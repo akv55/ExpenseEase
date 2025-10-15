@@ -81,28 +81,28 @@ const Report = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50">
       <Sidebar/>
       <div className="ml-64 p-8">
         {/* Header */}
         <div className="max-w-4xl mx-auto">
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Expense Reports</h1>
-              <p className="text-gray-600 dark:text-gray-300 mt-2">Comprehensive analysis of your spending patterns</p>
+              <h1 className="text-3xl font-bold text-gray-900">Expense Reports</h1>
+              <p className="text-gray-600 mt-2">Comprehensive analysis of your spending patterns</p>
             </div>
             <div className="flex gap-3">
               <select
                 value={dateRange}
                 onChange={(e) => setDateRange(e.target.value)}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="all">All Time</option>
                 <option value="month">This Month</option>
@@ -120,7 +120,7 @@ const Report = () => {
           </div>
 
           {/* Report Type Tabs */}
-          <div className="flex space-x-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg w-fit">
+          <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg w-fit">
             {[
               { id: 'overview', label: 'Overview' },
               { id: 'groups', label: 'Groups' },
@@ -131,8 +131,8 @@ const Report = () => {
                 onClick={() => setReportType(tab.id)}
                 className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                   reportType === tab.id
-                    ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
                 {tab.label}
@@ -145,38 +145,38 @@ const Report = () => {
           <div className="space-y-8">
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+              <div className="bg-white rounded-lg p-6 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Total Expenses</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">₹{reportData.overview.totalExpenses.toFixed(2)}</p>
+                    <p className="text-sm text-gray-600">Total Expenses</p>
+                    <p className="text-2xl font-bold text-gray-900">₹{reportData.overview.totalExpenses.toFixed(2)}</p>
                   </div>
                   <IndianRupee className="text-blue-600" size={24} />
                 </div>
               </div>
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+              <div className="bg-white rounded-lg p-6 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Active Groups</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{reportData.overview.totalGroups}</p>
+                    <p className="text-sm text-gray-600">Active Groups</p>
+                    <p className="text-2xl font-bold text-gray-900">{reportData.overview.totalGroups}</p>
                   </div>
                   <Users className="text-green-600" size={24} />
                 </div>
               </div>
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+              <div className="bg-white rounded-lg p-6 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Transactions</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">{reportData.overview.totalTransactions}</p>
+                    <p className="text-sm text-gray-600">Transactions</p>
+                    <p className="text-2xl font-bold text-gray-900">{reportData.overview.totalTransactions}</p>
                   </div>
                   <BarChart3 className="text-purple-600" size={24} />
                 </div>
               </div>
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+              <div className="bg-white rounded-lg p-6 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Avg Expense</p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">₹{reportData.overview.averageExpense.toFixed(2)}</p>
+                    <p className="text-sm text-gray-600">Avg Expense</p>
+                    <p className="text-2xl font-bold text-gray-900">₹{reportData.overview.averageExpense.toFixed(2)}</p>
                   </div>
                   <TrendingUp className="text-orange-600" size={24} />
                 </div>
@@ -186,20 +186,20 @@ const Report = () => {
             {/* Charts */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Monthly Trend */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Monthly Spending Trend</h3>
+              <div className="bg-white rounded-lg p-6 shadow-sm">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Monthly Spending Trend</h3>
                 <div className="space-y-3">
                   {reportData.overview.monthlyTrend.map((item, index) => (
                     <div key={index} className="flex items-center justify-between">
-                      <span className="text-gray-600 dark:text-gray-400">{item.month}</span>
+                      <span className="text-gray-600">{item.month}</span>
                       <div className="flex items-center gap-3">
-                        <div className="w-24 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div className="w-24 bg-gray-200 rounded-full h-2">
                           <div
                             className="bg-blue-600 h-2 rounded-full"
                             style={{ width: `${(item.amount / Math.max(...reportData.overview.monthlyTrend.map(i => i.amount))) * 100}%` }}
                           ></div>
                         </div>
-                        <span className="text-sm font-medium text-gray-900 dark:text-white">₹{item.amount.toFixed(0)}</span>
+                        <span className="text-sm font-medium text-gray-900">₹{item.amount.toFixed(0)}</span>
                       </div>
                     </div>
                   ))}
@@ -207,22 +207,22 @@ const Report = () => {
               </div>
 
               {/* Category Breakdown */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Spending by Category</h3>
+              <div className="bg-white rounded-lg p-6 shadow-sm">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Spending by Category</h3>
                 <div className="space-y-4">
                   {reportData.overview.topCategories.map((category, index) => (
                     <div key={index} className="space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span className="text-gray-600 dark:text-gray-400">{category.category}</span>
-                        <span className="font-medium text-gray-900 dark:text-white">{category.percentage}%</span>
+                        <span className="text-gray-600">{category.category}</span>
+                        <span className="font-medium text-gray-900">{category.percentage}%</span>
                       </div>
-                      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                      <div className="w-full bg-gray-200 rounded-full h-2">
                         <div
                           className="bg-blue-600 h-2 rounded-full"
                           style={{ width: `${category.percentage}%` }}
                         ></div>
                       </div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">₹{category.amount.toFixed(2)}</p>
+                      <p className="text-xs text-gray-500">₹{category.amount.toFixed(2)}</p>
                     </div>
                   ))}
                 </div>
@@ -232,45 +232,45 @@ const Report = () => {
         )}
 
         {reportType === 'groups' && reportData && (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
-            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">Group Reports</h2>
-              <p className="text-gray-600 dark:text-gray-400 mt-1">Detailed breakdown by group</p>
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div className="p-6 border-b border-gray-200">
+              <h2 className="text-xl font-bold text-gray-900">Group Reports</h2>
+              <p className="text-gray-600 mt-1">Detailed breakdown by group</p>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50 dark:bg-gray-700">
+                <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Group</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Members</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Expenses</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Transactions</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Last Activity</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Group</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Members</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Expenses</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Transactions</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Activity</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody className="bg-white divide-y divide-gray-200">
                   {reportData.groups.map((group) => (
                     <tr key={group.id}>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900 dark:text-white">{group.name}</div>
+                        <div className="text-sm font-medium text-gray-900">{group.name}</div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{group.members}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">₹{group.totalExpenses.toFixed(2)}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{group.transactions}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{group.lastActivity}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{group.members}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">₹{group.totalExpenses.toFixed(2)}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{group.transactions}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{group.lastActivity}</td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
                           group.status === 'active'
-                            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                            : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-gray-100 text-gray-800'
                         }`}>
                           {group.status}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">View Details</button>
+                        <button className="text-blue-600 hover:text-blue-900">View Details</button>
                       </td>
                     </tr>
                   ))}
@@ -284,28 +284,28 @@ const Report = () => {
           <div className="space-y-8">
             {/* Personal Summary */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+              <div className="bg-white rounded-lg p-6 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Total Paid</p>
+                    <p className="text-sm text-gray-600">Total Paid</p>
                     <p className="text-2xl font-bold text-blue-600">₹{reportData.personal.totalPaid.toFixed(2)}</p>
                   </div>
                   <TrendingUp className="text-blue-600" size={24} />
                 </div>
               </div>
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+              <div className="bg-white rounded-lg p-6 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Total Owed</p>
+                    <p className="text-sm text-gray-600">Total Owed</p>
                     <p className="text-2xl font-bold text-red-600">₹{reportData.personal.totalOwed.toFixed(2)}</p>
                   </div>
                   <TrendingDown className="text-red-600" size={24} />
                 </div>
               </div>
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+              <div className="bg-white rounded-lg p-6 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Net Balance</p>
+                    <p className="text-sm text-gray-600">Net Balance</p>
                     <p className={`text-2xl font-bold ${reportData.personal.netBalance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                       ₹{Math.abs(reportData.personal.netBalance).toFixed(2)}
                     </p>
@@ -316,15 +316,15 @@ const Report = () => {
             </div>
 
             {/* Pending Settlements */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Pending Settlements</h3>
+            <div className="bg-white rounded-lg p-6 shadow-sm">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Pending Settlements</h3>
               {reportData.personal.pendingSettlements.length > 0 ? (
                 <div className="space-y-3">
                   {reportData.personal.pendingSettlements.map((settlement, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                    <div key={index} className="flex items-center justify-between p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
                       <div>
-                        <p className="font-medium text-gray-900 dark:text-white">{settlement.from} owes you</p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">Group: {settlement.group}</p>
+                        <p className="font-medium text-gray-900">{settlement.from} owes you</p>
+                        <p className="text-sm text-gray-600">Group: {settlement.group}</p>
                       </div>
                       <div className="text-right">
                         <p className="text-lg font-bold text-yellow-600">₹{settlement.amount.toFixed(2)}</p>
@@ -338,8 +338,8 @@ const Report = () => {
               ) : (
                 <div className="text-center py-8">
                   <IndianRupee size={48} className="mx-auto text-green-600 mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">All Caught Up!</h3>
-                  <p className="text-gray-600 dark:text-gray-400">No pending settlements.</p>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">All Caught Up!</h3>
+                  <p className="text-gray-600">No pending settlements.</p>
                 </div>
               )}
             </div>

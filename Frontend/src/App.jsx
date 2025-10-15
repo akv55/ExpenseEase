@@ -12,6 +12,8 @@ import VerifyOtp from './components/Login/VerifyOtp';
 import AddIncome from './components/pages/Add-income';
 import Report from './components/pages/Report';
 import GroupExpense from './components/pages/GroupExpense';
+import ProtectedRoute from './components/ProtectedRoute';
+import Setting from './components/pages/Setting';
 function App() {
   return (
     <Router>
@@ -19,15 +21,16 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/add-expense" element={<AddExpense />} />
-        <Route path="/my-group" element={<MyGroup />} />
-        <Route path="/reports" element={<Report />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/add-expense" element={<ProtectedRoute><AddExpense /></ProtectedRoute>} />
+        <Route path="/my-group" element={<ProtectedRoute><MyGroup /></ProtectedRoute>} />
+        <Route path="/reports" element={<ProtectedRoute><Report /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/verify-otp" element={<VerifyOtp />} />
-        <Route path="/add-income" element={<AddIncome />} />
-        <Route path="/group-expenses" element={<GroupExpense/>} />
+        <Route path="/add-income" element={<ProtectedRoute><AddIncome /></ProtectedRoute>} />
+        <Route path="/group-expenses" element={<ProtectedRoute><GroupExpense/></ProtectedRoute>} />
+        <Route path="/settings" element={<ProtectedRoute><Setting /></ProtectedRoute>} />
       </Routes>
     </Router>
   )

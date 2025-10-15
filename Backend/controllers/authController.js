@@ -1,4 +1,3 @@
-const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User.js");
@@ -12,8 +11,8 @@ const signup = async (req, res) => {
     const existingEmail = await User.findOne({ email });
     if (existingEmail) return res.status(400).json({ message: "User already exists!" });
 
-    const exitphone= await User.findOne({phone});
-    if (exitphone)return res.status(400).json({message:"Phone Number already exists!"});
+    const existingPhone = await User.findOne({ phone });
+    if (existingPhone) return res.status(400).json({ message: "Phone Number already exists!" });
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({ name, email,phone, password: hashedPassword });
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
@@ -48,4 +47,9 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { signup, login };
+const logout = (req, res) => {
+  // Since JWT is stateless, logout can be handled on the client side by deleting the token
+  res.json({ message: "Logout successfull" });
+};
+
+module.exports = { signup, login, logout };

@@ -1,82 +1,183 @@
 import React, { useState } from 'react';
 import Sidebar from '../Layouts/Sidebar';
+import { useAuth } from '../../context/authContext';
 import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCalendarAlt, FaEdit, FaCamera, FaShieldAlt, FaBell, FaPalette, FaSave, FaTimes } from 'react-icons/fa';
 
 const Profile = () => {
+  const { user } = useAuth();
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({
+    name: user?.name || '',
+    email: user?.email || '',
+    phone: user?.phone || '',
+  });
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSave = () => {
+    // Implement save logic here
+    console.log('Saving profile:', formData);
+    setIsEditing(false);
+  };
+
+  const handleCancel = () => {
+    setFormData({
+      name: user?.name || '',
+      email: user?.email || '',
+      phone: user?.phone || '',
+    });
+    setIsEditing(false);
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 transition-colors duration-300">
       <Sidebar />
-      <div className="flex-1 p-6 max-w-4xl mx-auto">
-        <h2 className="text-lg font-semibold mb-4">User Profile</h2>
-        <div className="bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 shadow-lg rounded-xl p-8 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-300/20 via-purple-300/20 to-pink-300/20 rounded-xl"></div>
-          <div className="relative z-10 flex items-center mb-6">
-            <div className="relative">
-              <img src="https://res.cloudinary.com/dknkzth2t/image/upload/v1751401127/react_uploads/photo_2_oo7m3m.jpg" alt="Profile" className="w-40 h-40 rounded-full" />
-              <div className="absolute bottom-0 right-0 bg-green-500 rounded-full p-1 w-10 h-10 flex items-center justify-center cursor-pointer hover:bg-green-600 transition-colors">
-                <FaCamera className="text-white w-4 h-4" />
+      <div className="ml-64 p-8">
+        <h1 className="text-3xl font-bold mb-6 text-gray-700">User Profile</h1>
+        <div className="max-w-4xl mx-auto">
+          {/* Profile Card */}
+          <div className="bg-white shadow-lg rounded-2xl overflow-hidden">
+            {/* Header Section with Gradient Background */}
+            <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-8 text-white">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-6">
+                  <div className="relative">
+                    <img
+                      src="https://res.cloudinary.com/dknkzth2t/image/upload/v1751401127/react_uploads/photo_2_oo7m3m.jpg"
+                      alt="Profile"
+                      className="w-24 h-24 rounded-full border-4 border-white shadow-lg"
+                    />
+                    <button className="absolute bottom-0 right-0 bg-white rounded-full p-2 shadow-md hover:bg-gray-50 transition-colors">
+                      <FaCamera className="text-gray-600 w-4 h-4" />
+                    </button>
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold">{user?.name || 'User Name'}</h2>
+                    <p className="text-purple-100">{user?.email || 'user@example.com'}</p>
+                    <p className="text-sm text-purple-200 mt-1">Premium Member</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setIsEditing(!isEditing)}
+                  className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors"
+                >
+                  <FaEdit className="w-4 h-4" />
+                  <span>{isEditing ? 'Cancel' : 'Edit Profile'}</span>
+                </button>
               </div>
             </div>
-            <div className="ml-4">
-              <h3 className="text-2xl font-bold text-white">John Doe</h3>
-              <p className="text-gray-200">johndoe@example.com</p>
-              <p className="text-sm text-gray-300 mt-1">Premium Member</p>
+
+            {/* Content Section */}
+            <div className="p-8">
+              {isEditing ? (
+                <div className="space-y-6">
+                  <h3 className="text-xl font-semibold text-gray-800 mb-4">Edit Profile Information</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                      <input
+                        type="email"
+                        name="email"
+                        disabled
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-not-allowed bg-gray-100"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex space-x-4">
+                    <button
+                      onClick={handleSave}
+                      className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg flex items-center space-x-2 transition-colors"
+                    >
+                      <FaSave className="w-4 h-4" />
+                      <span>Save Changes</span>
+                    </button>
+                    <button
+                      onClick={handleCancel}
+                      className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg flex items-center space-x-2 transition-colors"
+                    >
+                      <FaTimes className="w-4 h-4" />
+                      <span>Cancel</span>
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-8">
+                  {/* Personal Information */}
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                      <FaUser className="mr-2 text-purple-600" />
+                      Personal Information
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <div className="flex items-center space-x-3">
+                          <FaUser className="text-gray-500 w-5 h-5" />
+                          <div>
+                            <p className="text-sm text-gray-500">Name</p>
+                            <p className="font-medium text-gray-800">{user?.name || 'N/A'}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <div className="flex items-center space-x-3">
+                          <FaEnvelope className="text-gray-500 w-5 h-5" />
+                          <div>
+                            <p className="text-sm text-gray-500">Email</p>
+                            <p className="font-medium text-gray-800">{user?.email || 'N/A'}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <div className="flex items-center space-x-3">
+                          <FaPhone className="text-gray-500 w-5 h-5" />
+                          <div>
+                            <p className="text-sm text-gray-500">Phone</p>
+                            <p className="font-medium text-gray-800">{user?.phone || 'N/A'}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <div className="flex items-center space-x-3">
+                          <FaCalendarAlt className="text-gray-500 w-5 h-5" />
+                          <div>
+                            <p className="text-sm text-gray-500">Member Since</p>
+                            <p className="font-medium text-gray-800">{user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-              <h4 className="text-lg font-semibold text-white mb-3 flex items-center">
-                <FaUser className="mr-2" /> Personal Information
-              </h4>
-              <div className="space-y-2">
-                <div className="flex items-center text-gray-200">
-                  <FaPhone className="mr-3 w-4 h-4" />
-                  <span>+1 (555) 123-4567</span>
-                </div>
-                <div className="flex items-center text-gray-200">
-                  <FaMapMarkerAlt className="mr-3 w-4 h-4" />
-                  <span>New York, NY</span>
-                </div>
-                <div className="flex items-center text-gray-200">
-                  <FaCalendarAlt className="mr-3 w-4 h-4" />
-                  <span>Joined March 2023</span>
-                </div>
-              </div>
-            </div>
-            
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-              <h4 className="text-lg font-semibold text-white mb-3 flex items-center">
-                <FaShieldAlt className="mr-2" /> Account Settings
-              </h4>
-              <div className="space-y-2">
-                <div className="flex items-center text-gray-200">
-                  <FaBell className="mr-3 w-4 h-4" />
-                  <span>Notifications: Enabled</span>
-                </div>
-                <div className="flex items-center text-gray-200">
-                  <FaPalette className="mr-3 w-4 h-4" />
-                  <span>Theme: Light</span>
-                </div>
-                <div className="flex items-center text-gray-200">
-                  <FaShieldAlt className="mr-3 w-4 h-4" />
-                  <span>Two-Factor Auth: On</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="mt-8 flex justify-center space-x-4">
-            <button className="bg-white/20 hover:bg-white/30 text-white px-6 py-2 rounded-full flex items-center transition-colors">
-              <FaEdit className="mr-2" /> Edit Profile
-            </button>
-            <button className="bg-white/20 hover:bg-white/30 text-white px-6 py-2 rounded-full flex items-center transition-colors">
-              <FaSave className="mr-2" /> Save Changes
-            </button>
-          </div>
+        </div>
       </div>
     </div>
-  </div>
   );
 }
 

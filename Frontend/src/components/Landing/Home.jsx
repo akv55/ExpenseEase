@@ -69,13 +69,13 @@ const Home = () => {
   return (
     <>
       {/* Hero Section */}
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
         <div className="container mx-auto px-4 py-16">
           <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-5xl md:text-7xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+            <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
               Simplify Your Spending Effortlessly<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600"> Split & Track</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
               Manage personal expenses, split bills with friends, and gain financial clarity in one intuitive platform.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
@@ -87,23 +87,23 @@ const Home = () => {
               </Link>
               <Link
                 to="/login"
-                className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-2 border-gray-300 dark:border-gray-600 hover:border-blue-500 font-semibold py-4 px-10 rounded-xl transition-all duration-300 hover:shadow-lg text-lg"
+                className="bg-white text-gray-900 border-2 border-gray-300 hover:border-blue-500 font-semibold py-4 px-10 rounded-xl transition-all duration-300 hover:shadow-lg text-lg"
               >
                 Sign In
               </Link>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+              <div className="bg-white p-6 rounded-xl shadow-lg">
                 <div className="text-3xl font-bold text-blue-600 mb-2">25K+</div>
-                <div className="text-gray-600 dark:text-gray-300">Active Users</div>
+                <div className="text-gray-600">Active Users</div>
               </div>
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+              <div className="bg-white p-6 rounded-xl shadow-lg">
                 <div className="text-3xl font-bold text-green-600 mb-2">₹5M+</div>
-                <div className="text-gray-600 dark:text-gray-300">Expenses Tracked</div>
+                <div className="text-gray-600">Expenses Tracked</div>
               </div>
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+              <div className="bg-white p-6 rounded-xl shadow-lg">
                 <div className="text-3xl font-bold text-purple-600 mb-2">100K+</div>
-                <div className="text-gray-600 dark:text-gray-300">Groups Created</div>
+                <div className="text-gray-600">Groups Created</div>
               </div>
             </div>
           </div>
@@ -113,25 +113,25 @@ const Home = () => {
     
 
       {/* Features Section */}
-      <div className="py-20 bg-white dark:bg-gray-900">
+      <div className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
               Key Features
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Discover all the tools and capabilities that make SpendWise the ultimate expense tracking solution for individuals and groups
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <div key={index} className="bg-gray-50 dark:bg-gray-800 p-8 rounded-xl hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 dark:border-gray-700">
+              <div key={index} className="bg-gray-50 p-8 rounded-xl hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
                 <div className="mb-6">{feature.icon}</div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">{feature.title}</h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">{feature.description}</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">{feature.title}</h3>
+                <p className="text-gray-600 mb-6 leading-relaxed">{feature.description}</p>
                 <div className="space-y-2">
                   {feature.benefits.map((benefit, benefitIndex) => (
-                    <div key={benefitIndex} className="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                    <div key={benefitIndex} className="flex items-center text-sm text-gray-700">
                       <FaCheckCircle className="text-green-500 mr-3 flex-shrink-0" />
                       <span>{benefit}</span>
                     </div>
@@ -144,13 +144,13 @@ const Home = () => {
       </div>
 
       {/* How It Works Section */}
-      <div className="py-20 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-800 dark:to-gray-900">
+      <div className="py-20 bg-gradient-to-r from-gray-50 to-blue-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
               How It Works
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Get started in four simple steps
             </p>
           </div>
@@ -160,8 +160,8 @@ const Home = () => {
                 <div className="bg-blue-600 text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6 shadow-lg">
                   {step.step}
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">{step.title}</h3>
-                <p className="text-gray-600 dark:text-gray-300">{step.description}</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">{step.title}</h3>
+                <p className="text-gray-600">{step.description}</p>
               </div>
             ))}
           </div>
@@ -169,62 +169,62 @@ const Home = () => {
       </div>
 
       {/* Testimonials Section */}
-      <div className="py-20 bg-white dark:bg-gray-900">
+      <div className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
               What Our Users Say
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Join thousands of satisfied users who have transformed their financial habits
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-gray-50 dark:bg-gray-800 p-8 rounded-xl shadow-lg">
+            <div className="bg-gray-50 p-8 rounded-xl shadow-lg">
               <div className="flex items-center mb-4">
                 <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
                   S
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white">Sarah Johnson</h4>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">Freelance Designer</p>
+                  <h4 className="font-semibold text-gray-900">Sarah Johnson</h4>
+                  <p className="text-gray-600 text-sm">Freelance Designer</p>
                 </div>
               </div>
-              <p className="text-gray-600 dark:text-gray-300 italic">
+              <p className="text-gray-600 italic">
                 "SpendWise has completely changed how I manage my business expenses. The group splitting feature is a lifesaver for client projects!"
               </p>
               <div className="flex text-yellow-400 mt-4">
                 ★★★★★
               </div>
             </div>
-            <div className="bg-gray-50 dark:bg-gray-800 p-8 rounded-xl shadow-lg">
+            <div className="bg-gray-50 p-8 rounded-xl shadow-lg">
               <div className="flex items-center mb-4">
                 <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
                   M
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white">Mike Chen</h4>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">Software Engineer</p>
+                  <h4 className="font-semibold text-gray-900">Mike Chen</h4>
+                  <p className="text-gray-600 text-sm">Software Engineer</p>
                 </div>
               </div>
-              <p className="text-gray-600 dark:text-gray-300 italic">
+              <p className="text-gray-600 italic">
                 "The analytics are incredible. I finally understand where my money goes each month. Highly recommend for anyone serious about budgeting."
               </p>
               <div className="flex text-yellow-400 mt-4">
                 ★★★★★
               </div>
             </div>
-            <div className="bg-gray-50 dark:bg-gray-800 p-8 rounded-xl shadow-lg">
+            <div className="bg-gray-50 p-8 rounded-xl shadow-lg">
               <div className="flex items-center mb-4">
                 <div className="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
                   A
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white">Anna Rodriguez</h4>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">Marketing Manager</p>
+                  <h4 className="font-semibold text-gray-900">Anna Rodriguez</h4>
+                  <p className="text-gray-600 text-sm">Marketing Manager</p>
                 </div>
               </div>
-              <p className="text-gray-600 dark:text-gray-300 italic">
+              <p className="text-gray-600 italic">
                 "Perfect for our household budget. We use it to track groceries, utilities, and even split vacation costs with friends. So easy to use!"
               </p>
               <div className="flex text-yellow-400 mt-4">
@@ -254,32 +254,32 @@ const Home = () => {
       </div>
 
       {/* FAQ Section */}
-      <div className="py-20 bg-gray-50 dark:bg-gray-800">
+      <div className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
               Frequently Asked Questions
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Everything you need to know about getting started with SpendWise
             </p>
           </div>
           <div className="max-w-4xl mx-auto space-y-6">
-            <div className="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-lg">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Is SpendWise really free to use?</h3>
-              <p className="text-gray-600 dark:text-gray-300">Yes! SpendWise offers a free plan with all essential features. Premium features are available for power users who need advanced analytics and unlimited groups.</p>
+            <div className="bg-white p-8 rounded-xl shadow-lg">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Is SpendWise really free to use?</h3>
+              <p className="text-gray-600">Yes! SpendWise offers a free plan with all essential features. Premium features are available for power users who need advanced analytics and unlimited groups.</p>
             </div>
-            <div className="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-lg">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">How secure is my financial data?</h3>
-              <p className="text-gray-600 dark:text-gray-300">We use bank-level 256-bit encryption and follow industry security standards. Your data is never shared with third parties, and we conduct regular security audits.</p>
+            <div className="bg-white p-8 rounded-xl shadow-lg">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">How secure is my financial data?</h3>
+              <p className="text-gray-600">We use bank-level 256-bit encryption and follow industry security standards. Your data is never shared with third parties, and we conduct regular security audits.</p>
             </div>
-            <div className="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-lg">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Can I export my expense data?</h3>
-              <p className="text-gray-600 dark:text-gray-300">Absolutely! You can export your data in CSV, PDF, or Excel formats. Premium users also get access to API integration for custom exports.</p>
+            <div className="bg-white p-8 rounded-xl shadow-lg">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Can I export my expense data?</h3>
+              <p className="text-gray-600">Absolutely! You can export your data in CSV, PDF, or Excel formats. Premium users also get access to API integration for custom exports.</p>
             </div>
-            <div className="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-lg">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Does SpendWise work offline?</h3>
-              <p className="text-gray-600 dark:text-gray-300">Yes, you can view and add expenses offline. All changes will sync automatically when you reconnect to the internet.</p>
+            <div className="bg-white p-8 rounded-xl shadow-lg">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Does SpendWise work offline?</h3>
+              <p className="text-gray-600">Yes, you can view and add expenses offline. All changes will sync automatically when you reconnect to the internet.</p>
             </div>
           </div>
         </div>
