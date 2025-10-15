@@ -16,12 +16,12 @@ const expenseSchema = new mongoose.Schema({
             "Personal Care",
             "Gifts",
             "Subscriptions",
-            "Rent", 
+            "Rent",
             "Others",
         ],
         required: true
     },
 
-    date: { type: Date, default: Date.now }
-});
+    date: { type: Date, required: true },
+}, { timestamps: true });
 module.exports = mongoose.model('Expense', expenseSchema);
