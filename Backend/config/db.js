@@ -3,7 +3,7 @@ require('dotenv').config();
 
 const connectDB = async () => {
   try {
-    const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/expenseease';
+    const mongoURI = process.env.ATLAS_URI || process.env.MONGO_URI || 'mongodb://localhost:27017/expenseease';
 
     const conn = await mongoose.connect(mongoURI);
 
