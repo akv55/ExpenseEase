@@ -30,7 +30,7 @@ const Home = () => {
       <Sidebar />
       <div className="ml-0 md:ml-64 transition-all duration-300">
         <div className="p-6 pt-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
           <div className="relative bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
             <div className="absolute top-0 right-0 w-20 h-20 bg-green-100 rounded-full -translate-y-10 translate-x-10 opacity-20"></div>
             <div className="relative z-10 flex items-center">
@@ -53,15 +53,15 @@ const Home = () => {
           <div className="relative bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
             <div className="absolute top-0 right-0 w-20 h-20 bg-red-100 rounded-full -translate-y-10 translate-x-10 opacity-20"></div>
             <div className="relative z-10 flex items-center">
-              <div className="p-3 bg-gradient-to-br from-red-400 to-red-600 rounded-full shadow-lg">
+              <div className="p-3 bg-gradient-to-br from-red-400 to-red-600 rounded-full shadow-lg sm:p-1">
                 <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z" />
                 </svg>
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Total Expenses</p>
-                <p className="text-2xl font-bold text-gray-600">₹3,200</p>
-                <div className="flex items-center mt-1">
+                <p className="text-2xl font-bold text-gray-600 sm:font-semibold">₹3,200</p>
+                <div className="flex items-center mt-1 ">
                   <svg className="w-4 h-4 text-red-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                   </svg>
@@ -97,8 +97,8 @@ const Home = () => {
                 <FaUsers className="w-4 h-4 text-white" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Group Expenses</p>
-                <p className="text-2xl font-bold text-gray-600">₹5,000</p>
+                <p className="text-sm font-medium text-gray-600 md:font-semibold">Group Expenses</p>
+                <p className="text-2xl font-bold text-gray-600 md:font-semibold">₹5,000</p>
                 <div className="flex items-center mt-1">
                   <svg className="w-4 h-4 text-sky-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -111,7 +111,7 @@ const Home = () => {
         </div>
 
         {/* Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           {/* Expense Breakdown Pie Chart */}
           <div className="bg-white rounded-xl shadow-lg p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">Expense Breakdown</h2>
