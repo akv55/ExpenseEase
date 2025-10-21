@@ -114,15 +114,14 @@ const AddExpense = () => {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 outline-none"
                 >
                   <option value="">Select a category</option>
-                  <option value="food">Food</option>
-                  <option value="transport">Transport</option>
+                  <option value="fast food"> Fast Food</option>
                   <option value="entertainment">Entertainment</option>
-                  <option value="utilities">Utilities</option>
+                  <option value="fruits">Fruits</option>
+                  <option value="vegetables">Vegetables</option>
                   <option value="health">Health</option>
                   <option value="shopping">Shopping</option>
                   <option value="education">Education</option>
                   <option value="travel">Travel</option>
-                  <option value="groceries">Groceries</option>
                   <option value="rent">Rent</option>
                   <option value="subscriptions">Subscriptions</option>
                   <option value="gifts">Gifts</option>

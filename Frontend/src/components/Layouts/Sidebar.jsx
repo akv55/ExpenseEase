@@ -42,6 +42,17 @@ export default function Sidebar() {
 
   return (
     <>
+      {/* Mobile Menu Button */}
+      {!isMobileOpen && window.innerWidth < 768 && (
+        <button
+          onClick={() => setIsMobileOpen(true)}
+          className="fixed top-4 left-4 z-50 p-2 rounded-lg  hover:bg-gray-50 transition-colors"
+          aria-label="Open menu"
+        >
+          <FaBars className="w-6 h-6 text-gray-700" />
+        </button>
+      )}
+
       {/* Sidebar */}
       <div className={`
         fixed left-0 top-0 h-full bg-white shadow-lg transition-all duration-300 z-40
@@ -70,6 +81,16 @@ export default function Sidebar() {
               )}
             </div>
           </div>
+          {/* Close Button for Mobile */}
+          {isMobileOpen && window.innerWidth < 768 && (
+            <button
+              onClick={() => setIsMobileOpen(false)}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              aria-label="Close menu"
+            >
+              <FaTimes className="w-5 h-5 text-gray-500" />
+            </button>
+          )}
         </div>
         {/* Navigation Items */}
         <nav className="flex-1 px-3 py-4">
@@ -100,11 +121,11 @@ export default function Sidebar() {
         </nav>
 
         {/* User Section & Logout */}
-        <div className="border-t border-gray-200 p-3">
+        <div className="border-t border-gray-200 p-2">
           <button
             onClick={handleLogout}
             className={`w-full flex items-center px-3 py-3 rounded-lg transition-all duration-200 group ${isCollapsed ? 'justify-center' : ''
-              } text-gray-700 hover:bg-red-50 hover:text-red-600`}
+              } text-gray-700 hover:bg-red-100 hover:text-red-600`}
             title={isCollapsed ? 'Logout' : ''}
           >
             <FaSignOutAlt className="w-5 h-5 flex-shrink-0 text-gray-500 group-hover:text-red-600" />
@@ -115,6 +136,14 @@ export default function Sidebar() {
         </div>
 
       </div>
+
+      {/* Mobile Overlay */}
+      {isMobileOpen && window.innerWidth < 768 && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+          onClick={() => setIsMobileOpen(false)}
+        />
+      )}
     </>
   );
 }
