@@ -5,7 +5,7 @@ require("dotenv").config();
 
 // Signup
 const signup = async (req, res) => {
-  const { name,phone, email, password } = req.body;
+  const { name, phone, email, password } = req.body;
   console.log('Signup attempt:', { name, phone, email }); // Log input without password
   try {
     const existingEmail = await User.findOne({ email });
@@ -14,7 +14,7 @@ const signup = async (req, res) => {
     const existingPhone = await User.findOne({ phone });
     if (existingPhone) return res.status(400).json({ message: "Phone Number already exists!" });
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({ name, email,phone, password: hashedPassword });
+    const user = await User.create({ name, email, phone, password: hashedPassword });
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
     const { password: _, ...userWithoutPassword } = user.toObject();
@@ -47,9 +47,23 @@ const login = async (req, res) => {
   }
 };
 
+// Change Password
+
+const changePassword = async (req, res) => {
+  const { currentPassword, newPassword, confirmPassword } = req.body;
+  try {
+    
+
+  } catch (err) {
+
+  }
+
+};
+
+
 const logout = (req, res) => {
   // Since JWT is stateless, logout can be handled on the client side by deleting the token
   res.json({ message: "Logout successfull" });
 };
 
-module.exports = { signup, login, logout };
+module.exports = { signup, login, logout, changePassword };

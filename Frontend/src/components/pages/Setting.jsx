@@ -4,15 +4,47 @@ import { useAuth } from "../../context/authContext";
 import { Link } from "react-router-dom";
 
 const Setting = () => {
+    const { changePassword } = useAuth;
     const [activeTab, setActiveTab] = useState('account');
     const { user, logout } = useAuth();
+    const [error, setError] = useState();
+    const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
+    const [loading, setLoading] = useState(false);
 
+    const [formData, setFormData] = useState({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+    });
+    const { currentPassword, newPassword, confirmPassword } = formData;
     const tabs = [
         { id: 'account', label: 'Account' },
         { id: 'change-password', label: 'Change Password' },
         { id: 'danger-zone', label: 'Danger Zone' }
     ];
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setHasAttemptedSubmit(true);
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            setError("Please fill out all required fields.");
+            return;
+        }
+        setLoading(true);
+        try {
+            await changePassword(formData);
+            setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+            navigate('/dashboard');
+        } catch (error) {
+            setError("Failed to Update password.");
+        } finally {
+            setLoading(false);
+        }
+    };
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+        if (error) setError(null);
+    };
     const renderTabContent = () => {
         switch (activeTab) {
             case 'account':
@@ -53,37 +85,50 @@ const Setting = () => {
             case 'change-password':
                 return (
                     <div className="space-y-6">
-                        {/* <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 rounded-lg">
+                        <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 rounded-lg">
                             <h2 className="text-xl font-semibold text-gray-800 mb-4">Change Password</h2>
                             <p className="text-gray-600">Update your password to keep your account secure.</p>
-                        </div> */}
+                        </div>
+                        {hasAttemptedSubmit && error && (
+                            <div className='mb-6 bg-red-50 border border-red-200 rounded-xl p-4'>
+                                <p className="text-red-600 text-center text-sm font-medium">{error}</p>
+                            </div>
+                        )}
                         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                            <form className="space-y-4">
+                            <form onSubmit={handleSubmit} className="space-y-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
-                                    <input type="password" className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 outline-none"
-                                    placeholder="Enter your current password"
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Current Password <span className="text-red-600">*</span></label>
+                                    <input type="password" value={currentPassword} name="currentPassword" onChange={handleChange} className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 outline-none"
+                                        placeholder="Enter your current password"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
-                                    <input type="password" className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 outline-none" 
-                                    placeholder="Enter new password"
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">New Password <span className="text-red-600">*</span></label>
+                                    <input
+                                        type="password"
+                                        name="newPassword"
+                                        value={newPassword}
+                                        onChange={handleChange}
+                                        className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 outline-none"
+                                        placeholder="Enter new password"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
-                                    <input type="password" className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 outline-none"
-                                    placeholder="Confirm new password"
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password <span className="text-red-600">*</span></label>
+                                    <input type="password" value={confirmPassword} name="confirmPassword" onChange={handleChange} className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 outline-none"
+                                        placeholder="Confirm new password"
                                     />
                                 </div>
                                 <div className="flex space-x-4">
                                     <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors">
-                                        Update Password
+                                        {loading ? 'Updating...' : 'Update Password'}
                                     </button>
-                                    <button type="button" className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md transition-colors">
+                                    <Link to={"/dashboard"}
+                                        type="button"
+                                        className="bg-red-500 hover:bg-red-700 text-white py-4 px-6 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                                    >
                                         Cancel
-                                    </button>
+                                    </Link>
                                 </div>
                             </form>
                         </div>
@@ -127,7 +172,7 @@ const Setting = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 transition-colors duration-300">
-              <Sidebar />
+            <Sidebar />
             <div className="ml-64 p-8">
                 <div className="bg-white shadow-md rounded-lg p-6">
                     <h1 className="text-3xl font-semibold mb-6 text-gray-700 text-center">SETTINGS</h1>
@@ -139,8 +184,8 @@ const Setting = () => {
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
                                 className={`px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 ${activeTab === tab.id
-                                        ? 'bg-white text-gray-900 shadow-sm transform scale-105'
-                                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+                                    ? 'bg-white text-gray-900 shadow-sm transform scale-105'
+                                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'
                                     }`}
                             >
                                 {tab.label}

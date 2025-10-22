@@ -35,9 +35,15 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem("token");
         setUser(null);
     };
+    // Change Password
+    const changePassword = async (formData) => {
+        const res = await API.post("/auth/change-password", formData);
+        setUser(res.data.user);
+        return res.data;
+    };
 
     return (
-        <AuthContext.Provider value={{ user, loading, login, signup, logout }}>
+        <AuthContext.Provider value={{ user, loading, login, signup, logout, changePassword }}>
             {children}
         </AuthContext.Provider>
     );
