@@ -40,8 +40,8 @@ const AddExpense = () => {
     if (error) setError(null);
   };
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-      <Sidebar />
+   <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 transition-colors duration-300">
+         <Sidebar />
       <div className="ml-64 p-8">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">

@@ -1,130 +1,78 @@
 import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar } from 'recharts';
-import { FaIndianRupeeSign, FaUsers } from 'react-icons/fa6';
 import Sidebar from "../Layouts/Sidebar";
 import { useAuth } from '../../context/authContext.jsx';
-import { useIncome } from '../../context/incomeContext.jsx';
+import ExpenseCard from './ExpenseCard.jsx';
 import { useExpense } from '../../context/expenseContext.jsx';
+import { useIncome } from '../../context/incomeContext.jsx';
 
 const Home = () => {
   const { user } = useAuth();
-  const { incomes } = useIncome();
-  // compute total income from incomes array (backend stores each income with `amount`)
-  const totalIncome = Array.isArray(incomes) && incomes.length > 0
-    ? incomes.reduce((sum, it) => sum + (Number(it.amount) || 0), 0)
-    : Number(user?.income) || 0;
-  const formattedIncome = new Intl.NumberFormat('en-IN').format(totalIncome);
   const { expenses } = useExpense();
-  // compute total expenses from expenses array (backend stores each expense with `amount`)
-  const totalExpenses = Array.isArray(expenses) && expenses.length > 0
-    ? expenses.reduce((sum, it) => sum + (Number(it.amount) || 0), 0)
-    : 0;
-  const formattedExpenses = new Intl.NumberFormat('en-IN').format(totalExpenses);
-  const netBalance = totalIncome - totalExpenses;
-  const formattedNetBalance = new Intl.NumberFormat('en-IN').format(netBalance);
-  // Sample data for charts
-  const expenseData = [
-    { name: 'Food', value: 800, color: '#FF6384' },
-    { name: 'Transportation', value: 400, color: '#36A2EB' },
-    { name: 'Entertainment', value: 500, color: '#FFCE56' },
-    { name: 'Utilities', value: 300, color: '#4BC0C0' },
-    { name: 'Rent', value: 1200, color: '#9966FF' },
-  ];
+  const { incomes } = useIncome();
+  const getRandomColor = () => {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  };
 
-  const monthlyData = [
-    { month: 'Jan', income: 4500, expenses: 3200 },
-    { month: 'Feb', income: 4800, expenses: 3100 },
-    { month: 'Mar', income: 5000, expenses: 3300 },
-    { month: 'Apr', income: 5200, expenses: 3400 },
-    { month: 'May', income: 4900, expenses: 3200 },
-    { month: 'Jun', income: 5100, expenses: 3300 },
-  ];
+// Build a flat array of { name, value, color } for the Pie chart
+const expenseData = (expenses || []).reduce((acc, curr) => {
+  const category = curr.category || 'Other';
+  const amount = Number(curr.amount) || 0;
+    const existing = acc.find(item => item.name === category);
+    if (existing) {
+      existing.value += amount;
+    } else {
+      acc.push({ name: category, value: amount, color: getRandomColor() });
+    }
+    return acc;
+  }, []);
+
+  // If no expenses, provide a fallback so the chart doesn't break
+  const pieData = expenseData.length ? expenseData : [{ name: 'No Data', value: 1, color: '#e5e7eb' }];
+
+  // Build monthly data for the last 6 months for LineChart
+  const getMonthKey = (date) => {
+    const d = new Date(date);
+    if (isNaN(d)) return null;
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`; // e.g. 2025-04
+  };
+
+  const months = [];
+  const now = new Date();
+  for (let i = 5; i >= 0; i--) {
+    const m = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    months.push({ key: `${m.getFullYear()}-${String(m.getMonth() + 1).padStart(2, '0')}`, label: m.toLocaleString(undefined, { month: 'short' }) });
+  }
+
+  const monthlyMap = months.reduce((acc, m) => {
+    acc[m.key] = { month: m.label, income: 0, expenses: 0 };
+    return acc;
+  }, {});
+
+  (incomes || []).forEach((inc) => {
+    const key = getMonthKey(inc.date || inc.createdAt || inc.dateString);
+    if (key && monthlyMap[key]) monthlyMap[key].income += Number(inc.amount || inc.value || 0);
+  });
+
+  (expenses || []).forEach((exp) => {
+    const key = getMonthKey(exp.date || exp.createdAt || exp.dateString);
+    if (key && monthlyMap[key]) monthlyMap[key].expenses += Number(exp.amount || exp.value || 0);
+  });
+
+  const monthlyData = months.map(m => monthlyMap[m.key]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 transition-colors duration-300">
       <Sidebar />
-      <div className="ml-0 md:ml-64 transition-all duration-300 ">
+      <div className="md:ml-64 pt-16 md:pt-0 transition-all duration-300">
         <div className="p-6 pt-8">
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-            <div className="relative bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
-              <div className="absolute top-0 right-0 w-20 h-20 bg-green-100 rounded-full -translate-y-10 translate-x-10 opacity-20"></div>
-              <div className="relative z-10 flex items-center">
-                <div className="p-3 bg-gradient-to-br from-green-400 to-green-600 rounded-full shadow-lg">
-                  <FaIndianRupeeSign className="w-4 h-4 text-white" />
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Income</p>
-                  <p className="text-2xl  text-gray-600 sm:font-semibold">₹{formattedIncome}</p>
-                  <div className="flex items-center mt-1">
-                    <svg className="w-4 h-4 text-green-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-xs text-green-600">+12% from last month</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="relative bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
-              <div className="absolute top-0 right-0 w-20 h-20 bg-red-100 rounded-full -translate-y-10 translate-x-10 opacity-20"></div>
-              <div className="relative z-10 flex items-center">
-                <div className="p-3 bg-gradient-to-br from-red-400 to-red-600 rounded-full shadow-lg">
-                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Expenses</p>
-                  <p className="text-2xl  text-gray-600 sm:font-semibold">₹{formattedExpenses}</p>
-                  <div className="flex items-center mt-1 ">
-                    <svg className="w-4 h-4 text-red-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-xs text-red-600">Within budget</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="relative bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
-              <div className="absolute top-0 right-0 w-20 h-20 bg-blue-100 rounded-full -translate-y-10 translate-x-10 opacity-20"></div>
-              <div className="relative z-10 flex items-center">
-                <div className="p-3 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full shadow-lg">
-                  <FaIndianRupeeSign className="w-4 h-4 text-white" />
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Net Balance</p>
-                  <p className="text-2xl text-gray-600 sm:font-semibold">₹ {formattedNetBalance}</p>
-                  <div className="flex items-center mt-1">
-                    <svg className="w-4 h-4 text-blue-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                    <span className="text-xs text-blue-600">Great job!</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="relative bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
-              <div className="absolute top-0 right-0 w-20 h-20 bg-purple-100 rounded-full -translate-y-10 translate-x-10 opacity-20"></div>
-              <div className="relative z-10 flex items-center">
-                <div className="p-3 bg-gradient-to-br from-sky-400 to-sky-600 rounded-full shadow-lg">
-                  <FaUsers className="w-4 h-4 text-white" />
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600 md:font-semibold">Group Expenses</p>
-                  <p className="text-2xl  text-gray-600 md:font-semibold">₹5,000</p>
-                  <div className="flex items-center mt-1">
-                    <svg className="w-4 h-4 text-sky-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-xs text-sky-600">3 Group</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
+          { /*Expense Summary Cards */}
+          <ExpenseCard />
           {/* Charts Section */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
             {/* Expense Breakdown Pie Chart */}
@@ -133,16 +81,16 @@ const Home = () => {
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
-                    data={expenseData}
+                    data={pieData}
                     cx="50%"
                     cy="50%"
+                    dataKey="value"
+                    outerRadius={80}
                     labelLine={false}
                     label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
+
                   >
-                    {expenseData.map((entry, index) => (
+                    {pieData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
@@ -172,50 +120,44 @@ const Home = () => {
           <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">Recent Transactions</h2>
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div className="flex items-center">
-                  <div className="p-2 bg-green-100 rounded-full">
-                    <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                    </svg>
+              {/** Combine incomes and expenses, normalize shape, sort by date desc and show top 6 */}
+              {([
+                ...((incomes || []).map((inc) => ({
+                  id: `inc-${inc._id || inc.id || Math.random()}`,
+                  type: 'income',
+                  title: inc.title || inc.source || 'Income',
+                  amount: inc.amount || inc.value || 0,
+                  date: inc.date || inc.createdAt || inc.dateString || new Date().toISOString(),
+                }))),
+                ...((expenses || []).map((exp) => ({
+                  id: `exp-${exp._id || exp.id || Math.random()}`,
+                  type: 'expense',
+                  title: exp.title || exp.category || 'Expense',
+                  amount: exp.amount || exp.value || 0,
+                  date: exp.date || exp.createdAt || exp.dateString || new Date().toISOString(),
+                })))
+              ]).sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 6).map((tx) => (
+                <div key={tx.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center">
+                    <div className={`p-2 rounded-full ${tx.type === 'income' ? 'bg-green-100' : 'bg-red-100'}`}>
+                      {tx.type === 'income' ? (
+                        <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                      ) : (
+                        <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        </svg>
+                      )}
+                    </div>
+                    <div className="ml-3">
+                      <p className="font-medium text-gray-900">{tx.title}</p>
+                      <p className="text-sm text-gray-600">{new Date(tx.date).toLocaleDateString()}</p>
+                    </div>
                   </div>
-                  <div className="ml-3">
-                    <p className="font-medium text-gray-900">Salary Deposit</p>
-                    <p className="text-sm text-gray-600">Oct 1, 2025</p>
-                  </div>
+                  <p className={`font-semibold ${tx.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>{tx.type === 'income' ? '+' : '-'}₹{tx.amount}</p>
                 </div>
-                <p className="font-semibold text-green-600">+₹4,000</p>
-              </div>
-
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div className="flex items-center">
-                  <div className="p-2 bg-red-100 rounded-full">
-                    <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                    </svg>
-                  </div>
-                  <div className="ml-3">
-                    <p className="font-medium text-gray-900">Grocery Shopping</p>
-                    <p className="text-sm text-gray-600">Oct 5, 2025</p>
-                  </div>
-                </div>
-                <p className="font-semibold text-red-600">-₹150</p>
-              </div>
-
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div className="flex items-center">
-                  <div className="p-2 bg-blue-100 rounded-full">
-                    <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                    </svg>
-                  </div>
-                  <div className="ml-3">
-                    <p className="font-medium text-gray-900">Freelance Payment</p>
-                    <p className="text-sm text-gray-600">Oct 3, 2025</p>
-                  </div>
-                </div>
-                <p className="font-semibold text-green-600">+₹1,000</p>
-              </div>
+              ))}
             </div>
           </div>
 
