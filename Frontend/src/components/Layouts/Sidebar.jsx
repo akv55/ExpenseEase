@@ -43,7 +43,7 @@ export default function Sidebar() {
     <>
       {/* Top Navbar (visible on mobile) */}
       <div className="md:hidden flex items-center justify-between bg-white shadow-md px-4 py-3 fixed top-0 left-0 right-0 z-50">
-        <h1 className="text-lg font-semibold text-[#2ECC71]">Grocerease</h1>
+        <h1 className="text-lg font-semibold text-[#2ECC71]">ExpenseEase</h1>
         <button
           onClick={() => setIsMobileOpen(!isMobileOpen)}
           className="text-gray-700 focus:outline-none"
@@ -56,7 +56,7 @@ export default function Sidebar() {
       <div
         className={`fixed top-0 left-0 h-full bg-white shadow-lg z-40 transform transition-all duration-300 
         ${isCollapsed ? "w-16" : "w-64"} 
-        ${isMobileOpen ? "translate-x-0" : "-translate-x-full"} 
+        ${isMobileOpen ? "translate-x-0 top-12" : "-translate-x-full"} 
         md:translate-x-0`}
       >
         {/* Header */}
@@ -76,13 +76,7 @@ export default function Sidebar() {
               </div>
             )}
           </div>
-          {/* Collapse toggle (only on desktop) */}
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="hidden md:block text-gray-600 hover:text-[#2ECC71]"
-          >
-            {isCollapsed ? <FaBars size={18} /> : <FaTimes size={18} />}
-          </button>
+          
         </div>
 
         {/* Navigation Items */}
@@ -139,17 +133,10 @@ export default function Sidebar() {
       {/* Overlay (mobile only) */}
       {isMobileOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-30 z-30 md:hidden"
+          className="fixed inset-0 bg-transparent bg-opacity-30 z-30 md:hidden"
           onClick={() => setIsMobileOpen(false)}
         ></div>
       )}
-
-      {/* Main Content (push down for mobile header) */}
-      <div className="md:ml-64 pt-16 md:pt-0 transition-all duration-300">
-        <div className="p-4">
-          {/* Place your page content here */}
-        </div>
-      </div>
     </>
   );
 }

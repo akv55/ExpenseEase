@@ -40,10 +40,10 @@ const AddExpense = () => {
     if (error) setError(null);
   };
   return (
-   <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 transition-colors duration-300">
-         <Sidebar />
-      <div className="ml-64 p-8">
-        <div className="max-w-4xl mx-auto">
+  <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 transition-colors duration-300">
+      <Sidebar />
+    <div className="md:ml-64 ml-0 p-4 md:p-8">
+      <div className="max-w-4xl mx-auto w-full">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Add New Expense</h1>
           </div>
