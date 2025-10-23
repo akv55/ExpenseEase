@@ -138,18 +138,18 @@ const AddIncome = () => {
                 </select>
                 <p className="mt-2 text-sm text-gray-500">Please select the category that best fits your income source.</p>
               {/* Action Buttons */}
-              <div className="flex gap-4 mt-8">
+              <div className="flex gap-4 mt-8 income-btn-group">
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-white py-4 px-6 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                  className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
                 >
                   <FaSave className="text-lg" />
                   {loading ? 'Saving...' : 'Save Income'}
                 </button>
                 <Link to={"/dashboard"}
                   type="button"
-                  className="bg-red-500 hover:bg-red-700 text-white py-4 px-6 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                  className="bg-red-500 hover:bg-red-700 text-white py-3 px-4 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
                 >
                   <FaTimes className="text-lg" />
                   Cancel

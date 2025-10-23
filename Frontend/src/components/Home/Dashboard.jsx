@@ -5,6 +5,7 @@ import { useAuth } from '../../context/authContext.jsx';
 import ExpenseCard from './ExpenseCard.jsx';
 import { useExpense } from '../../context/expenseContext.jsx';
 import { useIncome } from '../../context/incomeContext.jsx';
+import RecentTransactions from './RecentTransactions.jsx';
 
 const Home = () => {
   const { user } = useAuth();
@@ -119,46 +120,7 @@ const expenseData = (expenses || []).reduce((acc, curr) => {
           {/* Recent Transactions */}
           <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">Recent Transactions</h2>
-            <div className="space-y-4">
-              {/** Combine incomes and expenses, normalize shape, sort by date desc and show top 6 */}
-              {([
-                ...((incomes || []).map((inc) => ({
-                  id: `inc-${inc._id || inc.id || Math.random()}`,
-                  type: 'income',
-                  title: inc.title || inc.source || 'Income',
-                  amount: inc.amount || inc.value || 0,
-                  date: inc.date || inc.createdAt || inc.dateString || new Date().toISOString(),
-                }))),
-                ...((expenses || []).map((exp) => ({
-                  id: `exp-${exp._id || exp.id || Math.random()}`,
-                  type: 'expense',
-                  title: exp.title || exp.category || 'Expense',
-                  amount: exp.amount || exp.value || 0,
-                  date: exp.date || exp.createdAt || exp.dateString || new Date().toISOString(),
-                })))
-              ]).sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 6).map((tx) => (
-                <div key={tx.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                  <div className="flex items-center">
-                    <div className={`p-2 rounded-full ${tx.type === 'income' ? 'bg-green-100' : 'bg-red-100'}`}>
-                      {tx.type === 'income' ? (
-                        <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                        </svg>
-                      ) : (
-                        <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                        </svg>
-                      )}
-                    </div>
-                    <div className="ml-3">
-                      <p className="font-medium text-gray-900">{tx.title}</p>
-                      <p className="text-sm text-gray-600">{new Date(tx.date).toLocaleDateString()}</p>
-                    </div>
-                  </div>
-                  <p className={`font-semibold ${tx.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>{tx.type === 'income' ? '+' : '-'}₹{tx.amount}</p>
-                </div>
-              ))}
-            </div>
+            <RecentTransactions />
           </div>
 
         </div>

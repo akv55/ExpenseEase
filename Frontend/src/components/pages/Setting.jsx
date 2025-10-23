@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Sidebar from "../Layouts/Sidebar";
+import { FaSave, FaTimes } from 'react-icons/fa';
 import { useAuth } from "../../context/authContext";
 import { Link } from "react-router-dom";
 
@@ -119,14 +120,19 @@ const Setting = () => {
                                         placeholder="Confirm new password"
                                     />
                                 </div>
-                                <div className="flex space-x-4">
-                                    <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors">
+                                <div className=" flex gap-4 mt-8 changePasswordBtnGroup">
+                                    <button
+                                        type="submit"
+                                        className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                                    >
+                                        <FaSave className="text-lg" />
                                         {loading ? 'Updating...' : 'Update Password'}
                                     </button>
                                     <Link to={"/dashboard"}
                                         type="button"
-                                        className="bg-red-500 hover:bg-red-700 text-white py-4 px-6 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                                        className="bg-red-500 hover:bg-red-700 text-white py-3 px-4 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
                                     >
+                                        <FaTimes className="text-lg" />
                                         Cancel
                                     </Link>
                                 </div>

@@ -41,6 +41,12 @@
     font-size: 0.875rem;
     font-weight: 500;
   }
+  .expense-btn-group, .income-btn-group {
+    flex-direction: column;
+  }
+  .changePasswordBtnGroup {
+    flex-direction: column;
+  }
 } 
 
 /* :root {

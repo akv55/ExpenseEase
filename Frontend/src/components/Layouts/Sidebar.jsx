@@ -63,7 +63,7 @@ export default function Sidebar() {
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 bg-[#2ECC71] rounded-full flex items-center justify-center cursor-pointer">
-              <FaUser className="w-4 h-4 text-white" />
+              <img src={user?.profileImage?.url || 'https://cdn-icons-png.flaticon.com/512/147/147144.png'} alt="" className="w-12 h-12 rounded-full" />
             </div>
             {!isCollapsed && (
               <div className="flex-1 min-w-0">

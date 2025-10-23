@@ -123,24 +123,30 @@ const AddExpense = () => {
                   <option value="education">Education</option>
                   <option value="travel">Travel</option>
                   <option value="rent">Rent</option>
+                  <option value="electricity bill">Electricity Bill</option>
+                  <option value="water bill">Water Bill</option>
+                  <option value="internet bill">Internet Bill</option>
                   <option value="subscriptions">Subscriptions</option>
+                  <option value="gas bill">Gas Bill</option>
+                  <option value="fuel">Fuel</option>
+                  <option value="groceries shopping">Groceries Shopping</option>
                   <option value="gifts">Gifts</option>
                   <option value="other">Other</option>
                 </select>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-4 mt-8">
+              <div className="flex gap-4 mt-8 expense-btn-group">
                 <button
                   type="submit"
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-4 px-6 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
                 >
                   <FaSave className="text-lg" />
                   {loading ? 'Saving...' : 'Save Expense'}
                 </button>
                 <Link to={"/dashboard"}
                   type="button"
-                  className="bg-red-500 hover:bg-red-700 text-white py-4 px-6 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                  className="bg-red-500 hover:bg-red-700 text-white py-3 px-4 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
                 >
                   <FaTimes className="text-lg" />
                   Cancel

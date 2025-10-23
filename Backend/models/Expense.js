@@ -17,6 +17,12 @@ const expenseSchema = new mongoose.Schema({
             "gifts",
             "subscriptions",
             "travel",
+            "electricity bill",
+            "water bill",
+            "internet bill",
+            "gas bill",
+            "fuel",
+            "groceries shopping",
             "other"
 
         ],
