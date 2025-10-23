@@ -29,14 +29,10 @@ const Profile = () => {
       const formData = new FormData();
       formData.append("image", file);
 
-      const response = await axios.post(
-        "http://localhost:4000/api/uploads/uploadProfileImage",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
+      const response = await updateProfileImage(formData
+        ,
+        { headers: { "Content-Type": "multipart/form-data" }, }
       );
-
       const cloudinaryUrl = response.data.url;
       updateProfileImage(cloudinaryUrl);
     } catch (err) {
