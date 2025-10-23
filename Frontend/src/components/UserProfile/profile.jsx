@@ -43,20 +43,35 @@ const Profile = () => {
             <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-8 text-white">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-6">
-                  <div className="relative">
+                  <div className="relative profile-image-wrapper">
                     <img
-                      src="https://res.cloudinary.com/dknkzth2t/image/upload/v1751401127/react_uploads/photo_2_oo7m3m.jpg"
+                      src={user?.profileImage?.url || 'https://cdn-icons-png.flaticon.com/512/147/147144.png'}
                       alt="Profile"
                       className="w-24 h-24 rounded-full border-4 border-white shadow-lg"
                     />
-                    <button className="absolute bottom-0 right-0 bg-white rounded-full p-2 shadow-md hover:bg-gray-50 transition-colors">
-                      <FaCamera className="text-gray-600 w-4 h-4" />
-                    </button>
+                    {/* <label
+                      htmlFor="profileImageInput"
+                      className="absolute bottom-0 right-0 bg-white hover:bg-gray-100 text-white p-2 rounded-full cursor-pointer border-2 border-white"
+                    >
+                      <FaCamera className="w-4 h-4 text-gray-600" />
+                    </label>
+                     <input
+                      id="profileImageInput"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files && e.target.files[0];
+                        if (file) {
+                          setSelectedFile(file);
+                          setPreviewUrl(URL.createObjectURL(file));
+                        }
+                      }}
+                    /> */}
                   </div>
-                  <div>
+                  <div className="user-info">
                     <h2 className="text-2xl font-bold">{user?.name || 'User Name'}</h2>
                     <p className="text-purple-100">{user?.email || 'user@example.com'}</p>
-                    <p className="text-sm text-purple-200 mt-1">Premium Member</p>
                   </div>
                 </div>
                 <button
@@ -76,34 +91,42 @@ const Profile = () => {
                   <h3 className="text-xl font-semibold text-gray-800 mb-4">Edit Profile Information</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Name <span className="text-red-500">*</span></label>
                       <input
                         type="text"
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-400"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Email <span className="text-red-500">*</span></label>
                       <input
                         type="email"
                         name="email"
                         disabled
                         value={formData.email}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-not-allowed bg-gray-100"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-400 cursor-not-allowed bg-gray-100"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Phone <span className="text-red-500">*</span></label>
                       <input
                         type="tel"
                         name="phone"
                         value={formData.phone}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-400"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Upload Profile Picture <span className="text-gray-500">(JPEG, PNG)</span> <span className="text-red-500">*</span></label>
+                      <input
+                        type="file"
+                        accept="image/jpeg, image/png"
+                        className="w-full px-3 py-2 border-2 border-dashed border-purple-500 rounded-lg focus:outline-none file:border-0 file:bg-purple-200 file:rounded-lg file:text-purple-700 file:text-sm file:p-1 file:cursor-pointer"
                       />
                     </div>
                   </div>

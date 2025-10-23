@@ -23,7 +23,11 @@
   .rounded-2xl {
     border-radius: 0.75rem;
   }
+  .user-info {
+    display: none;
+  }
 }
+  
 
 /* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
