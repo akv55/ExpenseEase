@@ -1,6 +1,6 @@
 const express = require('express');
 const { addIncome, getIncomes } = require('../controllers/incomeController');
-const authMiddleware = require('../middleware/authMiddleware');
+const  authMiddleware= require('../middleware/authMiddleware');
 
 const router = express.Router();
 

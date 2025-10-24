@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   FaArrowUp,
   FaArrowDown,
-  FaMoneyBillWave,
-  FaTimes,
   FaCalendarAlt,
-  FaTag,
-  FaWallet,
 } from "react-icons/fa";
 import { useIncome } from "../../context/incomeContext";
 import { useExpense } from "../../context/expenseContext";
@@ -14,7 +10,6 @@ import { useExpense } from "../../context/expenseContext";
 const RecentTransactions = () => {
   const { incomes } = useIncome();
   const { expenses } = useExpense();
-
   const [transactions, setTransactions] = useState([]);
   const [selectedTx, setSelectedTx] = useState(null); // for popup
 

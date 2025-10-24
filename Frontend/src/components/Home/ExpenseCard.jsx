@@ -7,12 +7,13 @@ import { FaIndianRupeeSign, FaUsers } from 'react-icons/fa6';
 const ExpenseCard = () => {
     const { user } = useAuth();
     const { incomes } = useIncome();
+    const { expenses } = useExpense();
+
     // compute total income from incomes array (backend stores each income with `amount`)
     const totalIncome = Array.isArray(incomes) && incomes.length > 0
         ? incomes.reduce((sum, it) => sum + (Number(it.amount) || 0), 0)
         : Number(user?.income) || 0;
     const formattedIncome = new Intl.NumberFormat('en-IN').format(totalIncome);
-    const { expenses } = useExpense();
     // compute total expenses from expenses array (backend stores each expense with `amount`)
     const totalExpenses = Array.isArray(expenses) && expenses.length > 0
         ? expenses.reduce((sum, it) => sum + (Number(it.amount) || 0), 0)

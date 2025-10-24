@@ -9,10 +9,18 @@ export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setHasAttemptedSubmit(true);
+    setError('');
+    if (!form.email || !form.password) {
+      setLoading(false);
+      return setError('Please fill in all fields.');
+    }
+
     try {
       setLoading(true);
       await login(form);
@@ -24,7 +32,10 @@ export default function Login() {
       console.error(err);
     }
   };
-
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+    if (error) setError(null);
+  };
   return (
     <div className="min-h-screen flex flex-col md:flex-row text-white relative overflow-hidden">
       {/* Full screen wave background */}
@@ -41,30 +52,30 @@ export default function Login() {
             <h2 className="text-2xl font-bold mb-2 text-center text-gray-800">ExpenseEase</h2>
             <p className="text-gray-600 text-center mb-6 text-sm leading-relaxed">Welcome back! Please log in to your account.</p>
           </div>
-          {error && (
+          {hasAttemptedSubmit && error && (
             <div className='mb-6 bg-red-50 border border-red-200 rounded-xl p-4'>
               <p className="text-red-600 text-center text-sm font-medium">{error}</p>
             </div>
           )}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="text-sm font-semibold text-gray-700 mb-2 block">Email Address</label>
+              <label className="text-sm font-semibold text-gray-700 mb-2 block">Email Address <span className="text-red-500">*</span></label>
               <input
                 type="email"
+                name="email"
                 className="w-full p-3 border border-gray-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition-all duration-200 bg-gray-50 placeholder-gray-400 text-gray-900"
                 placeholder="you@example.com"
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                required
+                onChange={handleChange}
               />
             </div>
             <div>
-              <label className="text-sm font-semibold text-gray-700 mb-2 block">Password</label>
+              <label className="text-sm font-semibold text-gray-700 mb-2 block">Password <span className="text-red-500">*</span></label>
               <input
                 type="password"
+                name="password"
                 className="w-full p-3 border border-gray-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition-all duration-200 bg-gray-50 placeholder-gray-400 text-gray-900"
                 placeholder="Enter your password"
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
-                required
+                onChange={handleChange}
               />
             </div>
             <button

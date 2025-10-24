@@ -47,7 +47,7 @@ export default function Sidebar() {
           <img
             src="/logo.svg"
             alt="ExpenseEase Logo"
-            className="w-full h-8"
+            className="w-full h-10"
           />
         </div>
         <button
@@ -62,14 +62,14 @@ export default function Sidebar() {
       <div
         className={`fixed top-0 left-0 h-full bg-white shadow-lg z-40 transform transition-all duration-300 
         ${isCollapsed ? "w-16" : "w-64"} 
-        ${isMobileOpen ? "translate-x-0 top-12" : "-translate-x-full"} 
+        ${isMobileOpen ? "translate-x-0 top-16" : "-translate-x-full"} 
         md:translate-x-0`}
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 bg-[#2ECC71] rounded-full flex items-center justify-center cursor-pointer">
-              <img src={user?.profileImage?.url || 'https://cdn-icons-png.flaticon.com/512/147/147144.png'} alt="" className="w-12 h-12 rounded-full" />
+              <img src={user?.profileImage?.url} alt="" className="w-12 h-12 rounded-full" />
             </div>
             {!isCollapsed && (
               <div className="flex-1 min-w-0">
@@ -128,9 +128,9 @@ export default function Sidebar() {
             } text-gray-700 hover:bg-red-100 hover:text-red-600`}
             title={isCollapsed ? "Logout" : ""}
           >
-            <FaSignOutAlt className="w-5 h-5 flex-shrink-0 text-gray-500 group-hover:text-red-600" />
+            <FaSignOutAlt className="w-5 h-5 flex-shrink-0 text-red-700 group-hover:text-red-600" />
             {!isCollapsed && (
-              <span className="ml-3 font-medium">Logout</span>
+              <span className="ml-3 font-medium text-red-700 group-hover:text-red-600">Logout</span>
             )}
           </button>
         </div>
