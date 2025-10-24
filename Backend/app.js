@@ -14,8 +14,12 @@ const PORT = process.env.PORT || 4000;
 // Connect to database 
 connectDB();
 
-app.use(cors());
+app.use(cors({
+    origin: process.env.FRONTEND_URL || 'http://localhost:5173', // Adjust this to your frontend URL
+    
+}));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/auth', authRoutes);

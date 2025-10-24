@@ -10,7 +10,7 @@ import {
   FaCamera,
 } from "react-icons/fa";
 import EditProfileForm from "./editProfile";
-import axios from "axios";
+import API from "../../API/api";
 
 const Profile = () => {
   const { user, updateProfileImage } = useAuth();
@@ -29,11 +29,20 @@ const Profile = () => {
       const formData = new FormData();
       formData.append("image", file);
 
-      const response = await updateProfileImage(formData
-        ,
-        { headers: { "Content-Type": "multipart/form-data" }, }
+      // Upload to backend which forwards to Cloudinary
+      const response = await API.post(
+        "/uploads/uploadProfileImage",
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
-      const cloudinaryUrl = response.data.url;
+
+      const cloudinaryUrl = response?.data?.url;
+      if (!cloudinaryUrl) {
+        // Defensive: don't attempt to read .data.url if response is malformed
+        throw new Error("Upload succeeded but response did not include a URL");
+      }
+
+      // Update local user state with the new image URL
       updateProfileImage(cloudinaryUrl);
     } catch (err) {
       console.error("Upload failed:", err);

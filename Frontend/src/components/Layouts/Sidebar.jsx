@@ -43,7 +43,13 @@ export default function Sidebar() {
     <>
       {/* Top Navbar (visible on mobile) */}
       <div className="md:hidden flex items-center justify-between bg-white shadow-md px-4 py-3 fixed top-0 left-0 right-0 z-50">
-        <h1 className="text-lg font-semibold text-[#2ECC71]">ExpenseEase</h1>
+        <div>
+          <img
+            src="/logo.svg"
+            alt="ExpenseEase Logo"
+            className="w-full h-8"
+          />
+        </div>
         <button
           onClick={() => setIsMobileOpen(!isMobileOpen)}
           className="text-gray-700 focus:outline-none"
