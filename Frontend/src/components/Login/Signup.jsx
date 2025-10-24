@@ -12,12 +12,8 @@ export default function Signup() {
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const [formData, setFormData] = useState({ name: "", phone: "", email: "", password: "", confirmPassword: "" });
   const navigate = useNavigate();
-<<<<<<< HEAD
   const { name, phone, email, password, confirmPassword } = formData;
 
-=======
-const { name, phone, email, password, confirmPassword } = formData;
->>>>>>> c38708b4c7f4b1d889c58ff47a995015f7f28052
   const handleSubmit = async (e) => {
     e.preventDefault();
     setHasAttemptedSubmit(true);
@@ -26,10 +22,6 @@ const { name, phone, email, password, confirmPassword } = formData;
       return;
     }
     if (password !== confirmPassword) {
-<<<<<<< HEAD
-
-=======
->>>>>>> c38708b4c7f4b1d889c58ff47a995015f7f28052
       setError("Passwords do not match");
       return;
     }
@@ -44,10 +36,6 @@ const { name, phone, email, password, confirmPassword } = formData;
     setFormData({ ...formData, [e.target.name]: e.target.value });
     if (error) setError(null);
   };
-<<<<<<< HEAD
-
-=======
->>>>>>> c38708b4c7f4b1d889c58ff47a995015f7f28052
   return (
     <div className="min-h-screen flex flex-col md:flex-row text-white relative overflow-hidden">
       {/* Full screen wave background */}
@@ -72,10 +60,7 @@ const { name, phone, email, password, confirmPassword } = formData;
                 <p className="text-red-600 text-center text-sm font-medium">{error}</p>
               </div>
             )}
-<<<<<<< HEAD
 
-=======
->>>>>>> c38708b4c7f4b1d889c58ff47a995015f7f28052
             <div>
               <label className="text-sm font-semibold text-gray-700 mb-2 block">Full Name <span className="text-red-500">*</span></label>
               <input
@@ -106,13 +91,8 @@ const { name, phone, email, password, confirmPassword } = formData;
                 type="email"
                 className="w-full p-3 border border-gray-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition-all duration-200 bg-gray-50 placeholder-gray-400 text-gray-900"
                 placeholder="you@example.com"
-<<<<<<< HEAD
                 value={email}
                 name="email"
-=======
-                name="email"
-                value={email}
->>>>>>> c38708b4c7f4b1d889c58ff47a995015f7f28052
                 onChange={handleChange}
               />
             </div>
@@ -124,10 +104,6 @@ const { name, phone, email, password, confirmPassword } = formData;
                 className="w-full p-3 border border-gray-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition-all duration-200 bg-gray-50 placeholder-gray-400 text-gray-900"
                 placeholder="Create a strong password"
                 value={password}
-<<<<<<< HEAD
-                name="password"
-=======
->>>>>>> c38708b4c7f4b1d889c58ff47a995015f7f28052
                 onChange={handleChange}
               />
             </div>
@@ -139,10 +115,6 @@ const { name, phone, email, password, confirmPassword } = formData;
                 className="w-full p-3 border border-gray-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition-all duration-200 bg-gray-50 placeholder-gray-400 text-gray-900"
                 placeholder="Confirm your password"
                 value={confirmPassword}
-<<<<<<< HEAD
-                name="confirmPassword"
-=======
->>>>>>> c38708b4c7f4b1d889c58ff47a995015f7f28052
                 onChange={handleChange}
               />
               <p className="text-sm text-red-600">

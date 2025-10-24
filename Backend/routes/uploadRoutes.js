@@ -1,13 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
-const authMiddleware  = require("../middleware/authMiddleware");
 const { uploadProfileImage } = require("../controllers/uploadController");
+const  protect  = require("../middleware/authMiddleware");
 
-// Use memory storage for streaming
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-router.put("/uploadProfileImage", authMiddleware, upload.single("image"), uploadProfileImage);
+router.put("/uploadProfileImage", protect, upload.single("file"), uploadProfileImage);
 
 module.exports = router;
