@@ -29,11 +29,8 @@ const Profile = () => {
       const formData = new FormData();
       formData.append("image", file);
 
-<<<<<<< HEAD
       // Upload to backend which forwards to Cloudinary
-=======
       // Upload to backend (which forwards to Cloudinary)
->>>>>>> c38708b4c7f4b1d889c58ff47a995015f7f28052
       const response = await API.put(
         "/uploads/uploadProfileImage",
         formData,
@@ -43,10 +40,6 @@ const Profile = () => {
             Authorization: `Bearer ${user.token}`, // JWT token
           },
         }
-<<<<<<< HEAD
-
-=======
->>>>>>> c38708b4c7f4b1d889c58ff47a995015f7f28052
       );
 
       const updatedUser = response.data.user;
@@ -56,10 +49,7 @@ const Profile = () => {
 
       // Update local user state
       updateProfileImage(updatedUser.profileImage);
-<<<<<<< HEAD
-=======
 
->>>>>>> c38708b4c7f4b1d889c58ff47a995015f7f28052
     } catch (err) {
       console.error("Upload failed:", err);
       alert("Image upload failed!");
@@ -82,12 +72,8 @@ const Profile = () => {
                   <div className="relative profile-image-wrapper">
                     <img
                       src={
-<<<<<<< HEAD
-                        previewUrl || user?.profileImage?.url 
-=======
-                        previewUrl ||
-                        user?.profileImage?.url 
->>>>>>> c38708b4c7f4b1d889c58ff47a995015f7f28052
+                        previewUrl || user?.profileImage?.url
+
                       }
                       alt="Profile"
                       className="w-24 h-24 rounded-full border-4 border-white shadow-lg object-cover"
