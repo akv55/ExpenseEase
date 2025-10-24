@@ -30,7 +30,7 @@ const Profile = () => {
       formData.append("image", file);
 
       // Upload to backend which forwards to Cloudinary
-      const response = await API.post(
+      const response = await API.put(
         "/uploads/uploadProfileImage",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
@@ -65,7 +65,7 @@ const Profile = () => {
                   <div className="relative profile-image-wrapper">
                     <img
                       src={
-                        previewUrl ||
+                        user?.profileImage?.url ||
                         "https://cdn-icons-png.flaticon.com/512/147/147144.png"
                       }
                       alt="Profile"

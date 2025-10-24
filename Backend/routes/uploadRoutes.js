@@ -6,7 +6,7 @@ const uploadController = require('../controllers/uploadController');
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-router.post(
+router.put(
   '/uploadProfileImage',
   upload.single('image'),
   uploadController.uploadProfileImage

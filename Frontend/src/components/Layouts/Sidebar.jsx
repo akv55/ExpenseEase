@@ -47,7 +47,7 @@ export default function Sidebar() {
           <img
             src="/logo.svg"
             alt="ExpenseEase Logo"
-            className="w-full h-8"
+            className="w-full h-10"
           />
         </div>
         <button
@@ -62,7 +62,7 @@ export default function Sidebar() {
       <div
         className={`fixed top-0 left-0 h-full bg-white shadow-lg z-40 transform transition-all duration-300 
         ${isCollapsed ? "w-16" : "w-64"} 
-        ${isMobileOpen ? "translate-x-0 top-12" : "-translate-x-full"} 
+        ${isMobileOpen ? "translate-x-0 top-16" : "-translate-x-full"} 
         md:translate-x-0`}
       >
         {/* Header */}
