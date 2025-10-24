@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   FaArrowUp,
   FaArrowDown,
-  FaMoneyBillWave,
-  FaTimes,
   FaCalendarAlt,
-  FaTag,
-  FaWallet,
 } from "react-icons/fa";
 import { useIncome } from "../../context/incomeContext";
 import { useExpense } from "../../context/expenseContext";

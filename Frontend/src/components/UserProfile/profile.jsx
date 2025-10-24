@@ -30,20 +30,25 @@ const Profile = () => {
       formData.append("image", file);
 
       // Upload to backend which forwards to Cloudinary
-      const response = await API.post(
+      const response = await API.put(
         "/uploads/uploadProfileImage",
         formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${user.token}`, // JWT token
+          },
+        }
+
       );
 
-      const cloudinaryUrl = response?.data?.url;
-      if (!cloudinaryUrl) {
-        // Defensive: don't attempt to read .data.url if response is malformed
-        throw new Error("Upload succeeded but response did not include a URL");
+      const updatedUser = response.data.user;
+      if (!updatedUser?.profileImage?.url) {
+        throw new Error("Upload succeeded but response did not include URL");
       }
 
-      // Update local user state with the new image URL
-      updateProfileImage(cloudinaryUrl);
+      // Update local user state
+      updateProfileImage(updatedUser.profileImage);
     } catch (err) {
       console.error("Upload failed:", err);
       alert("Image upload failed!");
@@ -65,8 +70,7 @@ const Profile = () => {
                   <div className="relative profile-image-wrapper">
                     <img
                       src={
-                        previewUrl ||
-                        "https://cdn-icons-png.flaticon.com/512/147/147144.png"
+                        previewUrl || user?.profileImage?.url 
                       }
                       alt="Profile"
                       className="w-24 h-24 rounded-full border-4 border-white shadow-lg object-cover"
