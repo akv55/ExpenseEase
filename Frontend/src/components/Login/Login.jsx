@@ -20,6 +20,7 @@ export default function Login() {
       setLoading(false);
       return setError('Please fill in all fields.');
     }
+
     try {
       setLoading(true);
       await login(form);

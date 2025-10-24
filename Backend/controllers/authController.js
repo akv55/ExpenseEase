@@ -54,9 +54,7 @@ const login = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-
 // Change Password
-
 const changePassword = async (req, res) => {
   const { currentPassword, newPassword, confirmPassword } = req.body;
 
@@ -89,7 +87,6 @@ const changePassword = async (req, res) => {
     console.error("Change password error:", err);
     res.status(500).json({ error: err.message });
   }
-
 };
 
 //logout

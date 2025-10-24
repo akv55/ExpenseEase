@@ -29,7 +29,11 @@ const Profile = () => {
       const formData = new FormData();
       formData.append("image", file);
 
+<<<<<<< HEAD
       // Upload to backend which forwards to Cloudinary
+=======
+      // Upload to backend (which forwards to Cloudinary)
+>>>>>>> c38708b4c7f4b1d889c58ff47a995015f7f28052
       const response = await API.put(
         "/uploads/uploadProfileImage",
         formData,
@@ -39,7 +43,10 @@ const Profile = () => {
             Authorization: `Bearer ${user.token}`, // JWT token
           },
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> c38708b4c7f4b1d889c58ff47a995015f7f28052
       );
 
       const updatedUser = response.data.user;
@@ -49,6 +56,10 @@ const Profile = () => {
 
       // Update local user state
       updateProfileImage(updatedUser.profileImage);
+<<<<<<< HEAD
+=======
+
+>>>>>>> c38708b4c7f4b1d889c58ff47a995015f7f28052
     } catch (err) {
       console.error("Upload failed:", err);
       alert("Image upload failed!");
@@ -67,17 +78,23 @@ const Profile = () => {
             <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-8 text-white">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-6">
+                  {/* Profile Image */}
                   <div className="relative profile-image-wrapper">
                     <img
                       src={
+<<<<<<< HEAD
                         previewUrl || user?.profileImage?.url 
+=======
+                        previewUrl ||
+                        user?.profileImage?.url 
+>>>>>>> c38708b4c7f4b1d889c58ff47a995015f7f28052
                       }
                       alt="Profile"
                       className="w-24 h-24 rounded-full border-4 border-white shadow-lg object-cover"
                     />
                     <label
                       htmlFor="profileImageInput"
-                      className="absolute bottom-0 right-0 bg-white hover:bg-gray-100 text-white p-2 rounded-full cursor-pointer border-2 border-white"
+                      className="absolute bottom-0 right-0 bg-white hover:bg-gray-100 p-2 rounded-full cursor-pointer border-2 border-white"
                     >
                       <FaCamera className="w-4 h-4 text-gray-600" />
                     </label>
@@ -99,9 +116,7 @@ const Profile = () => {
                     <h2 className="text-2xl font-bold">
                       {user?.name || "User Name"}
                     </h2>
-                    <p className="text-purple-100">
-                      {user?.email || "user@example.com"}
-                    </p>
+                    <p className="text-purple-100">{user?.email}</p>
                   </div>
                 </div>
 
@@ -115,60 +130,24 @@ const Profile = () => {
               </div>
             </div>
 
-            {/* Profile Info */}
+            {/* Profile Info Section */}
             <div className="p-8">
               {isEditing ? (
                 <EditProfileForm />
               ) : (
                 <div className="space-y-8">
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                      <FaUser className="mr-2 text-purple-600" />
-                      Personal Information
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="bg-gray-50 p-4 rounded-lg flex items-center space-x-3">
-                        <FaUser className="text-gray-500 w-5 h-5" />
-                        <div>
-                          <p className="text-sm text-gray-500">Name</p>
-                          <p className="font-medium text-gray-800">
-                            {user?.name || "N/A"}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="bg-gray-50 p-4 rounded-lg flex items-center space-x-3">
-                        <FaEnvelope className="text-gray-500 w-5 h-5" />
-                        <div>
-                          <p className="text-sm text-gray-500">Email</p>
-                          <p className="font-medium text-gray-800">
-                            {user?.email || "N/A"}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="bg-gray-50 p-4 rounded-lg flex items-center space-x-3">
-                        <FaPhone className="text-gray-500 w-5 h-5" />
-                        <div>
-                          <p className="text-sm text-gray-500">Phone</p>
-                          <p className="font-medium text-gray-800">
-                            {user?.phone || "N/A"}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="bg-gray-50 p-4 rounded-lg flex items-center space-x-3">
-                        <FaCalendarAlt className="text-gray-500 w-5 h-5" />
-                        <div>
-                          <p className="text-sm text-gray-500">Member Since</p>
-                          <p className="font-medium text-gray-800">
-                            {user?.createdAt
-                              ? new Date(user.createdAt).toLocaleDateString()
-                              : "N/A"}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+                  <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                    <FaUser className="mr-2 text-purple-600" /> Personal Information
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <InfoCard icon={<FaUser />} label="Name" value={user?.name} />
+                    <InfoCard icon={<FaEnvelope />} label="Email" value={user?.email} />
+                    <InfoCard icon={<FaPhone />} label="Phone" value={user?.phone} />
+                    <InfoCard
+                      icon={<FaCalendarAlt />}
+                      label="Member Since"
+                      value={user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"}
+                    />
                   </div>
                 </div>
               )}
@@ -179,5 +158,16 @@ const Profile = () => {
     </div>
   );
 };
+
+// Reusable card component
+const InfoCard = ({ icon, label, value }) => (
+  <div className="bg-gray-50 p-4 rounded-lg flex items-center space-x-3">
+    <div className="text-gray-500 w-5 h-5">{icon}</div>
+    <div>
+      <p className="text-sm text-gray-500">{label}</p>
+      <p className="font-medium text-gray-800">{value || "N/A"}</p>
+    </div>
+  </div>
+);
 
 export default Profile;

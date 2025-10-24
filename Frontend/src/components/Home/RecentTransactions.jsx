@@ -10,7 +10,6 @@ import { useExpense } from "../../context/expenseContext";
 const RecentTransactions = () => {
   const { incomes } = useIncome();
   const { expenses } = useExpense();
-
   const [transactions, setTransactions] = useState([]);
   const [selectedTx, setSelectedTx] = useState(null); // for popup
 
