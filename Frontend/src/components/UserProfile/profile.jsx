@@ -65,7 +65,7 @@ const Profile = () => {
                   />
                   {loading && <p className="absolute -bottom-6 text-xs text-gray-200 animate-pulse bg-gray-800/50 px-3 rounded-md text-green-300">Uploading...</p>}
                 </div>
-                <div>
+                <div className="user-info">
                   <h2 className="text-2xl font-bold">{user?.name}</h2>
                   <p className="text-purple-100">{user?.email}</p>
                 </div>
