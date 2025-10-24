@@ -8,29 +8,33 @@ import { useAuth } from "../../context/authContext.jsx";
 export default function Signup() {
   const { signup } = useAuth();
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
-  const [form, setForm] = useState({ name: "", phone: "", email: "", password: "", confirmPassword: "" });
+  const [formData, setFormData] = useState({ name: "", phone: "", email: "", password: "", confirmPassword: "" });
   const navigate = useNavigate();
-
+const { name, phone, email, password, confirmPassword } = formData;
   const handleSubmit = async (e) => {
     e.preventDefault();
     setHasAttemptedSubmit(true);
-    if (!amount || !date || !description || !category) {
+    if (!name || !email || !password || !confirmPassword) {
       setError("Please fill out all required fields.");
       return;
     }
-    if (form.password !== form.confirmPassword) {
+    if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
     try {
-      await signup(form);
+      await signup(formData);
       navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Signup failed");
     }
   };
-
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (error) setError(null);
+  };
   return (
     <div className="min-h-screen flex flex-col md:flex-row text-white relative overflow-hidden">
       {/* Full screen wave background */}
@@ -48,21 +52,22 @@ export default function Signup() {
             <h2 className="text-2xl font-bold mb-2 text-center text-gray-800">ExpenseEase</h2>
             <p className="text-gray-600 text-center mb-6 text-sm leading-relaxed">Create your account to get started!</p>
           </div>
-          {error && (
-            <div className='mb-6 bg-red-50 border border-red-200 rounded-xl p-4'>
-              <p className="text-red-600 text-center text-sm font-medium">{error}</p>
-            </div>
-          )}
+
           <form onSubmit={handleSubmit} className="space-y-4">
+            {hasAttemptedSubmit && error && (
+              <div className='mb-6 bg-red-50 border border-red-200 rounded-xl p-4'>
+                <p className="text-red-600 text-center text-sm font-medium">{error}</p>
+              </div>
+            )}
             <div>
               <label className="text-sm font-semibold text-gray-700 mb-2 block">Full Name <span className="text-red-500">*</span></label>
               <input
                 type="text"
                 className="w-full p-3 border border-gray-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition-all duration-200 bg-gray-50 placeholder-gray-400 text-gray-900"
                 placeholder="John Doe"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                required
+                name="name"
+                value={name}
+                onChange={handleChange}
               />
             </div>
             <div>
@@ -73,8 +78,9 @@ export default function Signup() {
                 placeholder="1234567890"
                 maxLength={10}
                 pattern="\d{10}"
-                value={form.phone}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                name="phone"
+                value={phone}
+                onChange={handleChange}
               />
             </div>
             <div>
@@ -83,38 +89,42 @@ export default function Signup() {
                 type="email"
                 className="w-full p-3 border border-gray-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition-all duration-200 bg-gray-50 placeholder-gray-400 text-gray-900"
                 placeholder="you@example.com"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                name="email"
+                value={email}
+                onChange={handleChange}
               />
             </div>
             <div>
               <label className="text-sm font-semibold text-gray-700 mb-2 block">Password <span className="text-red-500">*</span></label>
               <input
                 type="password"
+                name="password"
                 className="w-full p-3 border border-gray-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition-all duration-200 bg-gray-50 placeholder-gray-400 text-gray-900"
                 placeholder="Create a strong password"
-                value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                value={password}
+                onChange={handleChange}
               />
             </div>
             <div>
               <label className="text-sm font-semibold text-gray-700 mb-2 block">Confirm Password <span className="text-red-500">*</span></label>
               <input
                 type="password"
+                name="confirmPassword"
                 className="w-full p-3 border border-gray-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition-all duration-200 bg-gray-50 placeholder-gray-400 text-gray-900"
                 placeholder="Confirm your password"
-                value={form.confirmPassword}
-                onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
+                value={confirmPassword}
+                onChange={handleChange}
               />
               <p className="text-sm text-red-600">
-                {form.password !== form.confirmPassword && "Passwords do not match"}
+                {password !== confirmPassword && "Passwords do not match"}
               </p>
             </div>
             <button
               type="submit"
+              disabled={isLoading}
               className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-3 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg cursor-pointer"
             >
-              Create Account
+              {isLoading ? 'Signing up...' : 'Sign Up'}
             </button>
           </form>
           <div className="text-center mt-4">

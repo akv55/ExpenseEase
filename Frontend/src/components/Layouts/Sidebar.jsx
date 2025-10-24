@@ -128,9 +128,9 @@ export default function Sidebar() {
             } text-gray-700 hover:bg-red-100 hover:text-red-600`}
             title={isCollapsed ? "Logout" : ""}
           >
-            <FaSignOutAlt className="w-5 h-5 flex-shrink-0 text-gray-500 group-hover:text-red-600" />
+            <FaSignOutAlt className="w-5 h-5 flex-shrink-0 text-red-700 group-hover:text-red-600" />
             {!isCollapsed && (
-              <span className="ml-3 font-medium">Logout</span>
+              <span className="ml-3 font-medium text-red-700 group-hover:text-red-600">Logout</span>
             )}
           </button>
         </div>
