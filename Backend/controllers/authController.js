@@ -3,7 +3,18 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User.js");
 const generateToken = require("../utils/generateToken.js");
 require("dotenv").config();
-
+const getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select("-password");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ user });
+  } catch (error) {
+    console.error("Profile fetch error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 // Signup
 const signup = async (req, res) => {
   const { name, phone, email, password } = req.body;
@@ -94,4 +105,4 @@ const logout = (req, res) => {
   res.json({ message: "Logout successful" });
 };
 
-module.exports = { signup, login, logout, changePassword };
+module.exports = { signup, login, logout, changePassword, getProfile };

@@ -6,18 +6,36 @@ const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState(() => {
+        // Try loading from localStorage first
+        const storedUser = localStorage.getItem("user");
+        return storedUser ? JSON.parse(storedUser) : null;
+    });
+
     const [loading, setLoading] = useState(true);
-    // Check for token and fetch user profile on mount
+
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            // Assume user is set from login/signup, or fetch if needed
-            // const res = await API.get("/auth/profile");
-            // setUser(res.data.user);
-        }
-        setLoading(false);
+        const fetchUserProfile = async () => {
+            const token = localStorage.getItem("token");
+            if (token) {
+                try {
+                    const res = await API.get("/auth/profile", {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+                    setUser(res.data.user);
+                    localStorage.setItem("user", JSON.stringify(res.data.user));
+                } catch (error) {
+                    console.error("Failed to fetch user profile:", error);
+                    logout(); // Clear bad token
+                }
+            }
+            setLoading(false);
+        };
+        fetchUserProfile();
     }, []);
+
     // Signup function
     const signup = async (formData) => {
         const res = await API.post("/auth/signup", formData);

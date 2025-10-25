@@ -5,9 +5,9 @@ import { useAuth } from "../../context/authContext";
 import { Link } from "react-router-dom";
 
 const Setting = () => {
-    const { changePassword } = useAuth;
+    const { changePassword } = useAuth();
     const [activeTab, setActiveTab] = useState('account');
-    const { user, logout } = useAuth();
+    const { user } = useAuth();
     const [error, setError] = useState();
     const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -180,7 +180,7 @@ const Setting = () => {
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 transition-colors duration-300">
             <Sidebar />
             <div className="ml-64 p-8">
-                <div className="bg-white shadow-md rounded-lg p-6">
+                <div className="bg-white shadow-md rounded-lg p-6  pt-8">
                     <h1 className="text-3xl font-semibold mb-6 text-gray-700 text-center">SETTINGS</h1>
 
                     {/* Settings content tabs */}
