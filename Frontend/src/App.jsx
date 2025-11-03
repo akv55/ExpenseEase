@@ -6,22 +6,25 @@ import Signup from './components/Login/Signup'
 import Dashboard from './components/Home/Dashboard'
 import AddExpense from './components/Expense/AddExpense';
 import Profile from './components/UserProfile/profile'
-import MyGroup from './components/pages/MyGroup';
+import MyGroup from './components/Groups/MyGroup';
 import ForgotPassword from './components/Login/Forgot';
 import VerifyOtp from './components/Login/VerifyOtp';
 import AddIncome from './components/Expense/Add-income';
 import Report from './components/pages/Report';
-import GroupExpense from './components/pages/GroupExpense';
+import GroupExpense from './components/Groups/GroupExpense';
 import ProtectedRoute from './components/ProtectedRoute';
 import Setting from './components/pages/Setting';
+import CreateGroup from './components/Groups/CreateGroup';
 import { AuthProvider } from './context/authContext';
 import { IncomeProvider } from './context/incomeContext';
 import { ExpenseProvider } from './context/expenseContext';
+import { GroupProvider } from './context/groupContext';
 function App() {
   return (
     <AuthProvider>
       <IncomeProvider>
         <ExpenseProvider>
+          <GroupProvider>
           <Router>
             <Routes>
               <Route path="/" element={<Home />} />
@@ -37,12 +40,14 @@ function App() {
               <Route path="/add-income" element={<ProtectedRoute><AddIncome /></ProtectedRoute>} />
               <Route path="/group-expenses" element={<ProtectedRoute><GroupExpense/></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute><Setting /></ProtectedRoute>} />
+              <Route path="/create-group" element={<ProtectedRoute><CreateGroup /></ProtectedRoute>} />
             </Routes>
           </Router>
-        </ExpenseProvider>
-      </IncomeProvider>
-    </AuthProvider>
-  )
+        </GroupProvider>
+      </ExpenseProvider>
+    </IncomeProvider>
+  </AuthProvider>
+)
 }
 
 export default App

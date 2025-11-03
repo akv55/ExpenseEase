@@ -109,8 +109,8 @@ const AddIncome = () => {
 
               <div className="mt-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Description <span className="text-red-600">*</span></label>
-                <input
-                  type="text"
+                <textarea
+                type="text"
                   name="description"
                   value={description}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-green-500 focus:border-transparent bg-white text-gray-900 outline-none"

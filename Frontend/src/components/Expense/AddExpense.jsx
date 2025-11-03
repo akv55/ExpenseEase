@@ -95,7 +95,7 @@ const AddExpense = () => {
 
               <div className="mt-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Description <span className="text-red-600">*</span></label>
-                <input
+                <textarea
                   type="text"
                   onChange={handleChange}
                   name="description"

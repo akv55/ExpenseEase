@@ -47,6 +47,14 @@
   .changePasswordBtnGroup {
     flex-direction: column;
   }
+  .search-box {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .search-input {
+    width: 100% !important;
+  }
 } 
 
 /* :root {

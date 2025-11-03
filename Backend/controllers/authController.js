@@ -100,9 +100,30 @@ const changePassword = async (req, res) => {
   }
 };
 
+
+// Search user by phone number
+const findUserByPhone = async (req, res) => {
+  try {
+    const { phone } = req.query;
+    if (!phone) {
+      return res.status(400).json({ message: "Phone number is required" });
+    }
+
+    const user = await User.findOne({ phone }).select("name email phone");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 //logout
 const logout = (req, res) => {
   res.json({ message: "Logout successful" });
 };
 
-module.exports = { signup, login, logout, changePassword, getProfile };
+module.exports = { signup, login, logout, changePassword, getProfile , findUserByPhone};

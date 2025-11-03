@@ -4,7 +4,6 @@ import API from "../API/api";
 const IncomeContext = createContext();
 
 export const useIncome = () => useContext(IncomeContext);
-
 export const IncomeProvider = ({ children }) => {
     const [incomes, setIncomes] = useState([]);
     const [loading, setLoading] = useState(false);

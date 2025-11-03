@@ -6,6 +6,7 @@ const authRoutes = require('./routes/authRoutes');
 const expenseRoutes = require('./routes/expenseRoutes');
 const incomeRoutes = require('./routes/incomeRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
+const groupRoutes = require('./routes/groupRoutes');
 const methoodsoverride = require('method-override');
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/expenses', expenseRoutes);
 app.use('/api/incomes', incomeRoutes);
 app.use('/api/uploads', uploadRoutes);
+app.use('/api/groups', groupRoutes);
 
 app.get('/', (req, res) => {
     res.send('Server is running!');

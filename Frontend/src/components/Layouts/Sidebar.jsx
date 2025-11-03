@@ -1,7 +1,8 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../../context/authContext";
-import { IoSettingsOutline } from "react-icons/io5";
+import { IoSettingsOutline,IoCreate } from "react-icons/io5";
+import { MdGroupAdd } from "react-icons/md";
 import {
   FaTachometerAlt,
   FaPlus,
@@ -30,9 +31,10 @@ export default function Sidebar() {
     { path: "/dashboard", label: "Dashboard", icon: FaTachometerAlt },
     { path: "/profile", label: "Profile", icon: FaUser },
     { path: "/add-expense", label: "Add Expense", icon: FaPlus },
-    { path: "/group-expenses", label: "Group Expenses", icon: FaUsers },
-    { path: "/my-group", label: "My Groups", icon: FaUsers },
     { path: "/add-income", label: "Add Income", icon: FaPlus },
+    { path: "/create-group", label: "Create Group", icon: IoCreate },
+    { path: "/group-expenses", label: "Group Expenses", icon: FaUsers },
+    { path: "/my-group", label: "My Groups", icon: MdGroupAdd },
     { path: "/settings", label: "Settings", icon: IoSettingsOutline },
     { path: "/reports", label: "Reports", icon: FaChartBar },
   ];

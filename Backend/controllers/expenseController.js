@@ -1,4 +1,3 @@
-const User = require("../models/User.js");
 const Expense = require("../models/Expense.js");
 
 // Get all expenses for a user
