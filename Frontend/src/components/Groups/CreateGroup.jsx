@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Sidebar from "../Layouts/Sidebar";
+import { Link, useNavigate } from 'react-router-dom';
+import { FaTimes } from "react-icons/fa";
 import { useGroup } from "../../context/groupContext";
 import API from "../../API/api";
 
@@ -105,8 +107,8 @@ const CreateGroup = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 transition-colors duration-300">
       <Sidebar />
       <div className="ml-64 p-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-8">
+        <div className="max-w-5xl mx-auto">
+          <div className="mb-8 group-container">
             <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-3">
               Create New Group
             </h1>
@@ -213,18 +215,17 @@ const CreateGroup = () => {
                     {foundMembers.map((m, i) => (
                       <li
                         key={i}
-                        className={`p-3 rounded border ${
-                          m.notFound
+                        className={`p-3 rounded border ${m.notFound
                             ? "border-red-300 bg-red-50 text-red-700"
                             : "border-green-300 bg-green-50 text-green-800"
-                        }`}
+                          }`}
                       >
-                        
+
                         {m.notFound ? (
                           <span> No user found for {m.phone}</span>
                         ) : (
                           <div>
-                            
+
                             {m.name} ({m.phone})
                           </div>
                         )}
@@ -235,6 +236,7 @@ const CreateGroup = () => {
               )}
 
               {/* Submit */}
+               <div className="flex gap-4 mt-8 ">
               <button
                 type="submit"
                 disabled={isLoading}
@@ -242,6 +244,15 @@ const CreateGroup = () => {
               >
                 {isLoading ? "Creating..." : "Create Group"}
               </button>
+
+              <Link to={"/dashboard"}
+                type="button"
+                className="bg-red-500 hover:bg-red-700 text-white py-3 px-4 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
+              >
+                <FaTimes className="text-lg" />
+                Cancel
+              </Link>
+            </div>
             </form>
           </div>
         </div>

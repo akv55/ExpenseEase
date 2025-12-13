@@ -134,7 +134,7 @@ const AddExpense = () => {
                   <option value="other">Other</option>
                 </select>
               </div>
-
+                <p className="mt-2 text-sm text-gray-500">Please select the category that best fits your expense source.</p>
               {/* Action Buttons */}
               <div className="flex gap-4 mt-8 expense-btn-group">
                 <button

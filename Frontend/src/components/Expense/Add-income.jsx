@@ -134,6 +134,8 @@ const AddIncome = () => {
                   <option value="Investments">Investments</option>
                   <option value="Rental Income">Rental Income</option>
                   <option value="Gifts">Gifts</option>
+                  <option value="Interest">Interest</option>
+                  <option value="Monthly Pocket Money">Monthly Pocket Money</option>
                   <option value="Other">Other</option>
                 </select>
                 <p className="mt-2 text-sm text-gray-500">Please select the category that best fits your income source.</p>

@@ -55,6 +55,10 @@
   .search-input {
     width: 100% !important;
   }
+  .group-container{
+    margin-top: 3.5rem;
+  }
+  
 } 
 
 /* :root {

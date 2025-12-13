@@ -28,15 +28,14 @@ export default function Sidebar() {
   };
 
   const navigationItems = [
-    { path: "/dashboard", label: "Dashboard", icon: FaTachometerAlt },
-    { path: "/profile", label: "Profile", icon: FaUser },
-    { path: "/add-expense", label: "Add Expense", icon: FaPlus },
-    { path: "/add-income", label: "Add Income", icon: FaPlus },
-    { path: "/create-group", label: "Create Group", icon: IoCreate },
-    { path: "/group-expenses", label: "Group Expenses", icon: FaUsers },
-    { path: "/my-group", label: "My Groups", icon: MdGroupAdd },
-    { path: "/settings", label: "Settings", icon: IoSettingsOutline },
-    { path: "/reports", label: "Reports", icon: FaChartBar },
+    { path: "/dashboard", label: "Dashboard", icon: FaTachometerAlt, color: "text-blue-500" },
+    { path: "/profile", label: "Profile", icon: FaUser, color: "text-purple-500" },
+    { path: "/add-expense", label: "Add Expense", icon: FaPlus, color: "text-red-500" },
+    { path: "/add-income", label: "Add Income", icon: FaPlus, color: "text-green-500" },
+    { path: "/create-group", label: "Create Group", icon: IoCreate, color: "text-orange-500" },
+    { path: "/group-expenses", label: "Group Expenses", icon: FaUsers, color: "text-teal-500" },
+    { path: "/settings", label: "Settings", icon: IoSettingsOutline, color: "text-gray-500" },
+    { path: "/reports", label: "Reports", icon: FaChartBar, color: "text-pink-500" },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -105,10 +104,10 @@ export default function Sidebar() {
                     title={isCollapsed ? item.label : ""}
                   >
                     <Icon
-                      className={`w-4 h-4 flex-shrink-0 ${
+                      className={`w-5 h-5 flex-shrink-0 ${
                         isActive(item.path)
                           ? "text-white"
-                          : "text-gray-500 group-hover:text-[#2ECC71]"
+                          : `${item.color} group-hover:scale-110`
                         }`}
                     />
                     {!isCollapsed && (

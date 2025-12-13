@@ -3,7 +3,7 @@ const groupSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "Group name is required"],
+      required: true,
       trim: true,
     },
     description: {

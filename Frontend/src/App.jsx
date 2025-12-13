@@ -10,11 +10,12 @@ import MyGroup from './components/Groups/MyGroup';
 import ForgotPassword from './components/Login/Forgot';
 import VerifyOtp from './components/Login/VerifyOtp';
 import AddIncome from './components/Expense/Add-income';
-import Report from './components/pages/Report';
+import Report from './components/Reports/Report';
 import GroupExpense from './components/Groups/GroupExpense';
 import ProtectedRoute from './components/ProtectedRoute';
-import Setting from './components/pages/Setting';
+import Setting from './components/Settings/Setting';
 import CreateGroup from './components/Groups/CreateGroup';
+import GroupExpenseDetails from './components/Groups/GroupExpenseDetails';
 import { AuthProvider } from './context/authContext';
 import { IncomeProvider } from './context/incomeContext';
 import { ExpenseProvider } from './context/expenseContext';
@@ -32,7 +33,6 @@ function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/add-expense" element={<ProtectedRoute><AddExpense /></ProtectedRoute>} />
-              <Route path="/my-group" element={<ProtectedRoute><MyGroup /></ProtectedRoute>} />
               <Route path="/reports" element={<ProtectedRoute><Report /></ProtectedRoute>} />
               <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -41,6 +41,7 @@ function App() {
               <Route path="/group-expenses" element={<ProtectedRoute><GroupExpense/></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute><Setting /></ProtectedRoute>} />
               <Route path="/create-group" element={<ProtectedRoute><CreateGroup /></ProtectedRoute>} />
+              <Route path="/group-expense-details/:id" element={<ProtectedRoute><GroupExpenseDetails /></ProtectedRoute>} />
             </Routes>
           </Router>
         </GroupProvider>
