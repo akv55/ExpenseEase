@@ -5,6 +5,13 @@ import { FaUser, FaEnvelope, FaPhone, FaCalendarAlt, FaEdit, FaCamera } from "re
 import EditProfileForm from "./editProfile";
 import API from "../../API/api";
 
+const formatDate = (value) => {
+  if (!value) return "N/A";
+  const date = new Date(value);
+  if (Number.isNaN(date)) return "N/A";
+  return date.toLocaleDateString("en-GB").replace(/\//g, "-");
+};
+
 const Profile = () => {
   const { user, updateProfileImage } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
@@ -94,7 +101,7 @@ const UserInfo = ({ user }) => (
       <InfoCard icon={<FaUser />} label="Name" value={user?.name} />
       <InfoCard icon={<FaEnvelope />} label="Email" value={user?.email} />
       <InfoCard icon={<FaPhone />} label="Phone" value={user?.phone} />
-      <InfoCard icon={<FaCalendarAlt />} label="Member Since" value={user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"} />
+      <InfoCard icon={<FaCalendarAlt />} label="Member Since" value={formatDate(user?.createdAt)} />
     </div>
   </div>
 );

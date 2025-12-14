@@ -7,6 +7,13 @@ import {
 import { useIncome } from "../../context/incomeContext";
 import { useExpense } from "../../context/expenseContext";
 
+const formatDate = (value) => {
+  if (!value) return "N/A";
+  const date = new Date(value);
+  if (Number.isNaN(date)) return "N/A";
+  return date.toLocaleDateString("en-GB").replace(/\//g, "-");
+};
+
 const RecentTransactions = () => {
   const { incomes } = useIncome();
   const { expenses } = useExpense();
@@ -53,7 +60,7 @@ const RecentTransactions = () => {
                     {tx.category}
                   </p>
                   <p className="text-sm text-gray-500 capitalize">
-                    {new Date(tx.date).toLocaleDateString()}
+                    {formatDate(tx.date)}
                   </p>
                 </div>
               </div>
@@ -100,7 +107,7 @@ const RecentTransactions = () => {
             <div className="mt-6 space-y-3 text-gray-700">
               <div className="flex items-center gap-2">
                 <FaCalendarAlt className="text-gray-400" />
-                <span>{new Date(selectedTx.date).toLocaleDateString()}</span>
+                <span>{formatDate(selectedTx.date)}</span>
               </div>
               <div className="flex items-center gap-2 border border-gray-200 p-3 rounded-lg bg-gray-50">
                 <p>

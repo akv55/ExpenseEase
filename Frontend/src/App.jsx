@@ -6,7 +6,6 @@ import Signup from './components/Login/Signup'
 import Dashboard from './components/Home/Dashboard'
 import AddExpense from './components/Expense/AddExpense';
 import Profile from './components/UserProfile/profile'
-import MyGroup from './components/Groups/MyGroup';
 import ForgotPassword from './components/Login/Forgot';
 import VerifyOtp from './components/Login/VerifyOtp';
 import AddIncome from './components/Expense/Add-income';

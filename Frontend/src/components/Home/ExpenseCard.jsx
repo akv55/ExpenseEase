@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useIncome } from '../../context/incomeContext.jsx';
 import { useExpense } from '../../context/expenseContext.jsx';
 import { useAuth } from '../../context/authContext.jsx';
 import { FaIndianRupeeSign, FaUsers } from 'react-icons/fa6';
+import { useGroup } from "../../context/groupContext";
+
 
 const ExpenseCard = () => {
     const { user } = useAuth();
     const { incomes } = useIncome();
     const { expenses } = useExpense();
+    const { groups, loading, fetchGroups } = useGroup();
 
     // compute total income from incomes array (backend stores each income with `amount`)
     const totalIncome = Array.isArray(incomes) && incomes.length > 0
@@ -21,6 +24,16 @@ const ExpenseCard = () => {
     const formattedExpenses = new Intl.NumberFormat('en-IN').format(totalExpenses);
     const netBalance = totalIncome - totalExpenses;
     const formattedNetBalance = new Intl.NumberFormat('en-IN').format(netBalance);
+    
+    // Group counts for the logged-in user
+    const joinedGroupsCount = Array.isArray(groups) ? groups.length : 0;
+    const createdGroupsCount = Array.isArray(groups)
+        ? groups.filter((g) => String(g.createdBy) === String(user?._id)).length
+        : 0;
+    const totalGroupExpense=Array.isArray(groups) && groups.length>0
+    ? groups.reduce((sum,group)=> sum + (Array.isArray (group.expenses) ? group.expenses.reduce((s,exp)=> s + (Number (exp.amount) || 0),0) :0),0)
+    :0;
+    const formattedGroupExpense = new Intl.NumberFormat('en-IN').format(totalGroupExpense);
     return (
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
             <div className="relative bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
@@ -89,13 +102,17 @@ const ExpenseCard = () => {
                         <FaUsers className="w-4 h-4 text-white" />
                     </div>
                     <div className="ml-4">
-                        <p className="text-sm font-medium text-gray-600 md:font-semibold">Group Expenses</p>
-                        <p className="text-2xl  text-gray-600 md:font-semibold">₹5,000</p>
+                        <p className="text-sm font-medium text-gray-600 md:font-semibold">Groups</p>
+                        <p className="text-2xl  text-gray-600 md:font-semibold">₹ {formattedGroupExpense}</p>
                         <div className="flex items-center mt-1">
                             <svg className="w-4 h-4 text-sky-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                             </svg>
-                            <span className="text-xs text-sky-600">3 Group</span>
+                            <p className="text-xs">
+                                <span className="text-green-600">Created :{createdGroupsCount}</span>
+                                &nbsp;
+                                <span className="text-sky-600">Joined :{joinedGroupsCount}</span>
+                            </p>
                         </div>
                     </div>
                 </div>

@@ -7,6 +7,7 @@ import { useExpense } from '../../context/expenseContext.jsx';
 import { useIncome } from '../../context/incomeContext.jsx';
 import RecentTransactions from './RecentTransactions.jsx';
 
+
 const Home = () => {
   const { user } = useAuth();
   const { expenses } = useExpense();

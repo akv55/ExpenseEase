@@ -13,10 +13,17 @@ const getGroups = async (req, res) => {
 
 // Create a new group
 const createGroup = async (req, res) => {
-  const { groupName, description, members } = req.body;
+  const { name, groupName, description, members } = req.body;
+  const resolvedName = name || groupName;
+
+  // Basic validation to avoid silent 500s from schema validation
+  if (!resolvedName || !description || !Array.isArray(members) || members.length === 0) {
+    return res.status(400).json({ error: "name, description, and at least one member are required." });
+  }
+
   try {
     const group = await Group.create({
-      name: groupName,
+      name: resolvedName,
       description,
       members,
       createdBy: req.user.id,

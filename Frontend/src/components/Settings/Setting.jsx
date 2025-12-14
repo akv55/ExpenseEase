@@ -24,6 +24,14 @@ const Setting = () => {
         { id: 'danger-zone', label: 'Danger Zone' }
     ];
 
+    const formatDate = (value) => {
+        if (!value) return 'N/A';
+        const date = new Date(value);
+        if (Number.isNaN(date)) return 'N/A';
+        // Format as dd-mm-yyyy
+        return date.toLocaleDateString('en-GB').replace(/\//g, '-');
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setHasAttemptedSubmit(true);
@@ -70,7 +78,7 @@ const Setting = () => {
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 mb-1">Member Since</label>
-                                        <p className="text-gray-900 bg-gray-50 px-3 py-2 rounded-md">{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}</p>
+                                        <p className="text-gray-900 bg-gray-50 px-3 py-2 rounded-md">{formatDate(user.createdAt)}</p>
                                     </div>
                                 </div>
 

@@ -1,73 +1,57 @@
-import React, { useEffect, useState,} from "react";
+import React, { useEffect, useState } from "react";
 import { FaPlus, FaUsers, FaTrash, FaEye, FaSearch, FaUserFriends } from "react-icons/fa";
 import { TrendingUp, IndianRupee, Calendar, CreditCard, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import Sidebar from "../Layouts/Sidebar";
 import { Link } from "react-router-dom";
+import { useGroup } from "../../context/groupContext";
+
+const formatDate = (value) => {
+  if (!value) return "N/A";
+  const date = new Date(value);
+  if (Number.isNaN(date)) return "N/A";
+  return date.toLocaleDateString("en-GB").replace(/\//g, "-");
+};
 
 const GroupExpense = () => {
-  const [groups, setGroups] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { groups, loading, fetchGroups } = useGroup();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [totalOwed, setTotalOwed] = useState(0);
   const [totalOwing, setTotalOwing] = useState(0);
+  const [error, setError] = useState(null);
 
-  // ✅ Load sample frontend data
+  // Load groups from API
   useEffect(() => {
-    const sampleData = [
-      {
-        _id: "1",
-        name: "Trip to Goa",
-        description: "Vacation with college friends",
-        members: ["Alok", "Ravi", "Priya", "Neha", "Amit"],
-        totalExpenses: 6558,
-        myBalance: 85,
-        date: "2025-10-10",
-      },
-      {
-        _id: "2",
-        name: "Trip to Mumbai",
-        description: "Office weekend trip",
-        members: ["Alok", "Suresh", "Rita", "Rahul", "Vikram", "Rani"],
-        totalExpenses: 7894,
-        myBalance: -150,
-        date: "2025-10-10",
-      },
-      {
-        _id: "3",
-        name: "College Reunion",
-        description: "Batch 2018 get-together",
-        members: ["Alok", "Ravi", "Sakshi", "Deepak"],
-        totalExpenses: 5200,
-        myBalance: 0,
-        date: "2025-09-25",
-      },
-    ];
-
-    setTimeout(() => {
-      setGroups(sampleData);
-      const owed = sampleData
-        .filter((g) => g.myBalance < 0)
-        .reduce((sum, g) => sum + Math.abs(g.myBalance), 0);
-      const owing = sampleData
-        .filter((g) => g.myBalance > 0)
-        .reduce((sum, g) => sum + g.myBalance, 0);
-      setTotalOwed(owed);
-      setTotalOwing(owing);
-      setLoading(false);
-    }, 1000);
-  }, []);
+    const load = async () => {
+      try {
+        setError(null);
+        const data = await fetchGroups();
+        const owed = (data || [])
+          .map((g) => g.myBalance || 0)
+          .filter((b) => b < 0)
+          .reduce((sum, b) => sum + Math.abs(b), 0);
+        const owing = (data || [])
+          .map((g) => g.myBalance || 0)
+          .filter((b) => b > 0)
+          .reduce((sum, b) => sum + b, 0);
+        setTotalOwed(owed);
+        setTotalOwing(owing);
+      } catch (err) {
+        setError("Failed to load groups.");
+      }
+    };
+    load();
+  }, [fetchGroups]);
 
   // ✅ Search Filter
   const filteredGroups = groups.filter((group) =>
     group.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // ✅ Delete Function (Frontend only)
-  const handleDelete = (id) => {
-    if (!window.confirm("Are you sure you want to delete this group?")) return;
-    setGroups(groups.filter((g) => g._id !== id));
+  // Delete placeholder until backend endpoint exists
+  const handleDelete = () => {
+    alert("Delete group is not yet implemented.");
   };
 
   // ✅ Open Modal
@@ -81,15 +65,16 @@ const GroupExpense = () => {
     setSelectedGroup(null);
     setIsModalOpen(false);
   };
-  // if (loading)
-  //   return (
-  //     <div className="flex justify-center items-center min-h-screen">
-  //       <div className="text-center">
-  //         <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600 mb-4"></div>
-  //         <p className="text-xl font-semibold text-gray-700">Loading groups...</p>
-  //       </div>
-  //     </div>
-  //   );
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600 mb-4"></div>
+          <p className="text-xl font-semibold text-gray-700">Loading groups...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
@@ -106,12 +91,18 @@ const GroupExpense = () => {
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                   My Groups
                 </h1>
-                <p className="text-gray-600 mt-2">
+                <p className="text-gray-600">
                   Manage your expense groups and track shared costs
                 </p>
               </div>
             </div>
           </div>
+
+          {error && (
+            <div className="mb-6 bg-red-50 border border-red-200 rounded-xl p-4">
+              <p className="text-red-600 text-center text-sm font-medium">{error}</p>
+            </div>
+          )}
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -214,14 +205,16 @@ const GroupExpense = () => {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-100">
                   {filteredGroups.map((group) => {
-                    const yourShare =
-                      group.totalExpenses / group.members.length;
-                    const youPaid = group.myBalance;
+                    const totalExpenses = Number(group.totalExpenses) || 0;
+                    const memberCount = Array.isArray(group.members) ? group.members.length : 0;
+                    const yourShare = memberCount > 0 ? totalExpenses / memberCount : 0;
+                    const youPaid = Number(group.myBalance) || 0;
+                    const displayDate = formatDate(group.createdAt);
                     return (
                       <tr key={group._id} className="hover:bg-blue-50 transition-colors duration-200">
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                           <div className="flex items-center gap-2">
-                            {group.date}
+                            {displayDate}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -231,13 +224,13 @@ const GroupExpense = () => {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center gap-2">
                             <span className="text-sm text-gray-600 font-medium ml-4">
-                              {group.members.length}
+                              {memberCount}
                             </span>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm font-bold text-gray-800">
-                            ₹{group.totalExpenses.toFixed(2)}
+                            ₹{totalExpenses.toFixed(2)}
                           </div>
                         </td>
                         <td className="px-6 py-4 text-sm">
@@ -257,12 +250,12 @@ const GroupExpense = () => {
 
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
-                            className={`px-3 py-1.5 inline-flex text-xs leading-5 font-semibold rounded-full ${group.myBalance === 0
+                            className={`px-3 py-1.5 inline-flex text-xs leading-5 font-semibold rounded-full ${youPaid === 0
                               ? "bg-green-100 text-green-800"
                               : "bg-blue-100 text-blue-800"
                               }`}
                           >
-                            {group.myBalance === 0 ? "✓ Settled" : "⚡ Active"}
+                            {youPaid === 0 ? "✓ Settled" : "⚡ Active"}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -303,8 +296,11 @@ const GroupExpense = () => {
             {/* Group Cards for Mobile */}
             <div className="md:hidden p-4 space-y-4">
               {filteredGroups.map((group) => {
-                const yourShare = group.totalExpenses / group.members.length;
-                const youPaid = group.myBalance;
+                const totalExpenses = Number(group.totalExpenses) || 0;
+                const memberCount = Array.isArray(group.members) ? group.members.length : 0;
+                const yourShare = memberCount > 0 ? totalExpenses / memberCount : 0;
+                const youPaid = Number(group.myBalance) || 0;
+                const displayDate = formatDate(group.createdAt);
                 return (
                   <div
                     key={group._id}
@@ -316,7 +312,7 @@ const GroupExpense = () => {
                         <p className="text-xs text-gray-500 mb-2">{group.description}</p>
                         <div className="flex items-center gap-2 text-sm text-gray-600">
                           <Calendar size={14} className="text-gray-400" />
-                          <span>{group.date}</span>
+                          <span>{displayDate}</span>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
@@ -349,14 +345,14 @@ const GroupExpense = () => {
                         ))}
                       </div> */}
                       <span className="text-sm text-gray-600 font-medium ml-1">
-                        {group.members.length} members
+                        {memberCount} members
                       </span>
                     </div>
 
                     <div className="space-y-3">
                       <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
                         <span className="text-sm font-semibold text-gray-700">Total Spent</span>
-                        <span className="text-lg font-bold text-gray-900">₹{group.totalExpenses.toFixed(2)}</span>
+                        <span className="text-lg font-bold text-gray-900">₹{totalExpenses.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between items-center p-3 bg-blue-50 rounded-xl">
                         <span className="text-sm font-semibold text-gray-700">Your Share</span>
@@ -373,12 +369,12 @@ const GroupExpense = () => {
                     <div className="mt-4 pt-4 border-t border-gray-200 flex justify-between items-center">
                       <span className="text-sm font-semibold text-gray-700">Status</span>
                       <span
-                        className={`px-4 py-1.5 inline-flex text-xs leading-5 font-bold rounded-full ${group.myBalance === 0
+                        className={`px-4 py-1.5 inline-flex text-xs leading-5 font-bold rounded-full ${youPaid === 0
                           ? "bg-green-100 text-green-800"
                           : "bg-blue-100 text-blue-800"
                           }`}
                       >
-                        {group.myBalance === 0 ? "✓ Settled" : "⚡ Active"}
+                        {youPaid === 0 ? "✓ Settled" : "⚡ Active"}
                       </span>
                     </div>
                   </div>

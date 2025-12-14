@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Sidebar from "../Layouts/Sidebar";
 import {
@@ -19,28 +19,29 @@ import {
 import {
     MdAccountBalance,
     MdPerson,
-    MdClose,
     MdTrendingUp,
     MdTrendingDown,
-    MdAttachMoney,
 } from "react-icons/md";
-import { IoMdClose } from "react-icons/io";
 import { CgMail } from "react-icons/cg";
-import { HiCurrencyRupee } from "react-icons/hi";
 import {
     PieChart,
     Pie,
     Cell,
     ResponsiveContainer,
-    Legend,
     Tooltip,
-    BarChart,
-    Bar,
-    XAxis,
-    YAxis,
-    CartesianGrid,
 } from "recharts";
-import { IoPulse } from "react-icons/io5";
+import AddExpenseModal from "./Models/AddExpenseModal";
+import SettlePaymentModal from "./Models/SettlePaymentModal";
+import AddMembersModal from "./Models/AddMembersModel";
+import TransactionDetailsModal from "./Models/TransactionDetailsModel";
+
+
+const formatDate = (value) => {
+    if (!value) return "N/A";
+    const date = new Date(value);
+    if (Number.isNaN(date)) return "N/A";
+    return date.toLocaleDateString("en-GB").replace(/\//g, "-");
+};
 
 
 const GroupExpenseDetails = () => {
@@ -48,7 +49,9 @@ const GroupExpenseDetails = () => {
     const navigate = useNavigate();
 
     const [showAddExpense, setShowAddExpense] = useState(false);
+    const [showAddMemberModal, setShowAddMemberModal] = useState(false);
     const [showSettleModal, setShowSettleModal] = useState(false);
+    const [showTransactionModal, setShowTransactionModal] = useState(false);
     const [filterCategory, setFilterCategory] = useState("all");
     const [filterSettled, setFilterSettled] = useState("all");
     const [selectedExpense, setSelectedExpense] = useState(null);
@@ -69,17 +72,20 @@ const GroupExpenseDetails = () => {
         id: id || "1",
         name: "Trip to Goa",
         description: "Beach vacation with college friends",
+        owner: { id: 1, name: "You", email: "you@example.com" },
         members: [
-            { id: 1, name: "You", email: "you@example.com" , phone: "9876543210"},
-            { id: 2, name: "Alok Kumar", email: "alok@example.com" , phone: "9123456780"},
-            { id: 3, name: "Priya Sharma", email: "priya@example.com" , phone: "9234567891"},
-            { id: 4, name: "Ravi Singh", email: "ravi@example.com" , phone: "9345678902"},
-            { id: 5, name: "Neha Gupta", email: "neha@example.com" , phone: "9456789013"},
+            { id: 1, name: "You", email: "you@example.com", phone: "9876543210" },
+            { id: 2, name: "Alok Kumar", email: "alok@example.com", phone: "9123456780" },
+            { id: 3, name: "Priya Sharma", email: "priya@example.com", phone: "9234567891" },
+            { id: 4, name: "Ravi Singh", email: "ravi@example.com", phone: "9345678902" },
+            { id: 5, name: "Neha Gupta", email: "neha@example.com", phone: "9456789013" },
         ],
         totalExpenses: 25450,
         yourShare: 5090,
         createdAt: "2025-11-15",
     };
+
+    const [members, setMembers] = useState(groupDetails.members);
 
     const [expenses, setExpenses] = useState([
         {
@@ -125,6 +131,13 @@ const GroupExpenseDetails = () => {
             settled: false,
             splitAmong: 5,
             yourShare: 490,
+            participants: [
+                { name: "You", share: 490, status: "paid" },
+                { name: "Alok Kumar", share: 490, status: "pending" },
+                { name: "Priya Sharma", share: 490, status: "pending" },
+                { name: "Ravi Singh", share: 490, status: "pending" },
+                { name: "Neha Gupta", share: 490, status: "pending" },
+            ],
         },
         {
             id: 5,
@@ -186,12 +199,12 @@ const GroupExpenseDetails = () => {
             id: expenses.length + 1,
             ...expenseData,
             amount: parseFloat(expenseData.amount),
-            paidBy: groupDetails.members.find(
+            paidBy: members.find(
                 (m) => m.id.toString() === expenseData.paidBy
             ),
             settled: false,
-            splitAmong: groupDetails.members.length,
-            yourShare: parseFloat(expenseData.amount) / groupDetails.members.length,
+            splitAmong: members.length,
+            yourShare: parseFloat(expenseData.amount) / members.length,
         };
         setExpenses([...expenses, newExpense]);
         setShowAddExpense(false);
@@ -216,6 +229,16 @@ const GroupExpenseDetails = () => {
         setExpenses(
             expenses.map((e) => (e.id === expenseId ? { ...e, settled: true } : e))
         );
+    };
+
+    const handleSettleConfirm = () => {
+        alert("Payment settled successfully!");
+        setShowSettleModal(false);
+    };
+
+    const handleAddMembersSave = (newMembers) => {
+        setMembers((prev) => [...prev, ...newMembers]);
+        setShowAddMemberModal(false);
     };
 
     const filteredExpenses = expenses.filter((expense) => {
@@ -265,18 +288,24 @@ const GroupExpenseDetails = () => {
                                         </p>
                                         <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
                                             <span className="flex items-center gap-1">
-                                                <FaUsers /> {groupDetails.members.length} members
+                                                <FaUsers className="text-purple-500" />  members:&nbsp;{members.length}
                                             </span>
                                             <span className="flex items-center gap-1">
-                                                <FaCalendarAlt /> Created{" "}
-                                                {new Date(groupDetails.createdAt).toLocaleDateString()}
+                                                <FaCalendarAlt className="text-blue-500" /> Created:{" "}
+                                                {formatDate(groupDetails.createdAt)}
                                             </span>
+                                            <span className="flex items-center gap-1 md:inline-flex hidden">
+                                                <MdPerson className="text-teal-500" /> Owner: <span className="bg-blue-200 px-2 py-1 text-blue-500 rounded-l-full rounded-r-full font-semibold">{groupDetails.owner?.name}</span>
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-2 mt-2  text-sm text-gray-500 lg:hidden">
+                                            <MdPerson className="text-teal-500" /> Owner: <span className="bg-blue-200 px-2 py-1 text-blue-500 rounded-l-full rounded-r-full font-semibold">{groupDetails.owner?.name}</span>
                                         </div>
                                     </div>
                                 </div>
                                 <button
                                     onClick={() => setShowAddExpense(true)}
-                                    className="bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white px-6 py-3 rounded-xl flex items-center gap-2 font-semibold transition-all duration-300 shadow-lg hover:shadow-xl"
+                                    className="bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white px-6 py-3 rounded-xl flex items-center gap-2 font-semibold transition-all duration-300 shadow-lg hover:shadow-xl isPhone"
                                 >
                                     <FaPlus /> Add Expense
                                 </button>
@@ -286,10 +315,10 @@ const GroupExpenseDetails = () => {
                     </div>
 
                     {/* Stats Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8 ">
                         <div className="bg-white rounded-2xl p-6 text-gray-800 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-                            <div className="flex items-center justify-between">
-                                <div>
+                            <div className="flex items-center justify-between GroupStatsCards">
+                                <div className="GroupStatsCards-info">
                                     <p className="text-gray-600 text-sm font-medium mb-1">
                                         Total Expenses
                                     </p>
@@ -307,8 +336,8 @@ const GroupExpenseDetails = () => {
                         </div>
 
                         <div className="bg-white rounded-2xl p-6 text-gray-800 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-                            <div className="flex items-center justify-between">
-                                <div>
+                            <div className="flex items-center justify-between GroupStatsCards">
+                                <div className="GroupStatsCards-info">
                                     <p className="text-gray-600 text-sm font-medium mb-1">
                                         Your Share
                                     </p>
@@ -324,8 +353,8 @@ const GroupExpenseDetails = () => {
                         </div>
 
                         <div className="bg-white rounded-2xl p-6 text-gray-800 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-                            <div className="flex items-center justify-between">
-                                <div>
+                            <div className="flex items-center justify-between GroupStatsCards">
+                                <div className="GroupStatsCards-info">
                                     <p className="text-gray-600 text-sm font-medium mb-1">
                                         You're Owed
                                     </p>
@@ -341,8 +370,8 @@ const GroupExpenseDetails = () => {
                         </div>
 
                         <div className="bg-white rounded-2xl p-6 text-gray-800 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-                            <div className="flex items-center justify-between">
-                                <div>
+                            <div className="flex items-center justify-between GroupStatsCards">
+                                <div className="GroupStatsCards-info">
                                     <p className="text-gray-600 text-sm font-medium mb-1">
                                         You Owe
                                     </p>
@@ -440,11 +469,11 @@ const GroupExpenseDetails = () => {
                                                             <span className="text-xs bg-teal-100 text-teal-700 px-3 py-1 rounded-full font-medium">
                                                                 {expense.category}
                                                             </span>
-                                                            {expense.settled && (
+                                                            {/* {expense.settled && (
                                                                 <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium flex items-center gap-1">
                                                                     <FaCheckCircle /> Settled
                                                                 </span>
-                                                            )}
+                                                            )} */}
                                                         </div>
                                                         <h4 className="font-bold text-lg text-gray-800 mb-1">
                                                             {expense.description}
@@ -457,7 +486,7 @@ const GroupExpenseDetails = () => {
                                                             <span className="hidden md:inline">•</span>
                                                             <span className="flex items-center gap-1">
                                                                 <FaCalendarAlt className="text-blue-500" />
-                                                                {new Date(expense.date).toLocaleDateString()}
+                                                                {formatDate(expense.date)}
                                                             </span>
                                                             <span className="hidden md:inline">•</span>
                                                             <span className="flex items-center gap-1">
@@ -482,7 +511,17 @@ const GroupExpenseDetails = () => {
                                                                 ₹{expense.amount}
                                                             </p>
                                                         </div>
-                                                        <div className="flex gap-2">
+                                                        {/* <div className="flex gap-2">
+                                                            <button
+                                                                onClick={() => {
+                                                                    setSelectedExpense(expense);
+                                                                    setShowTransactionModal(true);
+                                                                }}
+                                                                className="p-2 bg-purple-100 hover:bg-purple-200 text-purple-600 rounded-lg transition-colors"
+                                                                title="View details"
+                                                            >
+                                                                <FaReceipt />
+                                                            </button>
                                                             {!expense.settled && (
                                                                 <button
                                                                     onClick={() => handleSettleExpense(expense.id)}
@@ -509,7 +548,7 @@ const GroupExpenseDetails = () => {
                                                             >
                                                                 <FaTrash />
                                                             </button>
-                                                        </div>
+                                                        </div> */}
                                                     </div>
                                                 </div>
                                             </div>
@@ -572,11 +611,15 @@ const GroupExpenseDetails = () => {
                                         <FaUserFriends className="text-purple-500" />
                                         Members
                                     </h2>
-                                    <button className="bg-gradient-to-br from-teal-400 to-teal-600 text-white px-2 py-2 rounded-lg hover:bg-green-600 transition-colors cursor-pointer flex items-center gap-1 text-sm">
-                                        <FaPlus /> Add Member</button>
+                                    <button
+                                        onClick={() => setShowAddMemberModal(true)}
+                                        className="bg-gradient-to-br from-teal-400 to-teal-600 text-white px-2 py-2 rounded-lg hover:bg-green-600 transition-colors cursor-pointer flex items-center gap-1 text-sm"
+                                    >
+                                        <FaPlus /> Add Member
+                                    </button>
                                 </div>
                                 <div className="space-y-3">
-                                    {groupDetails.members.map((member) => (
+                                    {members.map((member) => (
                                         <div
                                             key={member.id}
                                             className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors"
@@ -588,9 +631,14 @@ const GroupExpenseDetails = () => {
                                                 <p className="font-semibold text-gray-800">
                                                     {member.name}
                                                 </p>
-                                                <p className="text-xs text-gray-500"><span className="flex items-center gap-1"><CgMail /> {member.email}</span></p>
-                                                <p className="text-xs text-gray-500"> <span className="flex items-center gap-1"> <FaPhoneAlt />  {member.phone}</span></p>
+                                                <p className="text-xs text-gray-500 flex flex-row"><span className="flex items-center gap-1"><CgMail className="text-blue-500" /> {member.email}</span>
+                                                    <span className="flex items-center gap-1"> &nbsp; <FaPhoneAlt className="text-green-500" />  {member.phone}</span></p>
                                             </div>
+                                            <div className="p-2  hover:bg-red-100 text-red-600 rounded-lg transition-colors cursor-pointer" title="Remove member">
+                                                <FaTrash />
+                                            </div>
+
+
                                         </div>
                                     ))}
                                 </div>
@@ -648,226 +696,62 @@ const GroupExpenseDetails = () => {
                             </div>
                         </div>
                     </div>
+                    {/* Mobile floating Add Expense button */}
+                    <button
+                        onClick={() => setShowAddExpense(true)}
+                        className="lg:hidden fixed bottom-6 right-6 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white px-4 py-4 rounded-full flex items-center justify-center gap-2 font-semibold transition-all duration-300 shadow-2xl"
+                        aria-label="Add expense"
+                    >
+                        <FaPlus />
+                    </button>
+
                 </div>
+
             </div>
 
 
-            {/* Add Expense Modal */}
-            {
-                showAddExpense && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-                            <div className="sticky top-0 bg-gradient-to-r from-teal-500 to-teal-600 text-white p-6 rounded-t-2xl">
-                                <div className="flex items-center justify-between">
-                                    <h3 className="text-2xl font-bold flex items-center gap-2">
-                                        <FaPlus /> Add New Expense
-                                    </h3>
-                                    <button
-                                        onClick={() => setShowAddExpense(false)}
-                                        className="p-2 hover:bg-white/20 rounded-lg transition-colors"
-                                    >
-                                        <IoMdClose className="text-2xl" />
-                                    </button>
-                                </div>
-                            </div>
+            <AddExpenseModal
+                open={showAddExpense}
+                expenseData={expenseData}
+                onChange={handleInputChange}
+                onClose={() => setShowAddExpense(false)}
+                onSubmit={handleSubmit}
+                categories={categories}
+                members={members}
+            />
 
-                            <form onSubmit={handleSubmit} className="p-6 space-y-6">
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                        Description *
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="description"
-                                        value={expenseData.description}
-                                        onChange={handleInputChange}
-                                        placeholder="e.g., Group dinner at restaurant"
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                                        required
-                                    />
-                                </div>
+            <SettlePaymentModal
+                open={showSettleModal}
+                amount={totalOwe}
+                onClose={() => setShowSettleModal(false)}
+                onConfirm={handleSettleConfirm}
+            />
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            Amount (₹) *
-                                        </label>
-                                        <input
-                                            type="number"
-                                            name="amount"
-                                            value={expenseData.amount}
-                                            onChange={handleInputChange}
-                                            placeholder="0.00"
-                                            step="0.01"
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                                            required
-                                        />
-                                    </div>
+            <AddMembersModal
+                open={showAddMemberModal}
+                onClose={() => setShowAddMemberModal(false)}
+                onSave={handleAddMembersSave}
+                existingMembers={members}
+            />
 
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            Category *
-                                        </label>
-                                        <select
-                                            name="category"
-                                            value={expenseData.category}
-                                            onChange={handleInputChange}
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                                            required
-                                        >
-                                            <option value="">Select category</option>
-                                            {categories.map((cat) => (
-                                                <option key={cat} value={cat}>
-                                                    {cat}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            Paid By *
-                                        </label>
-                                        <select
-                                            name="paidBy"
-                                            value={expenseData.paidBy}
-                                            onChange={handleInputChange}
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                                            required
-                                        >
-                                            <option value="">Select member</option>
-                                            {groupDetails.members.map((member) => (
-                                                <option key={member.id} value={member.id}>
-                                                    {member.name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            Date *
-                                        </label>
-                                        <input
-                                            type="date"
-                                            name="date"
-                                            value={expenseData.date}
-                                            onChange={handleInputChange}
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                                            required
-                                        />
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                        Split Type
-                                    </label>
-                                    <select
-                                        name="splitType"
-                                        value={expenseData.splitType}
-                                        onChange={handleInputChange}
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                                    >
-                                        <option value="equal">Split Equally</option>
-                                        <option value="custom">Custom Split</option>
-                                        <option value="percentage">By Percentage</option>
-                                    </select>
-                                </div>
-
-                                <div className="flex gap-4 pt-4">
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowAddExpense(false)}
-                                        className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors"
-                                    >
-                                        Cancel
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        className="flex-1 px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
-                                    >
-                                        Add Expense
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                )
-            }
-
-            {/* Settle Payment Modal */}
-            {
-                showSettleModal && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
-                            <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-6 rounded-t-2xl">
-                                <div className="flex items-center justify-between">
-                                    <h3 className="text-2xl font-bold flex items-center gap-2">
-                                        <MdAccountBalance /> Settle Payment
-                                    </h3>
-                                    <button
-                                        onClick={() => setShowSettleModal(false)}
-                                        className="p-2 hover:bg-white/20 rounded-lg transition-colors"
-                                    >
-                                        <IoMdClose className="text-2xl" />
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div className="p-6 space-y-4">
-                                <div className="bg-orange-50 border-2 border-orange-200 rounded-xl p-4 text-center">
-                                    <p className="text-gray-600 mb-2">Amount to settle</p>
-                                    <p className="text-4xl font-bold text-orange-600">₹{totalOwe}</p>
-                                </div>
-
-                                <div className="space-y-3">
-                                    <label className="block text-sm font-semibold text-gray-700">
-                                        Payment Method
-                                    </label>
-                                    <select className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent">
-                                        <option>UPI</option>
-                                        <option>Bank Transfer</option>
-                                        <option>Cash</option>
-                                        <option>Credit Card</option>
-                                    </select>
-                                </div>
-
-                                <div className="space-y-3">
-                                    <label className="block text-sm font-semibold text-gray-700">
-                                        Reference / Transaction ID (Optional)
-                                    </label>
-                                    <input
-                                        type="text"
-                                        placeholder="Enter transaction reference"
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                                    />
-                                </div>
-
-                                <div className="flex gap-4 pt-4">
-                                    <button
-                                        onClick={() => setShowSettleModal(false)}
-                                        className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors"
-                                    >
-                                        Cancel
-                                    </button>
-                                    <button
-                                        onClick={() => {
-                                            alert("Payment settled successfully!");
-                                            setShowSettleModal(false);
-                                        }}
-                                        className="flex-1 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
-                                    >
-                                        Confirm Payment
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )
-            }
+            <TransactionDetailsModal
+                open={showTransactionModal}
+                transaction={selectedExpense}
+                onClose={() => setShowTransactionModal(false)}
+                onSettle={(txn) => {
+                    if (txn?.id) handleSettleExpense(txn.id);
+                    setShowTransactionModal(false);
+                }}
+                onEdit={(txn) => {
+                    setSelectedExpense(txn);
+                    setShowEditModal(true);
+                    setShowTransactionModal(false);
+                }}
+                onDelete={(txn) => {
+                    if (txn?.id) handleDeleteExpense(txn.id);
+                    setShowTransactionModal(false);
+                }}
+            />
         </>
     );
 };

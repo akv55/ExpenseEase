@@ -58,9 +58,27 @@
   .group-container{
     margin-top: 3.5rem;
   }
-  
-} 
+  .GroupStatsCards {
+    flex-direction:column-reverse;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+  .isPhone {
+    display: none !important;
+  }
+ 
+}
 
+/* @media (min-width: 769px) {
+  .isPhone {
+    display: block !important;
+  }
+  .isDesktop {
+    display: none !important;
+  }
+} */
 /* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
