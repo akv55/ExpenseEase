@@ -9,9 +9,9 @@ import { useExpense } from "../../context/expenseContext";
 
 const formatDate = (value) => {
   if (!value) return "N/A";
-  const date = new Date(value);
-  if (Number.isNaN(date)) return "N/A";
-  return date.toLocaleDateString("en-GB").replace(/\//g, "-");
+  const createdAt = new Date(value);
+  if (Number.isNaN(createdAt)) return "N/A";
+  return createdAt.toLocaleDateString("en-GB").replace(/\//g, "-");
 };
 
 const RecentTransactions = () => {
@@ -27,7 +27,7 @@ const RecentTransactions = () => {
         ...incomes.map((item) => ({ ...item, type: "income" })),
         ...expenses.map((item) => ({ ...item, type: "expense" })),
       ];
-      combined.sort((a, b) => new Date(b.date) - new Date(a.date));
+      combined.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       setTransactions(combined.slice(0, 10)); // show last 10
     }
   }, [incomes, expenses]);
@@ -60,7 +60,7 @@ const RecentTransactions = () => {
                     {tx.category}
                   </p>
                   <p className="text-sm text-gray-500 capitalize">
-                    {formatDate(tx.date)}
+                    {formatDate(tx.createdAt)}
                   </p>
                 </div>
               </div>

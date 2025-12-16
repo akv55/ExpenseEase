@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Sidebar from '../Layouts/Sidebar';
 import { FaWallet, FaCalendarAlt, FaSave, FaTimes } from 'react-icons/fa';
-import { Link,useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useExpense } from '../../context/expenseContext';
 
 const AddExpense = () => {
@@ -12,22 +12,21 @@ const AddExpense = () => {
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const [formData, setFormData] = useState({
     amount: '',
-    date: '',
     description: '',
     category: ''
   });
-  const { amount, date, description, category } = formData;
+  const { amount,  description, category } = formData;
   const handleSubmit = async (e) => {
     e.preventDefault();
     setHasAttemptedSubmit(true);
-    if (!amount || !date || !description || !category) {
+    if (!amount || !description || !category) {
       setError("Please fill out all required fields.");
       return;
     }
     setLoading(true);
     try {
       await addExpense(formData);
-      setFormData({ amount: '', date: '', description: '', category: '' });
+      setFormData({ amount: '', description: '', category: '' });
       navigate('/dashboard');
     } catch (error) {
       setError("Failed to add Expense.");
@@ -40,10 +39,10 @@ const AddExpense = () => {
     if (error) setError(null);
   };
   return (
-  <div className="min-h-screen bg-gradient-to-br from-teal-50 to-indigo-100 transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 to-indigo-100 transition-colors duration-300">
       <Sidebar />
-    <div className="md:ml-64 ml-0 p-4 md:p-8">
-      <div className="max-w-4xl mx-auto w-full">
+      <div className="md:ml-64 ml-0 p-4 md:p-8">
+        <div className="max-w-4xl mx-auto w-full">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Add New Expense</h1>
           </div>
@@ -76,19 +75,36 @@ const AddExpense = () => {
                   </div>
                 </div>
 
+                {/* Category Selection */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Date <span className="text-red-600">*</span></label>
-                  <div className="relative">
-                    <FaCalendarAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                    <input
-                      type="date"
-                      onChange={handleChange}
-                      name="date"
-                      value={date}
-                      max={new Date().toISOString().split('T')[0]}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900 outline-none"
-                    />
-                  </div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Category <span className="text-red-600">*</span></label>
+                  <select
+                    onChange={handleChange}
+                    name="category"
+                    value={category}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900 outline-none"
+                  >
+                    <option value="">Select a category</option>
+                    <option value="fast food"> Fast Food</option>
+                    <option value="entertainment">Entertainment</option>
+                    <option value="fruits">Fruits</option>
+                    <option value="vegetables">Vegetables</option>
+                    <option value="health">Health</option>
+                    <option value="shopping">Shopping</option>
+                    <option value="education">Education</option>
+                    <option value="travel">Travel</option>
+                    <option value="rent">Rent</option>
+                    <option value="electricity bill">Electricity Bill</option>
+                    <option value="water bill">Water Bill</option>
+                    <option value="internet bill">Internet Bill</option>
+                    <option value="subscriptions">Subscriptions</option>
+                    <option value="gas bill">Gas Bill</option>
+                    <option value="fuel">Fuel</option>
+                    <option value="groceries shopping">Groceries Shopping</option>
+                    <option value="gifts">Gifts</option>
+                    <option value="other">Other</option>
+                  </select>
+                  <p className="mt-2 text-sm text-gray-500"><span className="font-semibold text-red-600">Note:</span> Please select the category that best fits your expense.</p>
                 </div>
 
               </div>
@@ -104,37 +120,7 @@ const AddExpense = () => {
                   placeholder="What did you spend on?"
                 />
               </div>
-              {/* Category Selection */}
-              <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Category <span className="text-red-600">*</span></label>
-                <select
-                  onChange={handleChange}
-                  name="category"
-                  value={category}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900 outline-none"
-                >
-                  <option value="">Select a category</option>
-                  <option value="fast food"> Fast Food</option>
-                  <option value="entertainment">Entertainment</option>
-                  <option value="fruits">Fruits</option>
-                  <option value="vegetables">Vegetables</option>
-                  <option value="health">Health</option>
-                  <option value="shopping">Shopping</option>
-                  <option value="education">Education</option>
-                  <option value="travel">Travel</option>
-                  <option value="rent">Rent</option>
-                  <option value="electricity bill">Electricity Bill</option>
-                  <option value="water bill">Water Bill</option>
-                  <option value="internet bill">Internet Bill</option>
-                  <option value="subscriptions">Subscriptions</option>
-                  <option value="gas bill">Gas Bill</option>
-                  <option value="fuel">Fuel</option>
-                  <option value="groceries shopping">Groceries Shopping</option>
-                  <option value="gifts">Gifts</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-                <p className="mt-2 text-sm text-gray-500">Please select the category that best fits your expense source.</p>
+
               {/* Action Buttons */}
               <div className="flex gap-4 mt-8">
                 <button
