@@ -1,7 +1,7 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../../context/authContext";
-import { IoSettingsOutline,IoCreate } from "react-icons/io5";
+import { IoSettingsOutline, IoCreate } from "react-icons/io5";
 import { MdGroupAdd } from "react-icons/md";
 import {
   FaTachometerAlt,
@@ -35,6 +35,7 @@ export default function Sidebar() {
     { path: "/create-group", label: "Create Group", icon: IoCreate, color: "text-orange-500" },
     { path: "/group-expenses", label: "Group Expenses", icon: FaUsers, color: "text-teal-500" },
     { path: "/settings", label: "Settings", icon: IoSettingsOutline, color: "text-gray-500" },
+    { path: "/notifications", label: "Notifications", icon: MdGroupAdd, color: "text-yellow-500" },
     { path: "/reports", label: "Reports", icon: FaChartBar, color: "text-pink-500" },
   ];
 
@@ -96,16 +97,14 @@ export default function Sidebar() {
                   <Link
                     to={item.path}
                     onClick={() => setIsMobileOpen(false)} // Close sidebar after navigation (mobile)
-                    className={`flex items-center px-3 py-3 rounded-lg transition-all duration-200 group ${
-                      isActive(item.path)
+                    className={`flex items-center px-3 py-3 rounded-lg transition-all duration-200 group ${isActive(item.path)
                         ? "bg-teal-500 text-white shadow-md"
                         : "text-gray-700 hover:bg-gray-100 hover:text-teal-500"
                       }`}
                     title={isCollapsed ? item.label : ""}
                   >
                     <Icon
-                      className={`w-5 h-5 flex-shrink-0 ${
-                        isActive(item.path)
+                      className={`w-5 h-5 flex-shrink-0 ${isActive(item.path)
                           ? "text-white"
                           : `${item.color} group-hover:scale-110`
                         }`}
@@ -124,8 +123,7 @@ export default function Sidebar() {
         <div className="border-t border-gray-200 p-2">
           <button
             onClick={handleLogout}
-            className={`w-full flex items-center px-3 py-3 rounded-lg transition-all duration-200 group bg-red-500/50${
-              isCollapsed ? "justify-center" : ""
+            className={`w-full flex items-center px-3 py-3 rounded-lg transition-all duration-200 group bg-red-500/50${isCollapsed ? "justify-center" : ""
               } text-gray-700 hover:bg-red-100 hover:text-red-600`}
             title={isCollapsed ? "Logout" : ""}
           >

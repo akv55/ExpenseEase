@@ -2,7 +2,7 @@ import React from "react";
 import { FaPlus } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 
-const AddExpenseModal = ({
+const AddGroupExpenseModal = ({
     open,
     expenseData,
     onChange,
@@ -14,7 +14,7 @@ const AddExpenseModal = ({
     if (!open) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
                 <div className="sticky top-0 bg-gradient-to-r from-teal-500 to-teal-600 text-white p-6 rounded-t-2xl">
                     <div className="flex items-center justify-between">
@@ -32,8 +32,8 @@ const AddExpenseModal = ({
 
                 <form onSubmit={onSubmit} className="p-6 space-y-6">
                     <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                            Description *
+                        <label className="block text-sm font-semibold text-gray-700 mb-2 outline-none">
+                            Title <sman className="text-red-600">*</sman>
                         </label>
                         <input
                             type="text"
@@ -41,7 +41,21 @@ const AddExpenseModal = ({
                             value={expenseData.description}
                             onChange={onChange}
                             placeholder="e.g., Group dinner at restaurant"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-1 focus:ring-teal-500 focus:border-transparent outline-none"
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2 outline-none">
+                            Description <sman className="text-red-600">*</sman>
+                        </label>
+                        <input
+                            type="text"
+                            name="description"
+                            value={expenseData.description}
+                            onChange={onChange}
+                            placeholder="e.g., Group dinner at restaurant"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-1 focus:ring-teal-500 focus:border-transparent outline-none"
                             required
                         />
                     </div>
@@ -49,7 +63,7 @@ const AddExpenseModal = ({
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Amount (₹) *
+                                Amount (₹) <sman className="text-red-600">*</sman>
                             </label>
                             <input
                                 type="number"
@@ -58,20 +72,20 @@ const AddExpenseModal = ({
                                 onChange={onChange}
                                 placeholder="0.00"
                                 step="0.01"
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-1 focus:ring-teal-500 focus:border-transparent outline-none"
                                 required
                             />
                         </div>
 
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Category *
+                                Category <sman className="text-red-600">*</sman>
                             </label>
                             <select
                                 name="category"
                                 value={expenseData.category}
                                 onChange={onChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-1 focus:ring-teal-500 focus:border-transparent outline-none"
                                 required
                             >
                                 <option value="">Select category</option>
@@ -87,13 +101,13 @@ const AddExpenseModal = ({
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Paid By *
+                                Paid By <sman className="text-red-600">*</sman>
                             </label>
                             <select
                                 name="paidBy"
                                 value={expenseData.paidBy}
                                 onChange={onChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-1 focus:ring-teal-500 focus:border-transparent outline-none"
                                 required
                             >
                                 <option value="">Select member</option>
@@ -107,14 +121,14 @@ const AddExpenseModal = ({
 
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Date *
+                                Date <sman className="text-red-600">*</sman>
                             </label>
                             <input
                                 type="date"
                                 name="date"
                                 value={expenseData.date}
                                 onChange={onChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-1 focus:ring-teal-500 focus:border-transparent outline-none"
                                 required
                             />
                         </div>
@@ -122,13 +136,13 @@ const AddExpenseModal = ({
 
                     <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-2">
-                            Split Type
+                            Split Type <sman className="text-red-600">*</sman>
                         </label>
                         <select
                             name="splitType"
                             value={expenseData.splitType}
                             onChange={onChange}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-1 focus:ring-teal-500 focus:border-transparent outline-none"
                         >
                             <option value="equal">Split Equally</option>
                             <option value="custom">Custom Split</option>
@@ -140,13 +154,13 @@ const AddExpenseModal = ({
                         <button
                             type="button"
                             onClick={onClose}
-                            className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors"
+                            className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors cursor-pointer"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
-                            className="flex-1 px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
+                            className="flex-1 px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer"
                         >
                             Add Expense
                         </button>
@@ -157,4 +171,4 @@ const AddExpenseModal = ({
     );
 };
 
-export default AddExpenseModal;
+export default AddGroupExpenseModal;

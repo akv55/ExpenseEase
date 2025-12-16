@@ -5,10 +5,7 @@ import {
     FaUsers,
     FaPlus,
     FaReceipt,
-    FaArrowLeft,
-    FaCheckCircle,
     FaMoneyBillWave,
-    FaEdit,
     FaTrash,
     FaUserFriends,
     FaCalendarAlt,
@@ -30,10 +27,9 @@ import {
     ResponsiveContainer,
     Tooltip,
 } from "recharts";
-import AddExpenseModal from "./Models/AddExpenseModal";
+import AddGroupExpenseModal from "./Models/AddGroupExpenseModal";
 import SettlePaymentModal from "./Models/SettlePaymentModal";
 import AddMembersModal from "./Models/AddMembersModel";
-import TransactionDetailsModal from "./Models/TransactionDetailsModel";
 
 
 const formatDate = (value) => {
@@ -48,14 +44,12 @@ const GroupExpenseDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const [showAddExpense, setShowAddExpense] = useState(false);
+    const [showAddGroupExpense, setShowAddGroupExpense] = useState(false);
     const [showAddMemberModal, setShowAddMemberModal] = useState(false);
     const [showSettleModal, setShowSettleModal] = useState(false);
-    const [showTransactionModal, setShowTransactionModal] = useState(false);
     const [filterCategory, setFilterCategory] = useState("all");
     const [filterSettled, setFilterSettled] = useState("all");
-    const [selectedExpense, setSelectedExpense] = useState(null);
-    const [showEditModal, setShowEditModal] = useState(false);
+
 
     const [expenseData, setExpenseData] = useState({
         description: "",
@@ -72,9 +66,9 @@ const GroupExpenseDetails = () => {
         id: id || "1",
         name: "Trip to Goa",
         description: "Beach vacation with college friends",
-        owner: { id: 1, name: "You", email: "you@example.com" },
+        owner: { id: 1, name: "Alok Kumar", email: "you@example.com" },
         members: [
-            { id: 1, name: "You", email: "you@example.com", phone: "9876543210" },
+            { id: 1, name: "Alok Kumar", email: "you@example.com", phone: "9876543210" },
             { id: 2, name: "Alok Kumar", email: "alok@example.com", phone: "9123456780" },
             { id: 3, name: "Priya Sharma", email: "priya@example.com", phone: "9234567891" },
             { id: 4, name: "Ravi Singh", email: "ravi@example.com", phone: "9345678902" },
@@ -86,7 +80,6 @@ const GroupExpenseDetails = () => {
     };
 
     const [members, setMembers] = useState(groupDetails.members);
-
     const [expenses, setExpenses] = useState([
         {
             id: 1,
@@ -207,7 +200,7 @@ const GroupExpenseDetails = () => {
             yourShare: parseFloat(expenseData.amount) / members.length,
         };
         setExpenses([...expenses, newExpense]);
-        setShowAddExpense(false);
+        setShowAddGroupExpense(false);
         setExpenseData({
             description: "",
             amount: "",
@@ -254,9 +247,11 @@ const GroupExpenseDetails = () => {
     const categories = [
         "Food",
         "Travel",
+        "Groceries Shopping",
+        "Vegetables",
+        "Fruits",
         "Accommodation",
         "Entertainment",
-        "Utilities",
         "Other",
     ];
 
@@ -294,12 +289,12 @@ const GroupExpenseDetails = () => {
                                             </span>
                                         </div>
                                         <div className="flex items-center gap-2 mt-2  text-sm text-gray-500 lg:hidden">
-                                            <MdPerson className="text-teal-500" /> Owner: <span className="bg-blue-200 px-2 py-1 text-blue-500 rounded-l-full rounded-r-full font-semibold">{groupDetails.owner?.name}</span>
+                                            <MdPerson className="text-teal-500" /> Owner: <span className="bg-blue-200 p-1 text-blue-500 rounded-l-full rounded-r-full font-semibold">{groupDetails.owner?.name ||"Alok Kumar"}</span>
                                         </div>
                                     </div>
                                 </div>
                                 <button
-                                    onClick={() => setShowAddExpense(true)}
+                                    onClick={() => setShowAddGroupExpense(true)}
                                     className="bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white px-6 py-3 rounded-xl flex items-center gap-2 font-semibold transition-all duration-300 shadow-lg hover:shadow-xl isPhone"
                                 >
                                     <FaPlus /> Add Expense
@@ -397,7 +392,7 @@ const GroupExpenseDetails = () => {
                                         <select
                                             value={filterCategory}
                                             onChange={(e) => setFilterCategory(e.target.value)}
-                                            className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                                            className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-1 focus:ring-teal-500 focus:border-transparent outline-none"
                                         >
                                             <option value="all">All Categories</option>
                                             {categories.map((cat) => (
@@ -415,7 +410,7 @@ const GroupExpenseDetails = () => {
                                         <select
                                             value={filterSettled}
                                             onChange={(e) => setFilterSettled(e.target.value)}
-                                            className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                                            className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-1 focus:ring-teal-500 focus:border-transparent outline-none"
                                         >
                                             <option value="all">All Members</option>
                                             <option value="settled">Settled</option>
@@ -434,14 +429,6 @@ const GroupExpenseDetails = () => {
                                     <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
                                         Transactions
                                     </h2>
-                                    {/* <div className="flex gap-2 text-sm">
-                                        <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">
-                                            {settledCount} Settled
-                                        </span>
-                                        <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full font-medium">
-                                            {pendingCount} Pending
-                                        </span>
-                                    </div> */}
                                 </div>
 
                                 {filteredExpenses.length === 0 ? (
@@ -457,7 +444,8 @@ const GroupExpenseDetails = () => {
                                         {filteredExpenses.map((expense) => (
                                             <div
                                                 key={expense.id}
-                                                className="border-2 border-gray-100 rounded-xl p-5 hover:border-teal-300 hover:shadow-md transition-all duration-300 bg-gradient-to-r from-white to-gray-50"
+                                               onClick={() => setTransactionDetailsModal(true)}
+                                                className="border-2 border-gray-100 rounded-xl p-5 hover:border-teal-300 hover:shadow-md transition-all duration-300 bg-gradient-to-r from-white to-gray-50 cursor-pointer"
                                             >
                                                 <div className="flex items-start justify-between">
                                                     <div className="flex-1">
@@ -468,11 +456,6 @@ const GroupExpenseDetails = () => {
                                                             <h3 className="font-bold text-lg text-gray-700 mb-1">
                                                                 {expense.description}
                                                             </h3>
-                                                            {/* {expense.settled && (
-                                                                <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium flex items-center gap-1">
-                                                                    <FaCheckCircle /> Settled
-                                                                </span>
-                                                            )} */}
                                                         </div>
 
                                                         <div className="flex flex-col md:flex-row md:items-center gap-2 text-sm text-gray-600">
@@ -497,61 +480,14 @@ const GroupExpenseDetails = () => {
                                                                 ₹{expense.yourShare}
                                                             </span>
                                                         </div>
-                                                        {/* <div className="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
-                                                            <div className="flex items-center justify-between text-sm">
-                                                                <span className="text-gray-600">
-                                                                    Your share:
-                                                                </span>
-                                                                <span className="font-bold text-teal-600">
-                                                                    ₹{expense.yourShare}
-                                                                </span>
-                                                            </div>
-                                                        </div> */}
+                                                       
                                                     </div>
                                                     <div className="ml-4 flex flex-col items-end gap-3">
                                                         <div className="text-right">
-                                                            <p className="text-2xl font-bold text-gray-700">
+                                                            <p className="text-xl font-semibold text-gray-600 ">
                                                                 ₹{expense.amount}
                                                             </p>
                                                         </div>
-                                                        {/* <div className="flex gap-2">
-                                                            <button
-                                                                onClick={() => {
-                                                                    setSelectedExpense(expense);
-                                                                    setShowTransactionModal(true);
-                                                                }}
-                                                                className="p-2 bg-purple-100 hover:bg-purple-200 text-purple-600 rounded-lg transition-colors"
-                                                                title="View details"
-                                                            >
-                                                                <FaReceipt />
-                                                            </button>
-                                                            {!expense.settled && (
-                                                                <button
-                                                                    onClick={() => handleSettleExpense(expense.id)}
-                                                                    className="p-2 bg-green-100 hover:bg-green-200 text-green-600 rounded-lg transition-colors"
-                                                                    title="Mark as settled"
-                                                                >
-                                                                    <FaCheckCircle />
-                                                                </button>
-                                                            )}
-                                                            <button
-                                                                onClick={() => {
-                                                                    setSelectedExpense(expense);
-                                                                    setShowEditModal(true);
-                                                                }}
-                                                                className="p-2 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-lg transition-colors"
-                                                                title="Edit expense"
-                                                            >
-                                                                <FaEdit />
-                                                            </button>
-                                                            <button
-                                                                onClick={() => handleDeleteExpense(expense.id)}
-                                                                className="p-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg transition-colors"
-                                                                title="Delete expense"
-                                                            >
-                                                                <FaTrash />
-                                                            </button>
-                                                        </div> */}
                                                     </div>
                                                 </div>
                                             </div>
@@ -701,7 +637,7 @@ const GroupExpenseDetails = () => {
                     </div>
                     {/* Mobile floating Add Expense button */}
                     <button
-                        onClick={() => setShowAddExpense(true)}
+                        onClick={() => setShowAddGroupExpense(true)}
                         className="lg:hidden fixed bottom-6 right-6 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white px-4 py-4 rounded-full flex items-center justify-center gap-2 font-semibold transition-all duration-300 shadow-2xl"
                         aria-label="Add expense"
                     >
@@ -713,11 +649,11 @@ const GroupExpenseDetails = () => {
             </div>
 
 
-            <AddExpenseModal
-                open={showAddExpense}
+            <AddGroupExpenseModal
+                open={showAddGroupExpense}
                 expenseData={expenseData}
                 onChange={handleInputChange}
-                onClose={() => setShowAddExpense(false)}
+                onClose={() => setShowAddGroupExpense(false)}
                 onSubmit={handleSubmit}
                 categories={categories}
                 members={members}
@@ -737,24 +673,7 @@ const GroupExpenseDetails = () => {
                 existingMembers={members}
             />
 
-            <TransactionDetailsModal
-                open={showTransactionModal}
-                transaction={selectedExpense}
-                onClose={() => setShowTransactionModal(false)}
-                onSettle={(txn) => {
-                    if (txn?.id) handleSettleExpense(txn.id);
-                    setShowTransactionModal(false);
-                }}
-                onEdit={(txn) => {
-                    setSelectedExpense(txn);
-                    setShowEditModal(true);
-                    setShowTransactionModal(false);
-                }}
-                onDelete={(txn) => {
-                    if (txn?.id) handleDeleteExpense(txn.id);
-                    setShowTransactionModal(false);
-                }}
-            />
+           
         </>
     );
 };

@@ -69,7 +69,7 @@ const GroupExpense = () => {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600 mb-4"></div>
+          <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-teal-600 mb-4"></div>
           <p className="text-xl font-semibold text-gray-700">Loading groups...</p>
         </div>
       </div>
@@ -84,12 +84,12 @@ const GroupExpense = () => {
         <div className="max-w-7xl mx-auto">
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-2">
-              <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg">
+              {/* <div className="p-3 bg-gradient-to-br from-teal-400 to-teal-600 rounded-xl shadow-lg">
                 <FaUserFriends className="text-white text-2xl" />
-              </div>
+              </div> */}
               <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                  My Groups
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-teal-400 to-teal-600 bg-clip-text text-transparent">
+                  Group Expense
                 </h1>
                 <p className="text-gray-600">
                   Manage your expense groups and track shared costs
@@ -147,7 +147,7 @@ const GroupExpense = () => {
             <div className="p-6 bg-gradient-to-r from-gray-50 to-white border-b border-gray-200 w-full flex flex-col md:flex-row justify-between md:items-center gap-4">
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                  <CreditCard className="text-blue-600" size={24} />
+                  <CreditCard className="text-teal-600" size={24} />
                   Groups
                 </h2>
                 <p className="text-gray-600 mt-1">Detailed breakdown by group</p>
@@ -164,7 +164,7 @@ const GroupExpense = () => {
                   placeholder="Search groups..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg bg-white text-gray-900 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 placeholder:text-gray-400"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg bg-white text-gray-900 focus:ring-1 focus:ring-teal-500 focus:border-blue-500 outline-none transition-all duration-200 placeholder:text-gray-400"
                 />
               </div>
             </div>
@@ -193,7 +193,10 @@ const GroupExpense = () => {
                       Total Expenses
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                      Your Balance
+                      Your Share
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                      You Paid
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
                       Status
@@ -205,13 +208,13 @@ const GroupExpense = () => {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-100">
                   {filteredGroups.map((group) => {
-                    const totalExpenses = Number(group.totalExpenses) || 0;
-                    const memberCount = Array.isArray(group.members) ? group.members.length : 0;
+                    const totalExpenses = Number(group.totalExpenses) || 4578.89;
+                    const memberCount = Array.isArray(group.members) ? group.members.length : 5;
                     const yourShare = memberCount > 0 ? totalExpenses / memberCount : 0;
                     const youPaid = Number(group.myBalance) || 0;
                     const displayDate = formatDate(group.createdAt);
                     return (
-                      <tr key={group._id} className="hover:bg-blue-50 transition-colors duration-200">
+                      <tr key={group._id} className="hover:bg-blue-50/60 even:bg-gray-50 transition-colors duration-200">
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                           <div className="flex items-center gap-2">
                             {displayDate}
@@ -219,34 +222,34 @@ const GroupExpense = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm font-semibold text-gray-900">{group.name}</div>
+                          {/* {group.description && (
+                            <p className="text-xs text-gray-500 mt-1 line-clamp-1">{group.description}</p>
+                          )} */}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center gap-2">
-                            <span className="text-sm text-gray-600 font-medium ml-4">
-                              {memberCount}
+                            <span className="px-3 py-1 text-xs font-semibold text-blue-700 bg-blue-50 rounded-full border border-blue-100">
+                              {memberCount} member{memberCount === 1 ? "" : "s"}
                             </span>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-bold text-gray-800">
+                          <div className="text-sm font-bold text-gray-800 items-center">
                             ₹{totalExpenses.toFixed(2)}
                           </div>
                         </td>
-                        <td className="px-6 py-4 text-sm">
-                          <div className="space-y-1">
-                            <div className="flex items-center justify-between gap-3">
-                              <span className="text-gray-600 font-medium">Share:</span>
-                              <span className="font-semibold text-gray-800">₹{yourShare.toFixed(2)}</span>
-                            </div>
-                            <div className="flex items-center justify-between gap-3">
-                              <span className="text-gray-600 font-medium">Paid:</span>
-                              <span className={`font-bold ${youPaid >= 0 ? "text-green-600" : "text-red-600"}`}>
-                                {youPaid >= 0 ? "+" : "-"}₹{Math.abs(youPaid).toFixed(2)}
-                              </span>
-                            </div>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center gap-2 ">
+                            <span className="text-sm font-bold text-gray-800">₹{yourShare.toFixed(2)}</span>
                           </div>
                         </td>
-
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center gap-2">
+                            <span className={`text-sm font-bold ${youPaid >= 0 ? "text-green-600" : "text-red-600"}`}>
+                              {youPaid >= 0 ? "+" : "-"}₹{Math.abs(youPaid).toFixed(2)}
+                            </span>
+                          </div>
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
                             className={`px-3 py-1.5 inline-flex text-xs leading-5 font-semibold rounded-full ${youPaid === 0
@@ -257,7 +260,7 @@ const GroupExpense = () => {
                             {youPaid === 0 ? "✓ Settled" : "⚡ Active"}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center gap-3">
                             <Link
                               to={`/group-expense-details/${group._id}`}
@@ -280,7 +283,7 @@ const GroupExpense = () => {
                   })}
                   {filteredGroups.length === 0 && (
                     <tr>
-                      <td colSpan="7" className="text-center py-12">
+                      <td colSpan="8" className="text-center py-12">
                         <div className="flex flex-col items-center gap-3">
                           <FaSearch className="text-gray-300 text-4xl" />
                           <p className="text-gray-500 font-medium">No groups found</p>
@@ -354,13 +357,13 @@ const GroupExpense = () => {
                         <span className="text-lg font-bold text-gray-900">₹{totalExpenses.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between items-center p-3 bg-blue-50 rounded-xl">
-                        <span className="text-sm font-semibold text-gray-700">Your Share</span>
-                        <span className="text-base font-bold text-blue-900">₹{yourShare.toFixed(2)}</span>
+                        <span className="text-sm font-semibold text-gray-700">Your Share:</span>
+                        <span className="text-base font-bold text-teal-900">₹{yourShare.toFixed(2)}65</span>
                       </div>
                       <div className="flex justify-between items-center p-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl">
-                        <span className="text-sm font-semibold text-gray-700">You Paid</span>
+                        <span className="text-sm font-semibold text-gray-700">You Paid:</span>
                         <span className={`text-base font-bold ${youPaid >= 0 ? "text-green-600" : "text-red-600"}`}>
-                          {youPaid >= 0 ? "+" : ""}₹{Math.abs(youPaid).toFixed(2)}
+                          {youPaid >= 0 ? "+" : ""}₹{Math.abs(youPaid).toFixed(2)}95
                         </span>
                       </div>
                     </div>
