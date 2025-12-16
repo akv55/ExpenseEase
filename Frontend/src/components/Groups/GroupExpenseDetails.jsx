@@ -267,12 +267,7 @@ const GroupExpenseDetails = () => {
                 <div className="ml-64 p-4 md:p-8 mt-16 md:mt-0 group-expense-details">
                     {/* Header with Back Button */}
                     <div className="mb-8">
-                        <button
-                            onClick={() => navigate(-1)}
-                            className="flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-4 transition-colors"
-                        >
-                            <FaArrowLeft /> Back to Groups
-                        </button>
+                       
                         <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
                             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                 <div className="flex items-center gap-4">
@@ -280,9 +275,9 @@ const GroupExpenseDetails = () => {
                                         <FaUserFriends className="text-white text-3xl" />
                                     </div>
                                     <div>
-                                        <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
+                                        <h2 className="text-3xl md:text-4xl font-bold text-gray-700">
                                             {groupDetails.name}
-                                        </h1>
+                                        </h2>
                                         <p className="text-gray-600 mt-1">
                                             {groupDetails.description}
                                         </p>
@@ -412,16 +407,17 @@ const GroupExpenseDetails = () => {
                                             ))}
                                         </select>
                                     </div>
+                                    
                                     <div className="flex-1">
                                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                                            Status
+                                           Members
                                         </label>
                                         <select
                                             value={filterSettled}
                                             onChange={(e) => setFilterSettled(e.target.value)}
                                             className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                                         >
-                                            <option value="all">All Status</option>
+                                            <option value="all">All Members</option>
                                             <option value="settled">Settled</option>
                                             <option value="pending">Pending</option>
                                         </select>
@@ -469,19 +465,20 @@ const GroupExpenseDetails = () => {
                                                             <span className="text-xs bg-teal-100 text-teal-700 px-3 py-1 rounded-full font-medium">
                                                                 {expense.category}
                                                             </span>
+                                                            <h3 className="font-bold text-lg text-gray-700 mb-1">
+                                                                {expense.description}
+                                                            </h3>
                                                             {/* {expense.settled && (
                                                                 <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium flex items-center gap-1">
                                                                     <FaCheckCircle /> Settled
                                                                 </span>
                                                             )} */}
                                                         </div>
-                                                        <h4 className="font-bold text-lg text-gray-800 mb-1">
-                                                            {expense.description}
-                                                        </h4>
+
                                                         <div className="flex flex-col md:flex-row md:items-center gap-2 text-sm text-gray-600">
                                                             <span className="flex items-center gap-1">
                                                                 <MdPerson className="text-teal-500" />
-                                                                Paid by {expense.paidBy.name}
+                                                                Paid by: <span className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium">{expense.paidBy?.name || "N/A"}</span>
                                                             </span>
                                                             <span className="hidden md:inline">•</span>
                                                             <span className="flex items-center gap-1">
@@ -493,8 +490,14 @@ const GroupExpenseDetails = () => {
                                                                 <FaUsers className="text-purple-500" />
                                                                 Split {expense.splitAmong} ways
                                                             </span>
+                                                            <span className="text-gray-600">
+                                                                Your share:
+                                                            </span>
+                                                            <span className="font-bold text-teal-600">
+                                                                ₹{expense.yourShare}
+                                                            </span>
                                                         </div>
-                                                        <div className="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                                                        {/* <div className="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
                                                             <div className="flex items-center justify-between text-sm">
                                                                 <span className="text-gray-600">
                                                                     Your share:
@@ -503,11 +506,11 @@ const GroupExpenseDetails = () => {
                                                                     ₹{expense.yourShare}
                                                                 </span>
                                                             </div>
-                                                        </div>
+                                                        </div> */}
                                                     </div>
                                                     <div className="ml-4 flex flex-col items-end gap-3">
                                                         <div className="text-right">
-                                                            <p className="text-2xl font-bold text-gray-800">
+                                                            <p className="text-2xl font-bold text-gray-700">
                                                                 ₹{expense.amount}
                                                             </p>
                                                         </div>

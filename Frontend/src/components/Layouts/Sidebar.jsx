@@ -31,7 +31,7 @@ export default function Sidebar() {
     { path: "/dashboard", label: "Dashboard", icon: FaTachometerAlt, color: "text-blue-500" },
     { path: "/profile", label: "Profile", icon: FaUser, color: "text-purple-500" },
     { path: "/add-expense", label: "Add Expense", icon: FaPlus, color: "text-red-500" },
-    { path: "/add-income", label: "Add Income", icon: FaPlus, color: "text-green-500" },
+    { path: "/add-income", label: "Add Income", icon: FaPlus, color: "text-teal-500" },
     { path: "/create-group", label: "Create Group", icon: IoCreate, color: "text-orange-500" },
     { path: "/group-expenses", label: "Group Expenses", icon: FaUsers, color: "text-teal-500" },
     { path: "/settings", label: "Settings", icon: IoSettingsOutline, color: "text-gray-500" },
@@ -69,7 +69,7 @@ export default function Sidebar() {
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-[#2ECC71] rounded-full flex items-center justify-center cursor-pointer">
+            <div className="w-12 h-12 bg-teal-500 rounded-full flex items-center justify-center cursor-pointer">
               <img src={user?.profileImage?.url} alt="" className="w-12 h-12 rounded-full" />
             </div>
             {!isCollapsed && (
@@ -98,8 +98,8 @@ export default function Sidebar() {
                     onClick={() => setIsMobileOpen(false)} // Close sidebar after navigation (mobile)
                     className={`flex items-center px-3 py-3 rounded-lg transition-all duration-200 group ${
                       isActive(item.path)
-                        ? "bg-[#2ECC71] text-white shadow-md"
-                        : "text-gray-700 hover:bg-gray-100 hover:text-[#2ECC71]"
+                        ? "bg-teal-500 text-white shadow-md"
+                        : "text-gray-700 hover:bg-gray-100 hover:text-teal-500"
                       }`}
                     title={isCollapsed ? item.label : ""}
                   >

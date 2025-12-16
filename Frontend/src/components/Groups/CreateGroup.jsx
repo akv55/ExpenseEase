@@ -104,7 +104,7 @@ const CreateGroup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 to-indigo-100 transition-colors duration-300">
       <Sidebar />
       <div className="ml-64 p-8">
         <div className="max-w-5xl mx-auto">
@@ -146,7 +146,7 @@ const CreateGroup = () => {
                   name="groupName"
                   value={groupName}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-indigo-500 bg-white text-gray-900 outline-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 bg-white text-gray-900 outline-none"
                   placeholder="Enter group name"
                   maxLength={50}
                 />
@@ -166,7 +166,7 @@ const CreateGroup = () => {
                   name="description"
                   value={description}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-indigo-500 bg-white text-gray-900 outline-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 bg-white text-gray-900 outline-none"
                   placeholder="Enter group description"
                   maxLength={120}
                 />
@@ -191,13 +191,13 @@ const CreateGroup = () => {
                     name="members"
                     value={members}
                     onChange={handleChange}
-                    className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-indigo-500 bg-white text-gray-900 outline-none"
+                    className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 bg-white text-gray-900 outline-none"
                     placeholder="Enter member phone numbers"
                   />
                   <button
                     type="button"
                     onClick={handleFindMembers}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-lg"
+                    className="bg-teal-600 hover:bg-teal-700 text-white px-4 rounded-lg"
                     disabled={isLoading}
                   >
                     {isLoading ? "Searching..." : "Find"}
@@ -240,14 +240,14 @@ const CreateGroup = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200"
+                className="bg-teal-500 hover:bg-teal-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200"
               >
                 {isLoading ? "Creating..." : "Create Group"}
               </button>
 
               <Link to={"/dashboard"}
                 type="button"
-                className="bg-red-500 hover:bg-red-700 text-white py-3 px-4 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                className="bg-gray-500 hover:bg-gray-600 text-white py-3 px-4 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
               >
                 <FaTimes className="text-lg" />
                 Cancel

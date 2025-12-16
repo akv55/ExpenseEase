@@ -56,7 +56,7 @@ const AddIncome = () => {
             {/* Basic Income Info */}
             <div className="bg-white rounded-2xl shadow-xl p-8">
               <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-                <FaWallet className="text-green-500" />
+                <FaWallet className="text-teal-500" />
                 Income Details
               </h2>
               {hasAttemptedSubmit && error && (
@@ -74,7 +74,7 @@ const AddIncome = () => {
                       step="1"
                       name="amount"
                       value={amount}
-                      className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-green-500 focus:border-transparent bg-white text-gray-900 outline-none"
+                      className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900 outline-none"
                       placeholder="0.00"
                       onChange={handleChange}
                     />
@@ -91,7 +91,7 @@ const AddIncome = () => {
                       value={date}
                       max={new Date().toISOString().split('T')[0]}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-green-500 focus:border-transparent bg-white text-gray-900 outline-none"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900 outline-none"
                     />
                   </div>
                 </div>
@@ -113,7 +113,7 @@ const AddIncome = () => {
                 type="text"
                   name="description"
                   value={description}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-green-500 focus:border-transparent bg-white text-gray-900 outline-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900 outline-none"
                   placeholder="e.g., Monthly salary, Freelance project payment"
                   onChange={handleChange}
                 />
@@ -122,7 +122,7 @@ const AddIncome = () => {
               <div className="mt-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Category <span className="text-red-600">*</span></label>
                 <select
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-green-500 focus:border-transparent bg-white text-gray-900 outline-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900 outline-none"
                   onChange={handleChange}
                   name="category"
                   value={category}
@@ -144,14 +144,14 @@ const AddIncome = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                  className="flex-1 bg-teal-600 hover:bg-teal-700 text-white py-3 px-4 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
                 >
                   <FaSave className="text-lg" />
                   {loading ? 'Saving...' : 'Save Income'}
                 </button>
                 <Link to={"/dashboard"}
                   type="button"
-                  className="bg-red-500 hover:bg-red-700 text-white py-3 px-4 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                  className="bg-gray-500 hover:bg-gray-600 text-white py-3 px-4 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
                 >
                   <FaTimes className="text-lg" />
                   Cancel

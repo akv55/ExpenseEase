@@ -30,7 +30,7 @@ const VerifyOtp = ({ onVerify, isLoading, error }) => {
             <div className="flex justify-center items-center w-full min-h-screen relative z-20 p-6">
                 <div className="w-full max-w-md bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-8 border border-white/30">
                     <div className="flex justify-center mb-6">
-                        <span className="bg-gradient-to-r from-green-500 to-emerald-600 p-4 rounded-full shadow-lg">
+                        <span className="bg-gradient-to-r from-teal-500 to-teal-600 p-4 rounded-full shadow-lg">
                             <FaShieldAlt className="text-3xl text-white" />
                         </span>
                     </div>
@@ -54,7 +54,7 @@ const VerifyOtp = ({ onVerify, isLoading, error }) => {
                                 onChange={handleChange}
                                 placeholder="000000"
                                 maxLength={6}
-                                className="w-full p-4 border border-gray-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition-all duration-200 bg-gray-50 text-center text-2xl font-mono tracking-widest placeholder-gray-400 text-gray-900"
+                                className="w-full p-2 border border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition-all duration-200 bg-gray-50 text-center text-2xl font-mono tracking-widest placeholder-gray-400 text-gray-900"
                                 disabled={isLoading}
                                 autoFocus
                                 required
@@ -66,7 +66,7 @@ const VerifyOtp = ({ onVerify, isLoading, error }) => {
                         <button
                             type="submit"
                             disabled={otp.length !== 6 || isLoading}
-                            className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold py-3 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                            className="w-full bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold py-3 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                         >
                             {isLoading ? 'Verifying...' : 'Verify Code'}
                         </button>
@@ -74,7 +74,7 @@ const VerifyOtp = ({ onVerify, isLoading, error }) => {
                     <div className="text-center mt-6">
                         <p className="text-sm text-gray-600">
                             Didn't receive the code?
-                            <button className="text-green-600 font-semibold hover:text-green-700 ml-1 transition-colors duration-200">
+                            <button className="text-teal-600 font-semibold hover:text-teal-700 ml-1 transition-colors duration-200">
                                 Resend Code
                             </button>
                         </p>

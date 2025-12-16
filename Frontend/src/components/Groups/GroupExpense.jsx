@@ -148,7 +148,7 @@ const GroupExpense = () => {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
                   <CreditCard className="text-blue-600" size={24} />
-                  Group Reports
+                  Groups
                 </h2>
                 <p className="text-gray-600 mt-1">Detailed breakdown by group</p>
               </div>
@@ -219,7 +219,6 @@ const GroupExpense = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm font-semibold text-gray-900">{group.name}</div>
-                          <div className="text-xs text-gray-500 mt-1">{group.description}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center gap-2">

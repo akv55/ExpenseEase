@@ -40,7 +40,7 @@ const AddExpense = () => {
     if (error) setError(null);
   };
   return (
-  <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 transition-colors duration-300">
+  <div className="min-h-screen bg-gradient-to-br from-teal-50 to-indigo-100 transition-colors duration-300">
       <Sidebar />
     <div className="md:ml-64 ml-0 p-4 md:p-8">
       <div className="max-w-4xl mx-auto w-full">
@@ -51,7 +51,7 @@ const AddExpense = () => {
           <form onSubmit={handleSubmit} className="space-y-8">
             <div className="bg-white rounded-2xl shadow-xl p-8">
               <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-                <FaWallet className="text-blue-500" />
+                <FaWallet className="text-teal-500" />
                 Expense Details
               </h2>
               {hasAttemptedSubmit && error && (
@@ -70,7 +70,7 @@ const AddExpense = () => {
                       onChange={handleChange}
                       name="amount"
                       value={amount}
-                      className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 outline-none"
+                      className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900 outline-none"
                       placeholder="0.00"
                     />
                   </div>
@@ -86,7 +86,7 @@ const AddExpense = () => {
                       name="date"
                       value={date}
                       max={new Date().toISOString().split('T')[0]}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 outline-none"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900 outline-none"
                     />
                   </div>
                 </div>
@@ -100,7 +100,7 @@ const AddExpense = () => {
                   onChange={handleChange}
                   name="description"
                   value={description}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 outline-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900 outline-none"
                   placeholder="What did you spend on?"
                 />
               </div>
@@ -111,7 +111,7 @@ const AddExpense = () => {
                   onChange={handleChange}
                   name="category"
                   value={category}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 outline-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900 outline-none"
                 >
                   <option value="">Select a category</option>
                   <option value="fast food"> Fast Food</option>
@@ -136,17 +136,17 @@ const AddExpense = () => {
               </div>
                 <p className="mt-2 text-sm text-gray-500">Please select the category that best fits your expense source.</p>
               {/* Action Buttons */}
-              <div className="flex gap-4 mt-8 expense-btn-group">
+              <div className="flex gap-4 mt-8">
                 <button
                   type="submit"
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                  className="flex-1 bg-teal-600 hover:bg-teal-700 text-white py-3 px-4 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
                 >
                   <FaSave className="text-lg" />
                   {loading ? 'Saving...' : 'Save Expense'}
                 </button>
                 <Link to={"/dashboard"}
                   type="button"
-                  className="bg-red-500 hover:bg-red-700 text-white py-3 px-4 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                  className="bg-gray-500 hover:bg-gray-600 text-white py-3 px-4 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
                 >
                   <FaTimes className="text-lg" />
                   Cancel

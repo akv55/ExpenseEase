@@ -37,19 +37,19 @@ const ExpenseCard = () => {
     return (
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
             <div className="relative bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
-                <div className="absolute top-0 right-0 w-20 h-20 bg-green-100 rounded-full -translate-y-10 translate-x-10 opacity-20"></div>
+                <div className="absolute top-0 right-0 w-20 h-20 bg-teal-100 rounded-full -translate-y-10 translate-x-10 opacity-20"></div>
                 <div className="relative z-10 flex items-center ExpenseCard">
-                    <div className="p-3 bg-gradient-to-br from-green-400 to-green-600 rounded-full shadow-lg">
+                    <div className="p-3 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full shadow-lg">
                         <FaIndianRupeeSign className="w-4 h-4 text-white" />
                     </div>
                     <div className="ml-4">
                         <p className="text-sm font-medium text-gray-600">Total Income</p>
                         <p className="text-2xl  text-gray-600 md:font-semibold">₹{formattedIncome}</p>
                         <div className="flex items-center mt-1">
-                            <svg className="w-4 h-4 text-green-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <svg className="w-4 h-4 text-teal-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                             </svg>
-                            <span className="text-xs text-green-600">+12% from last month</span>
+                            <span className="text-xs text-teal-600">+12% from last month</span>
                         </div>
                     </div>
                 </div>
@@ -109,7 +109,7 @@ const ExpenseCard = () => {
                                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                             </svg>
                             <p className="text-xs">
-                                <span className="text-green-600">Created :{createdGroupsCount}</span>
+                                <span className="text-teal-600">Created :{createdGroupsCount}</span>
                                 &nbsp;
                                 <span className="text-sky-600">Joined :{joinedGroupsCount}</span>
                             </p>

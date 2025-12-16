@@ -32,7 +32,7 @@ const ForgotPassword = () => {
             <div className="flex justify-center items-center w-full min-h-screen relative z-20 p-6">
                 <div className="w-full max-w-sm bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-8 border border-white/30">
                     <div className="flex justify-center mb-6">
-                        <span className="bg-gradient-to-r from-green-500 to-emerald-600 p-4 rounded-full shadow-lg">
+                        <span className="bg-gradient-to-r from-teal-500 to-teal-600 p-4 rounded-full shadow-lg">
                             <CiLock className="text-4xl text-white" />
                         </span>
                     </div>
@@ -55,7 +55,7 @@ const ForgotPassword = () => {
                             <label className="text-sm font-semibold text-gray-700 mb-2 block">Email Address</label>
                             <input
                                 type="email"
-                                className="w-full p-3 border border-gray-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none transition-all duration-200 bg-gray-50 placeholder-gray-400 text-gray-900"
+                                className="w-full p-3 border border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition-all duration-200 bg-gray-50 placeholder-gray-400 text-gray-900"
                                 placeholder="you@example.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -64,7 +64,7 @@ const ForgotPassword = () => {
                         </div>
                         <button
                             type="submit"
-                            className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-3 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full bg-gradient-to-r from-teal-400 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-semibold py-3 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             Send Reset Code
                         </button>
@@ -72,7 +72,7 @@ const ForgotPassword = () => {
                     <div className="text-center mt-6">
                         <p className="text-sm text-gray-600">
                             Remember your password?
-                            <Link to="/login" className="text-green-600 font-semibold hover:text-green-700 ml-1 transition-colors duration-200">
+                            <Link to="/login" className="text-teal-600 font-semibold hover:text-teal-700 ml-1 transition-colors duration-200">
                                 Back to Login
                             </Link>
                         </p>
