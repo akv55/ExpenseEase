@@ -65,37 +65,28 @@ const GroupExpense = () => {
     setSelectedGroup(null);
     setIsModalOpen(false);
   };
+  /* -------- Loading -------- */
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
+      <div className="flex items-center justify-center ml-64 p-8 max-w-7xl mx-auto">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-teal-600 mb-4"></div>
-          <p className="text-xl font-semibold text-gray-700">Loading groups...</p>
+          <div className="animate-spin h-14 w-14 border-4 border-teal-500 border-t-transparent rounded-full mx-auto mb-4" />
+          <p className="text-lg font-semibold text-gray-700">
+            Loading groups...
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 to-indigo-100 transition-colors duration-300">
       <Sidebar />
-      <div className="ml-64 p-8">
-        {/* Header */}
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-8">
-            <div className="flex items-center gap-3 mb-2">
-              {/* <div className="p-3 bg-gradient-to-br from-teal-400 to-teal-600 rounded-xl shadow-lg">
-                <FaUserFriends className="text-white text-2xl" />
-              </div> */}
-              <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-teal-400 to-teal-600 bg-clip-text text-transparent">
-                  Group Expense
-                </h1>
-                <p className="text-gray-600">
-                  Manage your expense groups and track shared costs
-                </p>
-              </div>
-            </div>
+      <div className="md:ml-64 ml-0 p-4 md:p-8">
+        <div className="max-w-7xl mx-auto group-container">
+          <div className="mb-2">
+            <h1 className="text-3xl font-bold text-teal-600 mb-2">Group Expense</h1>
+            <p className="text-gray-600">Manage your expense groups and track shared costs</p>
           </div>
 
           {error && (
@@ -306,15 +297,20 @@ const GroupExpense = () => {
                 return (
                   <div
                     key={group._id}
-                    className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-5 border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300"
+                    className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-5 border border-gray-200  transition-all duration-300"
                   >
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex-1">
                         <h3 className="font-bold text-lg text-gray-900 mb-1">{group.name}</h3>
-                        <p className="text-xs text-gray-500 mb-2">{group.description}</p>
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                          <Calendar size={14} className="text-gray-400" />
+                        <div className="flex items-center gap-2 text-sm text-gray-600 justify-between">
+                          <Calendar size={14} className="text-blue-400" />
                           <span>{displayDate}</span>
+
+                          {/* Members */}
+
+                          <span className="text-sm text-teal-500 font-medium ml-1 flex items-center gap-1 text-gray-600 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-100">
+                            {memberCount} members
+                          </span>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
@@ -334,33 +330,18 @@ const GroupExpense = () => {
                       </div>
                     </div>
 
-                    {/* Members */}
-                    <div className="flex items-center gap-2 mb-4 pb-4 border-b border-gray-200">
-                      {/* <div className="flex -space-x-2">
-                        {group.members.slice(0, 4).map((member, idx) => (
-                          <div
-                            key={idx}
-                            className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 border-2 border-white flex items-center justify-center text-white text-xs font-semibold"
-                          >
-                            {member?.charAt(0)}
-                          </div>
-                        ))}
-                      </div> */}
-                      <span className="text-sm text-gray-600 font-medium ml-1">
-                        {memberCount} members
-                      </span>
-                    </div>
+
 
                     <div className="space-y-3">
-                      <div className="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
+                      <div className="flex justify-between items-center p-2 bg-gray-50 rounded-xl">
                         <span className="text-sm font-semibold text-gray-700">Total Spent</span>
                         <span className="text-lg font-bold text-gray-900">₹{totalExpenses.toFixed(2)}</span>
                       </div>
-                      <div className="flex justify-between items-center p-3 bg-blue-50 rounded-xl">
+                      <div className="flex justify-between items-center p-2 bg-blue-50 rounded-xl">
                         <span className="text-sm font-semibold text-gray-700">Your Share:</span>
                         <span className="text-base font-bold text-teal-900">₹{yourShare.toFixed(2)}65</span>
                       </div>
-                      <div className="flex justify-between items-center p-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl">
+                      <div className="flex justify-between items-center p-2 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl">
                         <span className="text-sm font-semibold text-gray-700">You Paid:</span>
                         <span className={`text-base font-bold ${youPaid >= 0 ? "text-green-600" : "text-red-600"}`}>
                           {youPaid >= 0 ? "+" : ""}₹{Math.abs(youPaid).toFixed(2)}95

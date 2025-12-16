@@ -15,7 +15,7 @@ const AddIncome = () => {
     description: '',
     category: ''
   });
-  const { amount,  description, category } = formData;
+  const { amount, description, category } = formData;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,17 +43,15 @@ const AddIncome = () => {
     <div className="min-h-screen bg-gradient-to-br from-teal-50 to-blue-100 transition-colors duration-300">
       <Sidebar />
       <div className="ml-64 p-8">
-        <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-3">
-              Add New Income
-            </h1>
-          </div>
-
+        <div className="max-w-4xl mx-auto group-container">
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Basic Income Info */}
             <div className="bg-white rounded-2xl shadow-xl p-8">
+             <div className="mb-2 flex items-center justify-center">
+              <h1 className="text-2xl font-bold text-gray-800 mb-2 flex items-center gap-3">
+                Add New Income
+              </h1>
+            </div>
               <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
                 <FaWallet className="text-teal-500" />
                 Income Details
@@ -117,25 +115,26 @@ const AddIncome = () => {
                 />
               </div>
               {/* Category Selection */}
-              
-                {/* Action Buttons */}
-                <div className="flex gap-4 mt-8 income-btn-group">
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="flex-1 bg-teal-600 hover:bg-teal-700 text-white py-3 px-4 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
-                  >
-                    <FaSave className="text-lg" />
-                    {loading ? 'Saving...' : 'Save Income'}
-                  </button>
-                  <Link to={"/dashboard"}
-                    type="button"
-                    className="bg-gray-500 hover:bg-gray-600 text-white py-3 px-4 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
-                  >
-                    <FaTimes className="text-lg" />
-                    Cancel
-                  </Link>
-                </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-4 mt-8 income-btn-group">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="flex-1 bg-teal-600 hover:bg-teal-700 text-white py-3 px-4 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                >
+                  <FaSave className="text-lg" />
+                  {loading && <svg className="animate-spin h-5 w-5 mr-2 inline" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" /></svg>}
+                  {loading ? 'Saving...' : 'Save Income'}
+                </button>
+                <Link to={"/dashboard"}
+                  type="button"
+                  className="bg-gray-500 hover:bg-gray-600 text-white py-3 px-4 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                >
+                  <FaTimes className="text-lg" />
+                  Cancel
+                </Link>
+              </div>
             </div>
           </form>
         </div>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate,Link } from "react-router-dom";
 import Sidebar from "../Layouts/Sidebar";
 import {
     FaUsers,
@@ -31,6 +31,7 @@ import {
 import AddGroupExpenseModal from "./Models/AddGroupExpenseModal";
 import SettlePaymentModal from "./Models/SettlePaymentModal";
 import AddMembersModal from "./Models/AddMembersModel";
+import TransactionDetailsModal from "./Models/TransactionDetailsModel";
 
 
 const formatDate = (value) => {
@@ -48,8 +49,10 @@ const GroupExpenseDetails = () => {
     const [showAddGroupExpense, setShowAddGroupExpense] = useState(false);
     const [showAddMemberModal, setShowAddMemberModal] = useState(false);
     const [showSettleModal, setShowSettleModal] = useState(false);
+    const [transactionDetailsModal, setTransactionDetailsModal] = useState(false);
     const [filterCategory, setFilterCategory] = useState("all");
     const [filterSettled, setFilterSettled] = useState("all");
+    const [selectedTransaction, setSelectedTransaction] = useState(null);
 
 
     const [expenseData, setExpenseData] = useState({
@@ -152,6 +155,9 @@ const GroupExpenseDetails = () => {
         { person: "Ravi Singh", amount: 650, type: "owe" },
         // { person: "Neha Gupta", amount: 425, type: "owes" },
     ]);
+
+    // Determine if rendering on a phone-sized viewport (safe check for SSR)
+    const isPhone = typeof window !== "undefined" && window.innerWidth < 768;
 
     // Calculate statistics
     const totalOwed = balances
@@ -268,14 +274,13 @@ const GroupExpenseDetails = () => {
                             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                 <div className="flex items-center gap-4">
                                     <div className="bg-gradient-to-br from-teal-400 to-teal-600 p-4 rounded-xl">
-                                        <FaUserFriends className="text-white text-3xl" />
+                                        <FaUserFriends className="text-white text-3xl md:text-4xl" />
                                     </div>
                                     <div>
                                         <div className="flex items-center gap-2">
                                             <h2 className="text-3xl md:text-4xl font-bold text-gray-700">
                                                 {groupDetails.name}
                                             </h2>
-
                                             <FaInfoCircle onClick={() => setSelected(true)} className=" text-gray-400 mr-2 text-lg hover:text-gray-600 transition-colors cursor-pointer" />
                                         </div>
                                         {/* Popup Modal */}
@@ -304,10 +309,10 @@ const GroupExpenseDetails = () => {
                                         )}
                                         <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
                                             <span className="flex items-center gap-1">
-                                                <FaUsers className="text-purple-500" />  members:&nbsp;{members.length}
+                                                <FaUsers className="text-purple-500" />members:{members.length}
                                             </span>
                                             <span className="flex items-center gap-1">
-                                                <FaCalendarAlt className="text-blue-500" /> Created:{" "}
+                                                <FaCalendarAlt className="text-blue-500" />Created:
                                                 {formatDate(groupDetails.createdAt)}
                                             </span>
                                             <span className="flex items-center gap-1 md:inline-flex hidden">
@@ -466,12 +471,18 @@ const GroupExpenseDetails = () => {
                                         </p>
                                     </div>
                                 ) : (
-                                    <div className="space-y-4">
+                                    <div className="space-y-4 ">
                                         {filteredExpenses.map((expense) => (
-                                            <div
+                                            <Link
                                                 key={expense.id}
-                                                onClick={() => setTransactionDetailsModal(true)}
-                                                className="border-2 border-gray-100 rounded-xl p-5 hover:border-teal-300 hover:shadow-md transition-all duration-300 bg-gradient-to-r from-white to-gray-50 cursor-pointer"
+                                                to={`/group-expense-details/${groupDetails.id}/expense/${expense.id}`}
+                                            >
+                                            <div
+                                                onClick={() => {
+                                                    setSelectedTransaction(expense);
+                                                    setTransactionDetailsModal(true);
+                                                }}
+                                                className="border-2 border-gray-100 rounded-xl p-5 hover:border-teal-300 hover:shadow-md transition-all duration-300 bg-gradient-to-r from-white to-gray-50 cursor-pointer mb-4"
                                             >
                                                 <div className="flex items-start justify-between">
                                                     <div className="flex-1">
@@ -479,11 +490,11 @@ const GroupExpenseDetails = () => {
                                                             <span className="text-xs bg-teal-100 text-teal-700 px-3 py-1 rounded-full font-medium">
                                                                 {expense.category}
                                                             </span>
-                                                            <h3 className="font-bold text-lg text-gray-700 mb-1">
-                                                                {expense.description}
-                                                            </h3>
-                                                        </div>
 
+                                                        </div>
+                                                        <h3 className="font-bold text-lg text-gray-700 mb-1">
+                                                            {expense.description}
+                                                        </h3>
                                                         <div className="flex flex-col md:flex-row md:items-center gap-2 text-sm text-gray-600">
                                                             <span className="flex items-center gap-1">
                                                                 <MdPerson className="text-teal-500" />
@@ -500,11 +511,9 @@ const GroupExpenseDetails = () => {
                                                                 Split {expense.splitAmong} ways
                                                             </span>
                                                             <span className="text-gray-600">
-                                                                Your share:
+                                                                Your share:<p className="inline font-semibold text-teal-600"> ₹{expense.yourShare}</p>
                                                             </span>
-                                                            <span className="font-bold text-teal-600">
-                                                                ₹{expense.yourShare}
-                                                            </span>
+                                                            
                                                         </div>
 
                                                     </div>
@@ -517,6 +526,7 @@ const GroupExpenseDetails = () => {
                                                     </div>
                                                 </div>
                                             </div>
+                                            </Link>
                                         ))}
                                     </div>
                                 )}
@@ -673,8 +683,7 @@ const GroupExpenseDetails = () => {
                 </div>
 
             </div>
-
-
+            
             <AddGroupExpenseModal
                 open={showAddGroupExpense}
                 expenseData={expenseData}
@@ -699,6 +708,11 @@ const GroupExpenseDetails = () => {
                 existingMembers={members}
             />
 
+            <TransactionDetailsModal
+                open={transactionDetailsModal}
+                onClose={() => setTransactionDetailsModal(false)}
+                transaction={selectedTransaction}
+            />
 
         </>
     );

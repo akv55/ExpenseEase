@@ -85,7 +85,6 @@ const CreateGroup = () => {
       const validMemberIds = foundMembers
         .filter((m) => !m.notFound)
         .map((m) => m._id);
-
       await createGroup({
         name: groupName,
         description,
@@ -107,14 +106,13 @@ const CreateGroup = () => {
     <div className="min-h-screen bg-gradient-to-br from-teal-50 to-indigo-100 transition-colors duration-300">
       <Sidebar />
       <div className="ml-64 p-8">
-        <div className="max-w-5xl mx-auto">
-          <div className="mb-8 group-container">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-3">
-              Create New Group
-            </h1>
-          </div>
-
-          <div className="bg-white rounded-2xl p-8 shadow-md">
+        <div className="max-w-5xl mx-auto group-container">
+          <div className="bg-white rounded-2xl p-8 shadow-md ">
+            <div className="mb-2 flex items-center justify-center">
+              <h1 className="text-2xl font-bold text-gray-800 mb-2 flex items-center gap-3">
+                Create New Group
+              </h1>
+            </div>
             <form className="space-y-6" onSubmit={handleSubmit}>
               {/* Error & Success */}
               {hasAttemptedSubmit && error && (
@@ -216,8 +214,8 @@ const CreateGroup = () => {
                       <li
                         key={i}
                         className={`p-3 rounded border ${m.notFound
-                            ? "border-red-300 bg-red-50 text-red-700"
-                            : "border-green-300 bg-green-50 text-green-800"
+                          ? "border-red-300 bg-red-50 text-red-700"
+                          : "border-green-300 bg-green-50 text-green-800"
                           }`}
                       >
 
@@ -236,23 +234,24 @@ const CreateGroup = () => {
               )}
 
               {/* Submit */}
-               <div className="flex gap-4 mt-8 ">
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="bg-teal-500 hover:bg-teal-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200"
-              >
-                {isLoading ? "Creating..." : "Create Group"}
-              </button>
+              <div className="flex gap-4 mt-8 ">
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="bg-teal-500 hover:bg-teal-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200"
+                >
+                  {isLoading && <svg className="animate-spin h-5 w-5 mr-2 inline" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" /></svg>}
+                  {isLoading ? "Creating..." : "Create Group"}
+                </button>
 
-              <Link to={"/dashboard"}
-                type="button"
-                className="bg-gray-500 hover:bg-gray-600 text-white py-3 px-4 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
-              >
-                <FaTimes className="text-lg" />
-                Cancel
-              </Link>
-            </div>
+                <Link to={"/dashboard"}
+                  type="button"
+                  className="bg-gray-500 hover:bg-gray-600 text-white py-3 px-4 rounded-xl font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                >
+                  <FaTimes className="text-lg" />
+                  Cancel
+                </Link>
+              </div>
             </form>
           </div>
         </div>

@@ -42,6 +42,7 @@ function App() {
               <Route path="/settings" element={<ProtectedRoute><Setting /></ProtectedRoute>} />
               <Route path="/create-group" element={<ProtectedRoute><CreateGroup /></ProtectedRoute>} />
               <Route path="/group-expense-details/:id" element={<ProtectedRoute><GroupExpenseDetails /></ProtectedRoute>} />
+              <Route path="/group-expense-details/:groupId/expense/:expenseId" element={<ProtectedRoute><GroupExpenseDetails /></ProtectedRoute>} />
               <Route path="/maintenance" element={<UnderMaintenance />} />
             </Routes>
           </Router>

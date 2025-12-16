@@ -45,17 +45,15 @@ const TransactionDetailsModal = ({
 	return (
 		<div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
 			<div className="bg-white w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden">
-				<div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-fuchsia-500 text-white p-6 flex items-start justify-between">
+				<div className="bg-gradient-to-r from-teal-500 via-teal-600 to-teal-700 text-white p-6 flex items-start justify-between">
 					<div className="space-y-1">
 						<div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-sm font-semibold">
 							<FaReceipt /> Transaction Details
 						</div>
-						<h3 className="text-3xl font-bold flex items-center gap-2">
-							<FaMoneyBillWave /> {txn.description}
-						</h3>
-						<p className="text-sm text-white/80">
-							Review how this expense is split and settle it if needed.
-						</p>
+						<h4 className="text-3xl font-bold flex items-center gap-2">
+							 {txn.description}
+						</h4>
+						
 					</div>
 					<button
 						onClick={onClose}
@@ -68,20 +66,20 @@ const TransactionDetailsModal = ({
 
 				<div className="p-6 space-y-6">
 					<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-						<div className="col-span-2 bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100 rounded-xl p-4 flex items-center justify-between">
+						<div className="col-span-2 bg-gradient-to-br from-teal-50 to-teal-100 border border-teal-100 rounded-xl p-4 flex items-center justify-between">
 							<div>
 								<p className="text-sm text-gray-600">Total Amount</p>
 								<p className="text-3xl font-bold text-gray-900">₹{txn.amount}</p>
 								<p className="text-xs text-gray-500">Split among {txn.splitAmong} people</p>
 							</div>
-							<div className="p-3 bg-white rounded-xl shadow-sm text-indigo-600">
+							<div className="p-3 bg-white rounded-xl shadow-sm text-teal-600">
 								<FaMoneyBillWave className="text-2xl" />
 							</div>
 						</div>
 						<div className="bg-gray-50 border border-gray-100 rounded-xl p-4">
 							<p className="text-sm text-gray-600">Date</p>
 							<div className="flex items-center gap-2 mt-2 text-gray-900 font-semibold">
-								<FaCalendarAlt className="text-indigo-500" />
+								<FaCalendarAlt className="text-teal-500" />
 								{formatDate(txn.date)}
 							</div>
 							<span className={`mt-3 inline-flex px-3 py-1 rounded-full text-xs font-semibold ${statusBadge(txn.settled)}`}>
@@ -91,7 +89,7 @@ const TransactionDetailsModal = ({
 						<div className="bg-gray-50 border border-gray-100 rounded-xl p-4">
 							<p className="text-sm text-gray-600">Category</p>
 							<p className="text-lg font-semibold text-gray-900 mt-2">{txn.category || "General"}</p>
-							<p className="text-xs text-gray-500 mt-1">Paid by {txn.paidBy?.name || "Unknown"}</p>
+							<p className="text-xs text-gray-500 mt-1">Paid by: <span className="text-teal-600 bg-teal-100 px-1 py-1 rounded font-semibold uppercase">{txn.paidBy?.name || "Unknown"}</span></p>
 						</div>
 					</div>
 
@@ -100,10 +98,10 @@ const TransactionDetailsModal = ({
 							<div className="border border-gray-100 rounded-xl p-4 bg-white">
 								<div className="flex items-center justify-between mb-3">
 									<div className="flex items-center gap-2 text-gray-800 font-semibold">
-										<FaUsers className="text-indigo-500" /> Split Details
+										<FaUsers className="text-teal-500" /> Split Details
 									</div>
 									<span className="text-sm text-gray-500">
-										Your share: <span className="font-bold text-indigo-600">₹{txn.yourShare}</span>
+										Your share: <span className="font-bold text-teal-600">₹{txn.yourShare}</span>
 									</span>
 								</div>
 								<div className="space-y-2 max-h-56 overflow-y-auto pr-1">
@@ -133,31 +131,31 @@ const TransactionDetailsModal = ({
 						<div className="space-y-4">
 							<div className="border border-gray-100 rounded-xl p-4 bg-gradient-to-br from-slate-50 to-gray-100">
 								<div className="flex items-center gap-2 text-gray-800 font-semibold mb-2">
-									<MdAccountBalanceWallet className="text-indigo-500" /> Summary
+									<MdAccountBalanceWallet className="text-teal-500" /> Summary
 								</div>
 								<ul className="space-y-2 text-sm text-gray-700">
 									<li className="flex justify-between"><span>You paid</span><span className="font-semibold">₹{txn.paidBy?.contribution || txn.amount}</span></li>
-									<li className="flex justify-between"><span>Your share</span><span className="font-semibold text-indigo-600">₹{txn.yourShare}</span></li>
+									<li className="flex justify-between"><span>Your share</span><span className="font-semibold text-teal-600">₹{txn.yourShare}</span></li>
 									<li className="flex justify-between"><span>Outstanding</span><span className="font-semibold text-amber-600">{txn.settled ? "₹0" : "₹" + txn.yourShare}</span></li>
 								</ul>
 							</div>
 							<div className="flex flex-col gap-2">
 								<button
 									onClick={() => onSettle?.(txn)}
-									className="w-full px-4 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-indigo-600 hover:to-purple-700 transition-all"
+									className="w-full px-4 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-teal-600 hover:to-teal-700 transition-all colors cursor-pointer"
 								>
 									<FaCheckCircle className="inline mr-2" /> Mark as Settled
 								</button>
 								<div className="grid grid-cols-2 gap-2">
 									<button
 										onClick={() => onEdit?.(txn)}
-										className="px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-800 font-semibold hover:bg-gray-50 transition-colors"
+										className="px-4 py-3 bg-white border border-teal-200 rounded-xl text-gray-800 font-semibold hover:bg-gray-50 transition-colors cursor-pointer"
 									>
-										<MdEdit className="inline mr-2 text-indigo-500" /> Edit
+										<MdEdit className="inline mr-2 text-teal-500" /> Edit
 									</button>
 									<button
 										onClick={() => onDelete?.(txn)}
-										className="px-4 py-3 bg-white border border-red-200 text-red-600 rounded-xl font-semibold hover:bg-red-50 transition-colors"
+										className="px-4 py-3 bg-white border border-red-200 text-red-600 rounded-xl font-semibold hover:bg-red-50 transition-colors cursor-pointer"
 									>
 										<FaTrash className="inline mr-2" /> Delete
 									</button>
