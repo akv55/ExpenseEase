@@ -106,8 +106,8 @@ const RecentTransactions = () => {
 
             <div className="mt-6 space-y-3 text-gray-700">
               <div className="flex items-center gap-2">
-                <FaCalendarAlt className="text-gray-400" />
-                <span>{formatDate(selectedTx.date)}</span>
+                <FaCalendarAlt className="text-blue-500" />
+                <span>{formatDate(selectedTx.createdAt)}</span>
               </div>
               <div className="flex items-center gap-2 border border-gray-200 p-3 rounded-lg bg-gray-50">
                 <p>

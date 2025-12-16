@@ -12,6 +12,7 @@ import {
     FaFilter,
     FaChartPie,
     FaPhoneAlt,
+    FaInfoCircle,
 } from "react-icons/fa";
 import {
     MdAccountBalance,
@@ -43,7 +44,7 @@ const formatDate = (value) => {
 const GroupExpenseDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-
+    const [selected, setSelected] = useState(null);
     const [showAddGroupExpense, setShowAddGroupExpense] = useState(false);
     const [showAddMemberModal, setShowAddMemberModal] = useState(false);
     const [showSettleModal, setShowSettleModal] = useState(false);
@@ -262,7 +263,7 @@ const GroupExpenseDetails = () => {
                 <div className="ml-64 p-4 md:p-8 mt-16 md:mt-0 group-expense-details">
                     {/* Header with Back Button */}
                     <div className="mb-8">
-                       
+
                         <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
                             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                 <div className="flex items-center gap-4">
@@ -270,12 +271,37 @@ const GroupExpenseDetails = () => {
                                         <FaUserFriends className="text-white text-3xl" />
                                     </div>
                                     <div>
-                                        <h2 className="text-3xl md:text-4xl font-bold text-gray-700">
-                                            {groupDetails.name}
-                                        </h2>
-                                        <p className="text-gray-600 mt-1">
-                                            {groupDetails.description}
-                                        </p>
+                                        <div className="flex items-center gap-2">
+                                            <h2 className="text-3xl md:text-4xl font-bold text-gray-700">
+                                                {groupDetails.name}
+                                            </h2>
+
+                                            <FaInfoCircle onClick={() => setSelected(true)} className=" text-gray-400 mr-2 text-lg hover:text-gray-600 transition-colors cursor-pointer" />
+                                        </div>
+                                        {/* Popup Modal */}
+                                        {selected && (
+                                            <div className="fixed inset-0 bg-transparent bg-opacity-50 flex justify-center items-center z-50 p-4">
+                                                <div className="bg-white rounded-2xl shadow-2xl w-96 p-6 relative animate-fadeIn border-2 border-teal-300">
+                                                    <div className="text-center">
+                                                        <h3 className="text-xl font-bold text-gray-900 mb-2 capitalize">
+                                                            {groupDetails.name}</h3>
+                                                        <div className="flex items-center gap-2 border border-gray-200 p-3 rounded-lg bg-teal-50">
+                                                            <p>
+                                                                {groupDetails.description}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="mt-6 flex justify-center">
+                                                        <button
+                                                            onClick={() => setSelected(null)}
+                                                            className="px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
+                                                        >
+                                                            Close
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
                                         <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
                                             <span className="flex items-center gap-1">
                                                 <FaUsers className="text-purple-500" />  members:&nbsp;{members.length}
@@ -289,7 +315,7 @@ const GroupExpenseDetails = () => {
                                             </span>
                                         </div>
                                         <div className="flex items-center gap-2 mt-2  text-sm text-gray-500 lg:hidden">
-                                            <MdPerson className="text-teal-500" /> Owner: <span className="bg-blue-200 p-1 text-blue-500 rounded-l-full rounded-r-full font-semibold">{groupDetails.owner?.name ||"Alok Kumar"}</span>
+                                            <MdPerson className="text-teal-500" /> Owner: <span className="bg-blue-200 p-1 text-blue-500 rounded-l-full rounded-r-full font-semibold">{groupDetails.owner?.name || "Alok Kumar"}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -402,10 +428,10 @@ const GroupExpenseDetails = () => {
                                             ))}
                                         </select>
                                     </div>
-                                    
+
                                     <div className="flex-1">
                                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                                           Members
+                                            Members
                                         </label>
                                         <select
                                             value={filterSettled}
@@ -444,7 +470,7 @@ const GroupExpenseDetails = () => {
                                         {filteredExpenses.map((expense) => (
                                             <div
                                                 key={expense.id}
-                                               onClick={() => setTransactionDetailsModal(true)}
+                                                onClick={() => setTransactionDetailsModal(true)}
                                                 className="border-2 border-gray-100 rounded-xl p-5 hover:border-teal-300 hover:shadow-md transition-all duration-300 bg-gradient-to-r from-white to-gray-50 cursor-pointer"
                                             >
                                                 <div className="flex items-start justify-between">
@@ -480,7 +506,7 @@ const GroupExpenseDetails = () => {
                                                                 ₹{expense.yourShare}
                                                             </span>
                                                         </div>
-                                                       
+
                                                     </div>
                                                     <div className="ml-4 flex flex-col items-end gap-3">
                                                         <div className="text-right">
@@ -673,7 +699,7 @@ const GroupExpenseDetails = () => {
                 existingMembers={members}
             />
 
-           
+
         </>
     );
 };
