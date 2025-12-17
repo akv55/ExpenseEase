@@ -67,7 +67,7 @@ const RecentTransactions = () => {
                     {tx.category}
                   </p>
                   <p className="text-sm text-gray-500 capitalize">
-                    {formatDate(tx.date || tx.createdAt)}
+                    {formatDate(tx.date)}
                   </p>
                 </div>
               </div>
@@ -122,7 +122,7 @@ const RecentTransactions = () => {
             <div className="mt-6 space-y-3 text-gray-700">
               <div className="flex items-center gap-2">
                 <FaCalendarAlt className="text-blue-500" />
-                <span>{formatDate(selectedTx.date || selectedTx.createdAt)}</span>
+                <span>{formatDate(selectedTx.date)}</span>
               </div>
               <div className="flex items-center gap-2 border border-gray-200 p-3 rounded-lg bg-gray-50">
                 <p>
