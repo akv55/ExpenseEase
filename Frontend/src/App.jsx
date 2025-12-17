@@ -15,10 +15,12 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Setting from './components/Settings/Setting';
 import CreateGroup from './components/Groups/CreateGroup';
 import GroupExpenseDetails from './components/Groups/GroupExpenseDetails';
+import TransactionDetails from './components/Groups/TransactionDetails';
 import { AuthProvider } from './context/authContext';
 import { IncomeProvider } from './context/incomeContext';
 import { ExpenseProvider } from './context/expenseContext';
 import { GroupProvider } from './context/groupContext';
+import { GroupExpenseProvider } from './context/groupExpenseContext';
 import UnderMaintenance from './components/Layouts/UnderMaintenance';
 function App() {
   return (
@@ -26,6 +28,7 @@ function App() {
       <IncomeProvider>
         <ExpenseProvider>
           <GroupProvider>
+          <GroupExpenseProvider>
           <Router>
             <Routes>
               <Route path="/" element={<Home />} />
@@ -42,10 +45,11 @@ function App() {
               <Route path="/settings" element={<ProtectedRoute><Setting /></ProtectedRoute>} />
               <Route path="/create-group" element={<ProtectedRoute><CreateGroup /></ProtectedRoute>} />
               <Route path="/group-expense-details/:id" element={<ProtectedRoute><GroupExpenseDetails /></ProtectedRoute>} />
-              <Route path="/group-expense-details/:groupId/expense/:expenseId" element={<ProtectedRoute><GroupExpenseDetails /></ProtectedRoute>} />
+              <Route path="/group-expense-details/:id/expense/:id" element={<ProtectedRoute><TransactionDetails /></ProtectedRoute>} />
               <Route path="/maintenance" element={<UnderMaintenance />} />
             </Routes>
           </Router>
+        </GroupExpenseProvider>
         </GroupProvider>
       </ExpenseProvider>
     </IncomeProvider>

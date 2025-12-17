@@ -68,12 +68,11 @@ const GroupExpense = () => {
   /* -------- Loading -------- */
   if (loading) {
     return (
-      <div className="flex items-center justify-center ml-64 p-8 max-w-7xl mx-auto">
+      <div className="flex justify-center items-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin h-14 w-14 border-4 border-teal-500 border-t-transparent rounded-full mx-auto mb-4" />
-          <p className="text-lg font-semibold text-gray-700">
-            Loading groups...
-          </p>
+          <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-teal-600 mb-4">
+          </div>
+          <p className="text-xl font-semibold text-gray-700">Loading groups...</p>
         </div>
       </div>
     );
@@ -199,8 +198,8 @@ const GroupExpense = () => {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-100">
                   {filteredGroups.map((group) => {
-                    const totalExpenses = Number(group.totalExpenses) || 4578.89;
-                    const memberCount = Array.isArray(group.members) ? group.members.length : 5;
+                    const totalExpenses = Number(group.totalExpenses) || 0;
+                    const memberCount = Array.isArray(group.members) ? group.members.length : 0;
                     const yourShare = memberCount > 0 ? totalExpenses / memberCount : 0;
                     const youPaid = Number(group.myBalance) || 0;
                     const displayDate = formatDate(group.createdAt);

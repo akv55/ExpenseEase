@@ -1,114 +1,103 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
-const splitSchema = new mongoose.Schema(
+/* ---------- Participant Sub-Schema ---------- */
+const participantSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true
+      required: true,
     },
+
     shareAmount: {
       type: Number,
       required: true,
-      min: 0
-    }
+    },
+
+    status: {
+      type: String,
+      enum: ["paid", "pending"],
+      default: "pending",
+    },
   },
   { _id: false }
 );
 
+/* ---------- Group Expense Schema ---------- */
 const groupExpenseSchema = new mongoose.Schema(
   {
-    // Group reference
+    /* 🔗 Relation */
     groupId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Group",
-      required: true
+      required: true,
     },
 
-    // Expense description
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     description: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
 
-    // Current active user (You Paid)
-    paidBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true
-    },
-
-    // Total amount
     amount: {
       type: Number,
       required: true,
-      min: 1
+      min: 0,
     },
 
-    // Category
     category: {
       type: String,
       enum: [
-        "food",
-        "travel",
-        "rent",
-        "shopping",
-        "utilities",
-        "entertainment",
-        "other"
+        "Food",
+        "Restaurant",
+        "Groceries",
+        "Travel",
+        "Cab",
+        "Fuel",
+        "Rent",
+        "Electricity",
+        "Water",
+        "Internet",
+        "Movie",
+        "Party",
+        "Shopping",
+        "Medical",
+        "Education",
+        "Gift",
+        "Group Contribution",
+        "Other"
       ],
-      default: "other"
+      required: true,
     },
 
-    // Date
-    date: {
-      type: Date,
-      default: Date.now
+    /* 👤 Paid By */
+    paidBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
 
-    // Split type
+    /* 🔀 Split Logic */
     splitType: {
       type: String,
       enum: ["equal", "custom"],
-      required: true
+      default: "equal",
     },
 
-    // Each member's share (Your Share included here)
-    splits: {
-      type: [splitSchema],
-      required: true,
-      validate: {
-        validator: function (value) {
-          const total = value.reduce(
-            (sum, s) => sum + s.shareAmount,
-            0
-          );
-          return total === this.amount;
-        },
-        message: "Total share must equal expense amount"
-      }
-    },
+    participants: [participantSchema],
 
-    // Convenience fields (calculated)
-    youPaidAmount: {
-      type: Number,
-      default: function () {
-        return this.amount;
-      }
+    /* ✅ Settlement */
+    settled: {
+      type: Boolean,
+      default: false,
     },
-
-    yourShareAmount: {
-      type: Number,
-      default: function () {
-        const userSplit = this.splits.find(
-          s => s.user.toString() === this.paidBy.toString()
-        );
-        return userSplit ? userSplit.shareAmount : 0;
-      }
-    }
   },
   { timestamps: true }
 );
 
-export default mongoose.model("GroupExpense", groupExpenseSchema);
+module.exports = mongoose.model("GroupExpense", groupExpenseSchema);

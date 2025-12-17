@@ -22,6 +22,18 @@ export const GroupProvider = ({ children }) => {
             setLoading(false);
         }
     }, []);
+
+    // Fetch a single group by id (includes members)
+    const fetchGroupById = useCallback(async (groupId) => {
+        if (!groupId) throw new Error("groupId is required");
+        try {
+            const res = await API.get(`/groups/${groupId}`);
+            return res.data;
+        } catch (err) {
+            console.error("Error fetching group by id:", err);
+            throw err;
+        }
+    }, []);
     
     // Create group
     const createGroup = async (groupData) => {
@@ -36,7 +48,7 @@ export const GroupProvider = ({ children }) => {
     };
    
     return (
-        <GroupContext.Provider value={{ groups, loading, fetchGroups, createGroup }}>
+        <GroupContext.Provider value={{ groups, loading, fetchGroups, fetchGroupById, createGroup }}>
             {children}
         </GroupContext.Provider>
     );

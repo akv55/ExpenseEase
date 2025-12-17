@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate,Link } from "react-router-dom";
 import Sidebar from "../Layouts/Sidebar";
 import {
@@ -31,7 +31,10 @@ import {
 import AddGroupExpenseModal from "./Models/AddGroupExpenseModal";
 import SettlePaymentModal from "./Models/SettlePaymentModal";
 import AddMembersModal from "./Models/AddMembersModel";
-import TransactionDetailsModal from "./Models/TransactionDetailsModel";
+import TransactionDetailsModal from "./TransactionDetails";
+import { useGroup } from "../../context/groupContext";
+import { useGroupExpense } from "../../context/groupExpenseContext";
+import { useAuth } from "../../context/authContext";
 
 
 const formatDate = (value) => {
@@ -53,132 +56,156 @@ const GroupExpenseDetails = () => {
     const [filterCategory, setFilterCategory] = useState("all");
     const [filterSettled, setFilterSettled] = useState("all");
     const [selectedTransaction, setSelectedTransaction] = useState(null);
+    const { fetchGroupById } = useGroup();
+    const { groupExpenses, loading: expensesLoading, getGroupExpenses } = useGroupExpense();
+    const { user } = useAuth();
 
+    const [groupDetails, setGroupDetails] = useState(null);
+    const [members, setMembers] = useState([]);
+    const [expenses, setExpenses] = useState([]);
+    const [balances, setBalances] = useState([]);
+    const [pageLoading, setPageLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const [expenseData, setExpenseData] = useState({
-        description: "",
-        amount: "",
-        paidBy: "",
-        category: "",
-        date: new Date().toISOString().split("T")[0],
-        splitType: "equal",
-        participants: [],
-    });
+    useEffect(() => {
+        if (!id) return;
+        const loadData = async () => {
+            try {
+                setError(null);
+                setPageLoading(true);
+                const group = await fetchGroupById(id);
+                setGroupDetails(group);
+                setMembers(Array.isArray(group?.members) ? group.members : []);
+                await getGroupExpenses(id);
+            } catch (err) {
+                console.error("Failed to load group details:", err);
+                setError("Failed to load group details. Please try again.");
+            } finally {
+                setPageLoading(false);
+            }
+        };
 
-    // Sample group data - replace with API call
-    const groupDetails = {
-        id: id || "1",
-        name: "Trip to Goa",
-        description: "Beach vacation with college friends",
-        owner: { id: 1, name: "Alok Kumar", email: "you@example.com" },
-        members: [
-            { id: 1, name: "Alok Kumar", email: "you@example.com", phone: "9876543210" },
-            { id: 2, name: "Alok Kumar", email: "alok@example.com", phone: "9123456780" },
-            { id: 3, name: "Priya Sharma", email: "priya@example.com", phone: "9234567891" },
-            { id: 4, name: "Ravi Singh", email: "ravi@example.com", phone: "9345678902" },
-            { id: 5, name: "Neha Gupta", email: "neha@example.com", phone: "9456789013" },
-        ],
-        totalExpenses: 25450,
-        yourShare: 5090,
-        createdAt: "2025-11-15",
-    };
+        loadData();
+    }, [id, fetchGroupById, getGroupExpenses]);
 
-    const [members, setMembers] = useState(groupDetails.members);
-    const [expenses, setExpenses] = useState([
-        {
-            id: 1,
-            description: "Hotel Booking",
-            amount: 12000,
-            paidBy: { id: 1, name: "You" },
-            category: "Accommodation",
-            date: "2025-12-01",
-            settled: false,
-            splitAmong: 5,
-            yourShare: 2400,
-        },
-        {
-            id: 2,
-            description: "Flight Tickets",
-            amount: 8500,
-            paidBy: { id: 2, name: "Alok Kumar" },
-            category: "Travel",
-            date: "2025-11-28",
-            settled: true,
-            splitAmong: 5,
-            yourShare: 1700,
-        },
-        {
-            id: 3,
-            description: "Beach Activities",
-            amount: 3500,
-            paidBy: { id: 3, name: "Priya Sharma" },
-            category: "Entertainment",
-            date: "2025-12-02",
-            settled: false,
-            splitAmong: 4,
-            yourShare: 875,
-        },
-        {
-            id: 4,
-            description: "Group Dinner",
-            amount: 2450,
-            paidBy: { id: 1, name: "You" },
-            category: "Food",
-            date: "2025-12-03",
-            settled: false,
-            splitAmong: 5,
-            yourShare: 490,
-            participants: [
-                { name: "You", share: 490, status: "paid" },
-                { name: "Alok Kumar", share: 490, status: "pending" },
-                { name: "Priya Sharma", share: 490, status: "pending" },
-                { name: "Ravi Singh", share: 490, status: "pending" },
-                { name: "Neha Gupta", share: 490, status: "pending" },
-            ],
-        },
-        {
-            id: 5,
-            description: "Car Rental",
-            amount: 4500,
-            paidBy: { id: 4, name: "Ravi Singh" },
-            category: "Travel",
-            date: "2025-12-01",
-            settled: true,
-            splitAmong: 5,
-            yourShare: 900,
-        },
-    ]);
+    useEffect(() => {
+        setExpenses(Array.isArray(groupExpenses) ? groupExpenses : []);
+    }, [groupExpenses]);
 
-    const [balances, setBalances] = useState([
-        { person: "Alok Kumar", amount: 850, type: "owes" },
-        { person: "Priya Sharma", amount: 1200, type: "owes" },
-        { person: "Ravi Singh", amount: 650, type: "owe" },
-        // { person: "Neha Gupta", amount: 425, type: "owes" },
-    ]);
+    useEffect(() => {
+        if (!expenses.length) {
+            setBalances([]);
+            return;
+        }
+
+        const getId = (entity) => entity?._id ?? entity?.id ?? entity;
+        const balanceMap = new Map();
+
+        expenses.forEach((expense) => {
+            const paidById = getId(expense?.paidBy);
+            const expenseAmount = Number(expense?.amount) || 0;
+            if (paidById) {
+                balanceMap.set(paidById, (balanceMap.get(paidById) || 0) + expenseAmount);
+            }
+
+            (expense?.participants || []).forEach((participant) => {
+                const participantId = getId(participant?.user);
+                const shareAmount = Number(participant?.shareAmount) || 0;
+                if (participantId) {
+                    balanceMap.set(participantId, (balanceMap.get(participantId) || 0) - shareAmount);
+                }
+            });
+        });
+
+        const entries = Array.from(balanceMap.entries())
+            .map(([memberId, net]) => {
+                const member = members.find((m) => String(getId(m)) === String(memberId));
+                return {
+                    personId: memberId,
+                    person: member?.name || member?.email || "Member",
+                    amount: Math.abs(net),
+                    net,
+                    type: net >= 0 ? "owes" : "owe",
+                };
+            })
+            .filter((entry) => entry.amount > 0.009);
+
+        setBalances(entries);
+    }, [expenses, members]);
 
     // Determine if rendering on a phone-sized viewport (safe check for SSR)
     const isPhone = typeof window !== "undefined" && window.innerWidth < 768;
 
-    // Calculate statistics
-    const totalOwed = balances
-        .filter((b) => b.type === "owes")
-        .reduce((sum, b) => sum + b.amount, 0);
-    const totalOwe = balances
-        .filter((b) => b.type === "owe")
-        .reduce((sum, b) => sum + b.amount, 0);
+    const currentUserBalance = balances.find(
+        (balance) => String(balance.personId) === String(user?._id)
+    );
+
+    const totalOwed = currentUserBalance && currentUserBalance.net > 0 ? currentUserBalance.net : 0;
+    const totalOwe = currentUserBalance && currentUserBalance.net < 0 ? Math.abs(currentUserBalance.net) : 0;
+
     const settledCount = expenses.filter((e) => e.settled).length;
     const pendingCount = expenses.filter((e) => !e.settled).length;
 
-    // Category breakdown for charts
-    const categoryData = expenses.reduce((acc, exp) => {
-        const existing = acc.find((item) => item.name === exp.category);
-        if (existing) {
-            existing.value += exp.amount;
-        } else {
-            acc.push({ name: exp.category, value: exp.amount });
-        }
-        return acc;
-    }, []);
+    const categoryData = useMemo(() => {
+        return expenses.reduce((acc, exp) => {
+            const categoryName = exp.category || "Uncategorized";
+            const value = Number(exp.amount) || 0;
+            const existing = acc.find((item) => item.name === categoryName);
+            if (existing) {
+                existing.value += value;
+            } else {
+                acc.push({ name: categoryName, value });
+            }
+            return acc;
+        }, []);
+    }, [expenses]);
+
+    const categoryOptions = useMemo(() => {
+        const defaults = [
+            "Food",
+            "Travel",
+            "Groceries Shopping",
+            "Vegetables",
+            "Fruits",
+            "Accommodation",
+            "Entertainment",
+            "Other",
+        ];
+        const set = new Set(defaults);
+        expenses.forEach((expense) => {
+            if (expense.category) {
+                set.add(expense.category);
+            }
+        });
+        return Array.from(set);
+    }, [expenses]);
+
+    const personalShare = useMemo(() => {
+        if (!user?._id) return 0;
+        return expenses.reduce((sum, expense) => {
+            const participant = (expense.participants || []).find(
+                (p) => String(p?.user?._id ?? p?.user) === String(user._id)
+            );
+            return sum + (Number(participant?.shareAmount) || 0);
+        }, 0);
+    }, [expenses, user?._id]);
+
+    const totalGroupExpense = Number(groupDetails?.totalExpense) || 0;
+    const totalTransactions = expenses.length;
+    const yourSharePercentage = totalGroupExpense
+        ? ((personalShare / totalGroupExpense) * 100).toFixed(1)
+        : "0.0";
+
+    if (pageLoading && !groupDetails) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <div className="text-center">
+                    <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-teal-600 mb-4"></div>
+                    <p className="text-xl font-semibold text-gray-700">Loading group details...</p>
+                </div>
+            </div>
+        );
+    }
 
     const COLORS = [
         "#06b6d4",
@@ -188,48 +215,6 @@ const GroupExpenseDetails = () => {
         "#10b981",
         "#ef4444",
     ];
-
-    const handleInputChange = (e) => {
-        setExpenseData({ ...expenseData, [e.target.name]: e.target.value });
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const newExpense = {
-            id: expenses.length + 1,
-            ...expenseData,
-            amount: parseFloat(expenseData.amount),
-            paidBy: members.find(
-                (m) => m.id.toString() === expenseData.paidBy
-            ),
-            settled: false,
-            splitAmong: members.length,
-            yourShare: parseFloat(expenseData.amount) / members.length,
-        };
-        setExpenses([...expenses, newExpense]);
-        setShowAddGroupExpense(false);
-        setExpenseData({
-            description: "",
-            amount: "",
-            paidBy: "",
-            category: "",
-            date: new Date().toISOString().split("T")[0],
-            splitType: "equal",
-            participants: [],
-        });
-    };
-
-    const handleDeleteExpense = (expenseId) => {
-        if (window.confirm("Are you sure you want to delete this expense?")) {
-            setExpenses(expenses.filter((e) => e.id !== expenseId));
-        }
-    };
-
-    const handleSettleExpense = (expenseId) => {
-        setExpenses(
-            expenses.map((e) => (e.id === expenseId ? { ...e, settled: true } : e))
-        );
-    };
 
     const handleSettleConfirm = () => {
         alert("Payment settled successfully!");
@@ -251,17 +236,6 @@ const GroupExpenseDetails = () => {
         return categoryMatch && settledMatch;
     });
 
-    const categories = [
-        "Food",
-        "Travel",
-        "Groceries Shopping",
-        "Vegetables",
-        "Fruits",
-        "Accommodation",
-        "Entertainment",
-        "Other",
-    ];
-
     return (
         <>
             <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 ">
@@ -279,7 +253,7 @@ const GroupExpenseDetails = () => {
                                     <div>
                                         <div className="flex items-center gap-2">
                                             <h2 className="text-3xl md:text-4xl font-bold text-gray-700">
-                                                {groupDetails.name}
+                                                {groupDetails?.name || "Group"}
                                             </h2>
                                             <FaInfoCircle onClick={() => setSelected(true)} className=" text-gray-400 mr-2 text-lg hover:text-gray-600 transition-colors cursor-pointer" />
                                         </div>
@@ -289,10 +263,10 @@ const GroupExpenseDetails = () => {
                                                 <div className="bg-white rounded-2xl shadow-2xl w-96 p-6 relative animate-fadeIn border-2 border-teal-300">
                                                     <div className="text-center">
                                                         <h3 className="text-xl font-bold text-gray-900 mb-2 capitalize">
-                                                            {groupDetails.name}</h3>
+                                                            {groupDetails?.name || "Group"}</h3>
                                                         <div className="flex items-center gap-2 border border-gray-200 p-3 rounded-lg bg-teal-50">
                                                             <p>
-                                                                {groupDetails.description}
+                                                                {groupDetails?.description || "No description available."}
                                                             </p>
                                                         </div>
                                                     </div>
@@ -313,14 +287,14 @@ const GroupExpenseDetails = () => {
                                             </span>
                                             <span className="flex items-center gap-1">
                                                 <FaCalendarAlt className="text-blue-500" />Created:
-                                                {formatDate(groupDetails.createdAt)}
+                                                {formatDate(groupDetails?.createdAt)}
                                             </span>
                                             <span className="flex items-center gap-1 md:inline-flex hidden">
-                                                <MdPerson className="text-teal-500" /> Owner: <span className="bg-blue-200 px-2 py-1 text-blue-500 rounded-l-full rounded-r-full font-semibold">{groupDetails.owner?.name}</span>
+                                                <MdPerson className="text-teal-500" /> Owner: <span className="bg-blue-200 px-2 py-1 text-blue-500 rounded-l-full rounded-r-full font-semibold">{groupDetails?.owner?.name || "N/A"}</span>
                                             </span>
                                         </div>
                                         <div className="flex items-center gap-2 mt-2  text-sm text-gray-500 lg:hidden">
-                                            <MdPerson className="text-teal-500" /> Owner: <span className="bg-blue-200 p-1 text-blue-500 rounded-l-full rounded-r-full font-semibold">{groupDetails.owner?.name || "Alok Kumar"}</span>
+                                            <MdPerson className="text-teal-500" /> Owner: <span className="bg-blue-200 p-1 text-blue-500 rounded-l-full rounded-r-full font-semibold">{groupDetails?.owner?.name || "N/A"}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -344,10 +318,10 @@ const GroupExpenseDetails = () => {
                                         Total Expenses
                                     </p>
                                     <p className="text-2xl font-bold">
-                                        ₹{groupDetails.totalExpenses}
+                                        ₹{totalGroupExpense.toFixed(2)}
                                     </p>
                                     <p className="text-blue-600 text-xs mt-2">
-                                        {expenses.length} transactions
+                                        {totalTransactions} transactions
                                     </p>
                                 </div>
                                 <div className="bg-blue-50 p-3 rounded-xl backdrop-blur-sm">
@@ -362,9 +336,9 @@ const GroupExpenseDetails = () => {
                                     <p className="text-gray-600 text-sm font-medium mb-1">
                                         Your Share
                                     </p>
-                                    <p className="text-2xl font-bold">₹{groupDetails.yourShare}</p>
+                                    <p className="text-2xl font-bold">₹{personalShare.toFixed(2)}</p>
                                     <p className="text-purple-600 text-xs mt-2">
-                                        {((groupDetails.yourShare / groupDetails.totalExpenses) * 100).toFixed(1)}% of total
+                                        {yourSharePercentage}% of total
                                     </p>
                                 </div>
                                 <div className="bg-purple-50 p-3 rounded-xl backdrop-blur-sm">
@@ -426,7 +400,7 @@ const GroupExpenseDetails = () => {
                                             className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-1 focus:ring-teal-500 focus:border-transparent outline-none"
                                         >
                                             <option value="all">All Categories</option>
-                                            {categories.map((cat) => (
+                                            {categoryOptions.map((cat) => (
                                                 <option key={cat} value={cat}>
                                                     {cat}
                                                 </option>
@@ -472,62 +446,74 @@ const GroupExpenseDetails = () => {
                                     </div>
                                 ) : (
                                     <div className="space-y-4 ">
-                                        {filteredExpenses.map((expense) => (
-                                            <Link
-                                                key={expense.id}
-                                                to={`/group-expense-details/${groupDetails.id}/expense/${expense.id}`}
-                                            >
-                                            <div
-                                                onClick={() => {
-                                                    setSelectedTransaction(expense);
-                                                    setTransactionDetailsModal(true);
-                                                }}
-                                                className="border-2 border-gray-100 rounded-xl p-5 hover:border-teal-300 hover:shadow-md transition-all duration-300 bg-gradient-to-r from-white to-gray-50 cursor-pointer mb-4"
-                                            >
-                                                <div className="flex items-start justify-between">
-                                                    <div className="flex-1">
-                                                        <div className="flex items-center gap-3 mb-2">
-                                                            <span className="text-xs bg-teal-100 text-teal-700 px-3 py-1 rounded-full font-medium">
-                                                                {expense.category}
-                                                            </span>
+                                        {filteredExpenses.map((expense) => {
+                                            const splitCount = expense.participants?.length || members.length || 0;
+                                            const paidByName = expense.paidBy?.name || expense.paidBy?.email || "N/A";
+                                            const expenseDate = expense.date || expense.createdAt;
+                                            const participantShare = (expense.participants || []).find(
+                                                (participant) =>
+                                                    String(participant?.user?._id ?? participant?.user) === String(user?._id)
+                                            );
+                                            const personalShareValue = Number(participantShare?.shareAmount);
 
-                                                        </div>
-                                                        <h3 className="font-bold text-lg text-gray-700 mb-1">
-                                                            {expense.description}
-                                                        </h3>
-                                                        <div className="flex flex-col md:flex-row md:items-center gap-2 text-sm text-gray-600">
-                                                            <span className="flex items-center gap-1">
-                                                                <MdPerson className="text-teal-500" />
-                                                                Paid by: <span className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium">{expense.paidBy?.name || "N/A"}</span>
-                                                            </span>
-                                                            <span className="hidden md:inline">•</span>
-                                                            <span className="flex items-center gap-1">
-                                                                <FaCalendarAlt className="text-blue-500" />
-                                                                {formatDate(expense.date)}
-                                                            </span>
-                                                            <span className="hidden md:inline">•</span>
-                                                            <span className="flex items-center gap-1">
-                                                                <FaUsers className="text-purple-500" />
-                                                                Split {expense.splitAmong} ways
-                                                            </span>
-                                                            <span className="text-gray-600">
-                                                                Your share:<p className="inline font-semibold text-teal-600"> ₹{expense.yourShare}</p>
-                                                            </span>
-                                                            
-                                                        </div>
+                                            return (
+                                                <Link
+                                                    key={expense._id || expense.id}
+                                                    to={`/group-expense-details/${groupDetails?._id || id}/expense/${expense._id || expense.id}`}
+                                                >
+                                                    <div
+                                                        onClick={() => {
+                                                            setSelectedTransaction(expense);
+                                                            setTransactionDetailsModal(true);
+                                                        }}
+                                                        className="border-2 border-gray-100 rounded-xl p-5 hover:border-teal-300 hover:shadow-md transition-all duration-300 bg-gradient-to-r from-white to-gray-50 cursor-pointer mb-4"
+                                                    >
+                                                        <div className="flex items-start justify-between">
+                                                            <div className="flex-1">
+                                                                <div className="flex items-center gap-3 mb-2">
+                                                                    <span className="text-xs bg-teal-100 text-teal-700 px-3 py-1 rounded-full font-medium">
+                                                                        {expense.category || "Uncategorized"}
+                                                                    </span>
+                                                                </div>
+                                                                <h3 className="font-bold text-lg text-gray-700 mb-1">
+                                                                    {expense.title}
+                                                                </h3>
+                                                                <div className="flex flex-col md:flex-row md:items-center gap-2 text-sm text-gray-600">
+                                                                    <span className="flex items-center gap-1">
+                                                                        <MdPerson className="text-teal-500" />
+                                                                        Paid by: <span className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium">{paidByName}</span>
+                                                                    </span>
+                                                                    <span className="hidden md:inline">•</span>
+                                                                    <span className="flex items-center gap-1">
+                                                                        <FaCalendarAlt className="text-blue-500" />
+                                                                        {formatDate(expenseDate)}
+                                                                    </span>
+                                                                    <span className="hidden md:inline">•</span>
+                                                                    <span className="flex items-center gap-1">
+                                                                        <FaUsers className="text-purple-500" />
+                                                                        Split {splitCount || "-"} ways
+                                                                    </span>
+                                                                    {Number.isFinite(personalShareValue) && (
+                                                                        <span className="text-gray-600">
+                                                                            Your share:
+                                                                            <p className="inline font-semibold text-teal-600"> ₹{personalShareValue.toFixed(2)}</p>
+                                                                        </span>
+                                                                    )}
+                                                                </div>
 
-                                                    </div>
-                                                    <div className="ml-4 flex flex-col items-end gap-3">
-                                                        <div className="text-right">
-                                                            <p className="text-xl font-semibold text-gray-600 ">
-                                                                ₹{expense.amount}
-                                                            </p>
+                                                            </div>
+                                                            <div className="ml-4 flex flex-col items-end gap-3">
+                                                                <div className="text-right">
+                                                                    <p className="text-xl font-semibold text-gray-600 ">
+                                                                        ₹{(Number(expense.amount) || 0).toFixed(2)}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            </Link>
-                                        ))}
+                                                </Link>
+                                            );
+                                        })}
                                     </div>
                                 )}
                             </div>
@@ -594,28 +580,31 @@ const GroupExpenseDetails = () => {
                                     </button>
                                 </div>
                                 <div className="space-y-3">
-                                    {members.map((member) => (
-                                        <div
-                                            key={member.id}
-                                            className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors"
-                                        >
-                                            <div className="w-10 h-10 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center text-white font-bold">
-                                                {member.name.charAt(0)}
+                                    {members.map((member) => {
+                                        const memberId = member?._id ?? member?.id;
+                                        const memberName = member?.name || member?.email || "Member";
+                                        const initial = memberName.charAt(0).toUpperCase();
+                                        return (
+                                            <div
+                                                key={memberId}
+                                                className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors"
+                                            >
+                                                <div className="w-10 h-10 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center text-white font-bold">
+                                                    {initial}
+                                                </div>
+                                                <div className="flex-1">
+                                                    <p className="font-semibold text-gray-800">
+                                                        {memberName}
+                                                    </p>
+                                                    <p className="text-xs text-gray-500 flex flex-row"><span className="flex items-center gap-1"><CgMail className="text-blue-500" /> {member?.email || "Not provided"}</span>
+                                                        <span className="flex items-center gap-1"> &nbsp; <FaPhoneAlt className="text-green-500" />  {member?.Phone || "N/A"}</span></p>
+                                                </div>
+                                                <div className="p-2  hover:bg-red-100 text-red-600 rounded-lg transition-colors cursor-pointer" title="Remove member">
+                                                    <FaTrash />
+                                                </div>
                                             </div>
-                                            <div className="flex-1">
-                                                <p className="font-semibold text-gray-800">
-                                                    {member.name}
-                                                </p>
-                                                <p className="text-xs text-gray-500 flex flex-row"><span className="flex items-center gap-1"><CgMail className="text-blue-500" /> {member.email}</span>
-                                                    <span className="flex items-center gap-1"> &nbsp; <FaPhoneAlt className="text-green-500" />  {member.phone}</span></p>
-                                            </div>
-                                            <div className="p-2  hover:bg-red-100 text-red-600 rounded-lg transition-colors cursor-pointer" title="Remove member">
-                                                <FaTrash />
-                                            </div>
-
-
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
                                 </div>
                             </div>
 
@@ -686,12 +675,9 @@ const GroupExpenseDetails = () => {
             
             <AddGroupExpenseModal
                 open={showAddGroupExpense}
-                expenseData={expenseData}
-                onChange={handleInputChange}
+                groupId={id}
                 onClose={() => setShowAddGroupExpense(false)}
-                onSubmit={handleSubmit}
-                categories={categories}
-                members={members}
+                onSuccess={() => getGroupExpenses(id)}
             />
 
             <SettlePaymentModal

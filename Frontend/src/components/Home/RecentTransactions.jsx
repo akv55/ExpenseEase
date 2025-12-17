@@ -9,9 +9,9 @@ import { useExpense } from "../../context/expenseContext";
 
 const formatDate = (value) => {
   if (!value) return "N/A";
-  const createdAt = new Date(value);
-  if (Number.isNaN(createdAt)) return "N/A";
-  return createdAt.toLocaleDateString("en-GB").replace(/\//g, "-");
+  const date = new Date(value);
+  if (isNaN(date.getTime())) return "N/A"; // ✅ FIXED
+  return date.toLocaleDateString("en-GB").replace(/\//g, "-");
 };
 
 const RecentTransactions = () => {
@@ -27,15 +27,19 @@ const RecentTransactions = () => {
         ...incomes.map((item) => ({ ...item, type: "income" })),
         ...expenses.map((item) => ({ ...item, type: "expense" })),
       ];
-      combined.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      combined.sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+      );
       setTransactions(combined.slice(0, 10)); // show last 10
     }
   }, [incomes, expenses]);
 
   return (
-    <div >
+    <div>
       {transactions.length === 0 ? (
-        <p className="text-gray-500 text-center py-6">No transactions yet.</p>
+        <p className="text-gray-500 text-center py-6">
+          No transactions yet.
+        </p>
       ) : (
         <ul className="divide-y divide-gray-200">
           {transactions.map((tx, index) => (
@@ -46,8 +50,11 @@ const RecentTransactions = () => {
             >
               <div className="flex items-center gap-3">
                 <div
-                  className={`p-3 rounded-full ${tx.type === "income" ? "bg-green-100" : "bg-red-100"
-                    }`}
+                  className={`p-3 rounded-full ${
+                    tx.type === "income"
+                      ? "bg-green-100"
+                      : "bg-red-100"
+                  }`}
                 >
                   {tx.type === "income" ? (
                     <FaArrowDown className="text-green-600" />
@@ -60,13 +67,16 @@ const RecentTransactions = () => {
                     {tx.category}
                   </p>
                   <p className="text-sm text-gray-500 capitalize">
-                    {formatDate(tx.createdAt)}
+                    {formatDate(tx.date || tx.createdAt)}
                   </p>
                 </div>
               </div>
               <p
-                className={`font-semibold ${tx.type === "income" ? "text-green-600" : "text-red-600"
-                  }`}
+                className={`font-semibold ${
+                  tx.type === "income"
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
               >
                 {tx.type === "income" ? "+" : "-"}₹{tx.amount}
               </p>
@@ -81,8 +91,11 @@ const RecentTransactions = () => {
           <div className="bg-white rounded-2xl shadow-2xl w-96 p-6 relative animate-fadeIn">
             <div className="text-center">
               <div
-                className={`inline-flex items-center justify-center w-16 h-16 rounded-full ${selectedTx.type === "income" ? "bg-green-100" : "bg-red-100"
-                  } mb-4`}
+                className={`inline-flex items-center justify-center w-16 h-16 rounded-full ${
+                  selectedTx.type === "income"
+                    ? "bg-green-100"
+                    : "bg-red-100"
+                } mb-4`}
               >
                 {selectedTx.type === "income" ? (
                   <FaArrowDown className="text-green-600 text-2xl" />
@@ -95,19 +108,21 @@ const RecentTransactions = () => {
                 {selectedTx.category}
               </h3>
               <p
-                className={`text-lg font-semibold ${selectedTx.type === "income"
+                className={`text-lg font-semibold ${
+                  selectedTx.type === "income"
                     ? "text-green-600"
                     : "text-red-600"
-                  }`}
+                }`}
               >
-                {selectedTx.type === "income" ? "+" : "-"}₹{selectedTx.amount}
+                {selectedTx.type === "income" ? "+" : "-"}₹
+                {selectedTx.amount}
               </p>
             </div>
 
             <div className="mt-6 space-y-3 text-gray-700">
               <div className="flex items-center gap-2">
                 <FaCalendarAlt className="text-blue-500" />
-                <span>{formatDate(selectedTx.createdAt)}</span>
+                <span>{formatDate(selectedTx.date || selectedTx.createdAt)}</span>
               </div>
               <div className="flex items-center gap-2 border border-gray-200 p-3 rounded-lg bg-gray-50">
                 <p>
@@ -116,7 +131,6 @@ const RecentTransactions = () => {
                     : "No description provided."}
                 </p>
               </div>
-
             </div>
 
             <div className="mt-6 flex justify-center">
