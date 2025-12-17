@@ -67,8 +67,8 @@ const getGroupById = async (req, res) => {
       _id: groupId,
       $or: [{ members: req.user.id }, { owner: req.user.id }],
     })
-      .populate("owner", "name email")
-      .populate("members", "name email");
+      .populate("owner", "name email phone")
+      .populate("members", "name email phone");
 
     if (!group) {
       return res.status(404).json({ error: "Group not found" });

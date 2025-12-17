@@ -8,6 +8,7 @@ const incomeRoutes = require('./routes/incomeRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const groupRoutes = require('./routes/groupRoutes');
 const groupExpenseRoutes = require('./routes/groupExpenseRoutes');
+const ExpressError = require("./utils/ExpressError.js");
 const methoodsoverride = require('method-override');
 dotenv.config();
 
@@ -33,7 +34,10 @@ app.use('/api/group-expenses', groupExpenseRoutes);
 app.get('/', (req, res) => {
     res.send('Server is running!');
 });
-
+// --------ERROR HANDLING--------
+app.use((req, res, next) => {
+    next(new ExpressError("Page Not Found", 404));
+});
 
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);

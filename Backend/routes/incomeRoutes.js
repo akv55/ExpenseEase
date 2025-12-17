@@ -1,10 +1,10 @@
 const express = require('express');
 const { addIncome, getIncomes } = require('../controllers/incomeController');
 const  protect= require('../middleware/authMiddleware');
-
+const wrapAsync = require("../utils/wrapAsync.js");
 const router = express.Router();
 
-router.post('/', protect, addIncome);
-router.get('/', protect, getIncomes);
+router.post('/', protect, wrapAsync(addIncome));
+router.get('/', protect, wrapAsync(getIncomes));
 
 module.exports = router;

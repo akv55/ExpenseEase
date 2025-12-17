@@ -67,6 +67,17 @@ const GroupExpenseDetails = () => {
     const [pageLoading, setPageLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const ownerName = useMemo(() => {
+        if (!groupDetails?.owner) return "N/A";
+        if (typeof groupDetails.owner === "object") {
+            return groupDetails.owner.name || groupDetails.owner.email || "N/A";
+        }
+        const ownerFromMembers = members.find(
+            (member) => String(member?._id ?? member?.id ?? member) === String(groupDetails.owner)
+        );
+        return ownerFromMembers?.name || ownerFromMembers?.email || "N/A";
+    }, [groupDetails, members]);
+
     useEffect(() => {
         if (!id) return;
         const loadData = async () => {
@@ -290,11 +301,11 @@ const GroupExpenseDetails = () => {
                                                 {formatDate(groupDetails?.createdAt)}
                                             </span>
                                             <span className="flex items-center gap-1 md:inline-flex hidden">
-                                                <MdPerson className="text-teal-500" /> Owner: <span className="bg-blue-200 px-2 py-1 text-blue-500 rounded-l-full rounded-r-full font-semibold">{groupDetails?.owner?.name || "N/A"}</span>
+                                                <MdPerson className="text-teal-500" /> Owner: <span className="bg-blue-200 px-2 py-1 text-blue-500 rounded-l-full rounded-r-full font-semibold">{ownerName}</span>
                                             </span>
                                         </div>
                                         <div className="flex items-center gap-2 mt-2  text-sm text-gray-500 lg:hidden">
-                                            <MdPerson className="text-teal-500" /> Owner: <span className="bg-blue-200 p-1 text-blue-500 rounded-l-full rounded-r-full font-semibold">{groupDetails?.owner?.name || "N/A"}</span>
+                                            <MdPerson className="text-teal-500" /> Owner: <span className="bg-blue-200 p-1 text-blue-500 rounded-l-full rounded-r-full font-semibold">{ownerName}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -410,14 +421,14 @@ const GroupExpenseDetails = () => {
 
                                     <div className="flex-1">
                                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                                            Members
+                                            Status
                                         </label>
                                         <select
                                             value={filterSettled}
                                             onChange={(e) => setFilterSettled(e.target.value)}
                                             className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-1 focus:ring-teal-500 focus:border-transparent outline-none"
                                         >
-                                            <option value="all">All Members</option>
+                                            <option value="all">All Status</option>
                                             <option value="settled">Settled</option>
                                             <option value="pending">Pending</option>
                                         </select>
@@ -462,10 +473,6 @@ const GroupExpenseDetails = () => {
                                                     to={`/group-expense-details/${groupDetails?._id || id}/expense/${expense._id || expense.id}`}
                                                 >
                                                     <div
-                                                        onClick={() => {
-                                                            setSelectedTransaction(expense);
-                                                            setTransactionDetailsModal(true);
-                                                        }}
                                                         className="border-2 border-gray-100 rounded-xl p-5 hover:border-teal-300 hover:shadow-md transition-all duration-300 bg-gradient-to-r from-white to-gray-50 cursor-pointer mb-4"
                                                     >
                                                         <div className="flex items-start justify-between">
@@ -597,7 +604,7 @@ const GroupExpenseDetails = () => {
                                                         {memberName}
                                                     </p>
                                                     <p className="text-xs text-gray-500 flex flex-row"><span className="flex items-center gap-1"><CgMail className="text-blue-500" /> {member?.email || "Not provided"}</span>
-                                                        <span className="flex items-center gap-1"> &nbsp; <FaPhoneAlt className="text-green-500" />  {member?.Phone || "N/A"}</span></p>
+                                                        <span className="flex items-center gap-1"> &nbsp; <FaPhoneAlt className="text-green-500" />  {member?.phone || "N/A"}</span></p>
                                                 </div>
                                                 <div className="p-2  hover:bg-red-100 text-red-600 rounded-lg transition-colors cursor-pointer" title="Remove member">
                                                     <FaTrash />
@@ -692,12 +699,6 @@ const GroupExpenseDetails = () => {
                 onClose={() => setShowAddMemberModal(false)}
                 onSave={handleAddMembersSave}
                 existingMembers={members}
-            />
-
-            <TransactionDetailsModal
-                open={transactionDetailsModal}
-                onClose={() => setTransactionDetailsModal(false)}
-                transaction={selectedTransaction}
             />
 
         </>
