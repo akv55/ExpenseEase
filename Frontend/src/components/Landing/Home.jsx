@@ -6,7 +6,7 @@ import { FaWallet, FaUsers, FaChartLine, FaShieldAlt, FaCheckCircle, FaArrowRigh
 const Home = () => {
   const features = [
     {
-      icon: <FaWallet className="text-4xl text-blue-600" />,
+      icon: <FaWallet className="text-4xl text-teal-600" />,
       title: "Smart Expense Tracking",
       description: "Log expenses effortlessly with our intuitive interface. Categorize transactions automatically and add receipts with photo capture.",
       benefits: ["Auto-categorization", "Receipt scanning", "Voice notes"]
@@ -69,11 +69,11 @@ const Home = () => {
   return (
     <>
       {/* Hero Section */}
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+      <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-indigo-50">
         <div className="container mx-auto px-4 py-16">
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-              Simplify Your Spending Effortlessly<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600"> Split & Track</span>
+              Simplify Your Spending Effortlessly<span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-500 to-teal-600"> Split & Track</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
               Manage personal expenses, split bills with friends, and gain financial clarity in one intuitive platform.
@@ -81,20 +81,20 @@ const Home = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
               <Link
                 to="/signup"
-                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-4 px-10 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl inline-flex items-center gap-2 text-lg"
+                className="bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-700 hover:to-teal-700 text-white font-semibold py-4 px-10 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl inline-flex items-center gap-2 text-lg"
               >
                 Get Started Free <FaArrowRight />
               </Link>
               <Link
                 to="/login"
-                className="bg-white text-gray-900 border-2 border-gray-300 hover:border-blue-500 font-semibold py-4 px-10 rounded-xl transition-all duration-300 hover:shadow-lg text-lg"
+                className="bg-white text-gray-900 border-2 border-gray-300 hover:border-teal-500 font-semibold py-4 px-10 rounded-xl transition-all duration-300 hover:shadow-lg text-lg"
               >
                 Sign In
               </Link>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
               <div className="bg-white p-6 rounded-xl shadow-lg">
-                <div className="text-3xl font-bold text-blue-600 mb-2">25K+</div>
+                <div className="text-3xl font-bold text-teal-600 mb-2">25K+</div>
                 <div className="text-gray-600">Active Users</div>
               </div>
               <div className="bg-white p-6 rounded-xl shadow-lg">
@@ -144,7 +144,7 @@ const Home = () => {
       </div>
 
       {/* How It Works Section */}
-      <div className="py-20 bg-gradient-to-r from-gray-50 to-blue-50">
+      <div className="py-20 bg-gradient-to-r from-gray-50 to-teal-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
@@ -157,7 +157,7 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {steps.map((step, index) => (
               <div key={index} className="text-center">
-                <div className="bg-blue-600 text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6 shadow-lg">
+                <div className="bg-teal-600 text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6 shadow-lg">
                   {step.step}
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">{step.title}</h3>
@@ -182,7 +182,7 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-gray-50 p-8 rounded-xl shadow-lg">
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
+                <div className="w-12 h-12 bg-teal-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
                   S
                 </div>
                 <div>
@@ -236,17 +236,17 @@ const Home = () => {
       </div>
 
       {/* CTA Section */}
-      <div className="py-20 bg-gradient-to-r from-blue-600 to-indigo-600">
+      <div className="py-20 bg-gradient-to-r from-teal-500 to-teal-600">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
             Ready to Take Control?
           </h2>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-teal-100 mb-8 max-w-2xl mx-auto">
             Join thousands of users who are already managing their finances smarter with SpendWise.
           </p>
           <Link
             to="/signup"
-            className="bg-white text-blue-600 hover:bg-gray-100 font-semibold py-4 px-10 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl inline-flex items-center gap-2 text-lg"
+            className="bg-white text-teal-600 hover:bg-gray-100 font-semibold py-4 px-10 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl inline-flex items-center gap-2 text-lg"
           >
             Start Your Journey <FaArrowRight />
           </Link>
