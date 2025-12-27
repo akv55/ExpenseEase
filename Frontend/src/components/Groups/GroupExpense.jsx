@@ -4,6 +4,7 @@ import { TrendingUp, IndianRupee, Calendar, CreditCard, ArrowUpRight, ArrowDownR
 import Sidebar from "../Layouts/Sidebar";
 import { Link } from "react-router-dom";
 import { useGroup } from "../../context/groupContext";
+import { toast } from "react-toastify";
 
 const formatDate = (value) => {
   if (!value) return "N/A";
@@ -51,7 +52,7 @@ const GroupExpense = () => {
 
   // Delete placeholder until backend endpoint exists
   const handleDelete = () => {
-    alert("Delete group is not yet implemented.");
+    toast.info("Delete group is not yet implemented.");
   };
 
   // ✅ Open Modal

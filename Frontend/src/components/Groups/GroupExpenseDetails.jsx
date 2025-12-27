@@ -35,6 +35,7 @@ import TransactionDetailsModal from "./TransactionDetails";
 import { useGroup } from "../../context/groupContext";
 import { useGroupExpense } from "../../context/groupExpenseContext";
 import { useAuth } from "../../context/authContext";
+import { toast } from "react-toastify";
 
 
 const formatDate = (value) => {
@@ -228,7 +229,7 @@ const GroupExpenseDetails = () => {
     ];
 
     const handleSettleConfirm = () => {
-        alert("Payment settled successfully!");
+        toast.success("Payment settled successfully!");
         setShowSettleModal(false);
     };
 

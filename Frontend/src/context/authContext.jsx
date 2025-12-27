@@ -39,24 +39,47 @@ export const AuthProvider = ({ children }) => {
     // Signup function
     const signup = async (formData) => {
         const res = await API.post("/auth/signup", formData);
-        localStorage.setItem("token", res.data.token);
-        setUser(res.data.user);
+        return res.data;
     };
     // Login function
     const login = async (formData) => {
         const res = await API.post("/auth/login", formData);
         localStorage.setItem("token", res.data.token);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
         setUser(res.data.user);
     };
     // Logout function
     const logout = () => {
         localStorage.removeItem("token");
+        localStorage.removeItem("user");
         setUser(null);
     };
     // Change Password
     const changePassword = async (formData) => {
         const res = await API.post("/auth/change-password", formData);
+        return res.data;
+    };
+
+    const verifyOtp = async ({ email, otp }) => {
+        const res = await API.post("/auth/verify-otp", { email, otp });
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
         setUser(res.data.user);
+        return res.data;
+    };
+
+    const resendOtp = async (email) => {
+        const res = await API.post("/auth/resend-otp", { email });
+        return res.data;
+    };
+
+    const requestPasswordReset = async (email) => {
+        const res = await API.post("/auth/forgot-password", { email });
+        return res.data;
+    };
+
+    const resetPassword = async (payload) => {
+        const res = await API.post("/auth/reset-password", payload);
         return res.data;
     };
 
@@ -68,7 +91,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, loading, login, signup, logout, changePassword, updateProfileImage }}>
+        <AuthContext.Provider value={{ user, loading, login, signup, verifyOtp, resendOtp, requestPasswordReset, resetPassword, logout, changePassword, updateProfileImage }}>
             {children}
         </AuthContext.Provider>
     );

@@ -3,6 +3,7 @@ import { data, Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext.jsx";
 import WaveDivider from "../Landing/waveDivider.jsx";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const { login } = useAuth();
@@ -25,6 +26,7 @@ export default function Login() {
       setLoading(true);
       await login(form);
       setLoading(false);
+      toast.success("Logged in successfully.");
       navigate("/dashboard");
     } catch (err) {
       setLoading(false);
@@ -109,14 +111,11 @@ export default function Login() {
             </div>
 
             <div className="flex justify-center gap-8">
-              <button className="flex items-center gap-2 border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-100 transition cursor-not-allowed text-gray-500">
+              <button className="flex items-center gap-2 border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-100 transition cursor-not-allowed text-gray-500 cursor-not-allowed">
                 <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
                 Google
               </button>
-              <button className="flex items-center gap-2 border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-100 transition cursor-not-allowed text-gray-500">
-                <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" alt="Facebook" className="w-5 h-5" />
-                Facebook
-              </button>
+              
             </div>
 
           </div>

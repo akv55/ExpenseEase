@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { CiLock } from 'react-icons/ci';
 import WaveDivider from '../Landing/waveDivider.jsx';
+import { useAuth } from '../../context/authContext.jsx';
 
 const ForgotPassword = () => {
+    const { requestPasswordReset } = useAuth();
+    const navigate = useNavigate();
     const [error, setError] = useState('');
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
@@ -11,13 +14,20 @@ const ForgotPassword = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
+        setMessage('');
+        setIsLoading(true);
         try {
-            // Placeholder for API call
+            await requestPasswordReset(email);
             setMessage('If an account with that email exists, a reset code has been sent.');
-            setError('');
+            localStorage.setItem('resetEmail', email);
+            setTimeout(() => {
+                navigate('/reset-password', { state: { email } });
+            }, 1200);
         } catch (err) {
-            setError('Failed to send reset code');
+            setError(err.response?.data?.message || 'Failed to send reset code');
         }
+        setIsLoading(false);
     };
 
     return (

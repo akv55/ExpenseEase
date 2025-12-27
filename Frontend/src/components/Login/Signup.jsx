@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import WaveDivider from "../Landing/waveDivider.jsx";
 import { useAuth } from "../../context/authContext.jsx";
+import { toast } from "react-toastify";
 
 export default function Signup() {
   const { signup } = useAuth();
@@ -17,7 +18,8 @@ export default function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setHasAttemptedSubmit(true);
-    if (!name || !email || !password || !confirmPassword) {
+    setError('');
+    if (!name || !phone || !email || !password || !confirmPassword) {
       setError("Please fill out all required fields.");
       return;
     }
@@ -26,15 +28,21 @@ export default function Signup() {
       return;
     }
     try {
-      await signup(formData);
-      navigate("/dashboard");
+      setIsLoading(true);
+      const response = await signup(formData);
+      const registeredEmail = response?.email || email;
+      localStorage.setItem("pendingEmail", registeredEmail);
+      toast.success("Signup successful. Please verify your email.");
+      navigate("/verify-otp", { state: { email: registeredEmail } });
     } catch (err) {
       setError(err.response?.data?.message || "Signup failed");
+    } finally {
+      setIsLoading(false);
     }
   };
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    if (error) setError(null);
+    if (error) setError('');
   };
   return (
     <div className="min-h-screen flex flex-col md:flex-row text-white relative overflow-hidden">
@@ -150,10 +158,7 @@ export default function Signup() {
               <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
               Google
             </button>
-            <button className="flex items-center gap-2 border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-100 transition cursor-not-allowed text-gray-500">
-              <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" alt="Facebook" className="w-5 h-5" />
-              Facebook
-            </button>
+            
           </div>
         </div>
       </div>

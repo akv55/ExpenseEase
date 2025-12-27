@@ -4,6 +4,7 @@ import { useAuth } from "../../context/authContext";
 import { FaUser, FaEnvelope, FaPhone, FaCalendarAlt, FaEdit, FaCamera } from "react-icons/fa";
 import EditProfileForm from "./editProfile";
 import API from "../../API/api";
+import { toast } from "react-toastify";
 
 const formatDate = (value) => {
   if (!value) return "N/A";
@@ -37,9 +38,10 @@ const Profile = () => {
       });
 
       updateProfileImage(response.data.user.profileImage);
+      toast.success("Profile image updated successfully.");
     } catch (err) {
       console.error("Upload failed:", err);
-      alert("Image upload failed!");
+      toast.error("Image upload failed. Please try again.");
     } finally {
       setLoading(false);
     }
