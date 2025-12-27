@@ -12,6 +12,7 @@ import {
   FaSignOutAlt,
   FaBars,
   FaTimes,
+  FaBook
 } from "react-icons/fa";
 
 export default function Sidebar() {
@@ -33,6 +34,7 @@ export default function Sidebar() {
     { path: "/add-expense", label: "Add Expense", icon: FaPlus, color: "text-red-500" },
     { path: "/add-income", label: "Add Income", icon: FaPlus, color: "text-teal-500" },
     { path: "/create-group", label: "Create Group", icon: IoCreate, color: "text-orange-500" },
+    { path: "/my-khata", label: "My Khata", icon: FaBook, color: "text-red-500" },
     { path: "/group-expenses", label: "Group Expenses", icon: FaUsers, color: "text-teal-500" },
     { path: "/settings", label: "Settings", icon: IoSettingsOutline, color: "text-gray-500" },
     { path: "/notifications", label: "Notifications", icon: MdGroupAdd, color: "text-yellow-500" },
@@ -98,15 +100,15 @@ export default function Sidebar() {
                     to={item.path}
                     onClick={() => setIsMobileOpen(false)} // Close sidebar after navigation (mobile)
                     className={`flex items-center px-3 py-3 rounded-lg transition-all duration-200 group ${isActive(item.path)
-                        ? "bg-teal-500 text-white shadow-md"
-                        : "text-gray-700 hover:bg-gray-100 hover:text-teal-500"
+                      ? "bg-teal-500 text-white shadow-md"
+                      : "text-gray-700 hover:bg-gray-100 hover:text-teal-500"
                       }`}
                     title={isCollapsed ? item.label : ""}
                   >
                     <Icon
                       className={`w-5 h-5 flex-shrink-0 ${isActive(item.path)
-                          ? "text-white"
-                          : `${item.color} group-hover:scale-110`
+                        ? "text-white"
+                        : `${item.color} group-hover:scale-110`
                         }`}
                     />
                     {!isCollapsed && (

@@ -19,6 +19,7 @@ import Setting from './components/Settings/Setting';
 import CreateGroup from './components/Groups/CreateGroup';
 import GroupExpenseDetails from './components/Groups/GroupExpenseDetails';
 import TransactionDetails from './components/Groups/TransactionDetails';
+import MyKhataBook from './components/MyKhata/MyKhataBook';
 import { AuthProvider } from './context/authContext';
 import { IncomeProvider } from './context/incomeContext';
 import { ExpenseProvider } from './context/expenseContext';
@@ -61,6 +62,7 @@ function App() {
                     <Route path="/create-group" element={<ProtectedRoute><CreateGroup /></ProtectedRoute>} />
                     <Route path="/group-expense-details/:id" element={<ProtectedRoute><GroupExpenseDetails /></ProtectedRoute>} />
                     <Route path="/group-expense-details/:id/expense/:id" element={<ProtectedRoute><TransactionDetails /></ProtectedRoute>} />
+                    <Route path="/my-khata" element={<ProtectedRoute><MyKhataBook /></ProtectedRoute>} />
                     <Route path="/maintenance" element={<UnderMaintenance />} />
                   </Routes>
                 </Router>
