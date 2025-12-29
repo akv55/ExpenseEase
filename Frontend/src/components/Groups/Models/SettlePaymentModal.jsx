@@ -6,7 +6,7 @@ const SettlePaymentModal = ({ open, amount, onClose, onConfirm }) => {
     if (!open) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
                 <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-6 rounded-t-2xl">
                     <div className="flex items-center justify-between">
@@ -15,7 +15,7 @@ const SettlePaymentModal = ({ open, amount, onClose, onConfirm }) => {
                         </h3>
                         <button
                             onClick={onClose}
-                            className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                            className="p-2 hover:bg-white/20 rounded-lg transition-colors cursor-pointer"
                         >
                             <IoMdClose className="text-2xl" />
                         </button>
@@ -32,7 +32,7 @@ const SettlePaymentModal = ({ open, amount, onClose, onConfirm }) => {
                         <label className="block text-sm font-semibold text-gray-700">
                             Payment Method
                         </label>
-                        <select className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                        <select className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-1 focus:ring-orange-500 focus:border-transparent outline-none">
                             <option>UPI</option>
                             <option>Bank Transfer</option>
                             <option>Cash</option>
@@ -47,20 +47,20 @@ const SettlePaymentModal = ({ open, amount, onClose, onConfirm }) => {
                         <input
                             type="text"
                             placeholder="Enter transaction reference"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-1 focus:ring-orange-500 focus:border-transparent outline-none"
                         />
                     </div>
 
                     <div className="flex gap-4 pt-4">
                         <button
                             onClick={onClose}
-                            className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors"
+                            className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors cursor-pointer"
                         >
                             Cancel
                         </button>
                         <button
                             onClick={onConfirm}
-                            className="flex-1 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
+                            className="flex-1 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer"
                         >
                             Confirm Payment
                         </button>

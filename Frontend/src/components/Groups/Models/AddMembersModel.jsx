@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { FaUserPlus, FaEnvelopeOpenText, FaPhoneAlt, FaUsers } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 
-const emptyMember = { name: "", email: "", phone: "", role: "Member" };
+const emptyMember = { phone:""};
 
 const AddMembersModal = ({ open, onClose, onSave, existingMembers = [] }) => {
 	const [member, setMember] = useState(emptyMember);
@@ -24,8 +24,8 @@ const AddMembersModal = ({ open, onClose, onSave, existingMembers = [] }) => {
 
 	const handleAddToList = (e) => {
 		e?.preventDefault();
-		if (!member.name.trim() || !member.email.trim()) {
-			setError("Name and email are required");
+		if (!member.phone.trim()) {
+			setError("Phone is required");
 			return;
 		}
 
@@ -39,13 +39,13 @@ const AddMembersModal = ({ open, onClose, onSave, existingMembers = [] }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		const hasDraft = member.name.trim() || member.email.trim() || member.phone.trim();
+		const hasDraft = member.phone.trim();
 		let listToSave = pending;
 
 		if (hasDraft) {
-			const isValid = member.name.trim() && member.email.trim();
+			const isValid = member.phone.trim();
 			if (!isValid) {
-				setError("Please complete Name and Email before saving");
+				setError("Please complete Phone before saving");
 				return;
 			}
 			listToSave = [...pending, member];
@@ -128,20 +128,16 @@ const AddMembersModal = ({ open, onClose, onSave, existingMembers = [] }) => {
 										className="flex items-center justify-between bg-white border border-gray-200 rounded-lg px-3 py-2 shadow-sm"
 									>
 										<div className="flex flex-col text-sm">
-											<span className="font-semibold text-gray-800">{item.name}</span>
-											<span className="text-gray-600">{item.email}</span>
 											{item.phone && (
 												<span className="text-gray-500">{item.phone}</span>
 											)}
 										</div>
 										<div className="flex items-center gap-3 text-xs text-gray-600">
-											<span className="px-2 py-1 bg-emerald-50 text-emerald-700 rounded-full font-semibold">
-												{item.role}
-											</span>
+											
 											<button
 												type="button"
 												onClick={() => handleRemovePending(idx)}
-												className="text-red-500 hover:text-red-600 font-semibold"
+												className="text-red-500 hover:text-red-600 font-semibold transition-colors cursor-pointer px-3 py-1 rounded-lg border border-red-200 hover:bg-red-50"
 											>
 												Remove
 											</button>
@@ -173,7 +169,7 @@ const AddMembersModal = ({ open, onClose, onSave, existingMembers = [] }) => {
 							</button>
 							<button
 								type="submit"
-								className="flex-1 md:flex-none px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-emerald-600 hover:to-teal-700 transition-all"
+								className="flex-1 md:flex-none px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-teal-600 hover:to-teal-700 transition-all"
 							>
 								Send Invites
 							</button>

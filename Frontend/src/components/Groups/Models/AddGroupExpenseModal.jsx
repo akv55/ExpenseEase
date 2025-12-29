@@ -224,7 +224,7 @@ const AddGroupExpenseModal = ({
 
 
     return (
-        <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
                 <div className="sticky top-0 bg-gradient-to-r from-teal-500 to-teal-600 text-white p-6 rounded-t-2xl">
                     <div className="flex items-center justify-between">
@@ -233,7 +233,7 @@ const AddGroupExpenseModal = ({
                         </h3>
                         <button
                             onClick={onClose}
-                            className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                            className="p-2 hover:bg-white/20 rounded-lg transition-colors cursor-pointer"
                         >
                             <IoMdClose className="text-2xl" />
                         </button>
@@ -266,7 +266,7 @@ const AddGroupExpenseModal = ({
                                 value={formData.amount}
                                 onChange={handleChange}
                                 placeholder="0.00"
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-1 focus:ring-teal-500 focus:border-transparent outline-none"
+                                className=" w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-1 focus:ring-teal-500 focus:border-transparent outline-none"
                             />
                         </div>
                     </div>

@@ -206,14 +206,18 @@ const GroupExpenseDetails = () => {
         : "0.0";
 
     if (pageLoading && !groupDetails) {
-        return (
-            <div className="flex justify-center items-center min-h-screen">
-                <div className="text-center">
-                    <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-teal-600 mb-4"></div>
-                    <p className="text-xl font-semibold text-gray-700">Loading group details...</p>
-                </div>
-            </div>
-        );
+       return (
+			<div className="flex justify-center items-center min-h-screen">
+				<div className="text-center max-w-7xl mx-auto group-container">
+					<div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-teal-600 mb-4">
+					</div>
+					<h3 className="text-xl font-semibold text-teal-600">Loading
+            <span className="animate-pulse">.</span><span className="animate-pulse delay-150">.</span><span className="animate-pulse delay-300">.</span>
+          </h3>
+          <p>Please wait while we fetch your data.</p>
+				</div>
+			</div>
+		);
     }
 
     const COLORS = [
@@ -560,7 +564,7 @@ const GroupExpenseDetails = () => {
                                             {balance.type === "owe" && (
                                                 <button
                                                     onClick={() => setShowSettleModal(true)}
-                                                    className="mt-3 w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-2 rounded-lg text-sm font-medium transition-all duration-300"
+                                                    className="mt-3 w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-2 rounded-lg text-sm font-medium transition-all duration-300 cur"
                                                 >
                                                     Settle Up
                                                 </button>

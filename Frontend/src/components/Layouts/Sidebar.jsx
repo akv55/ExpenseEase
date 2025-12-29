@@ -34,7 +34,7 @@ export default function Sidebar() {
     { path: "/add-expense", label: "Add Expense", icon: FaPlus, color: "text-red-500" },
     { path: "/add-income", label: "Add Income", icon: FaPlus, color: "text-teal-500" },
     { path: "/create-group", label: "Create Group", icon: IoCreate, color: "text-orange-500" },
-    { path: "/my-khata", label: "My Khata", icon: FaBook, color: "text-red-500" },
+    // { path: "/my-khata", label: "Khatabook", icon: FaBook, color: "text-red-500" },
     { path: "/group-expenses", label: "Group Expenses", icon: FaUsers, color: "text-teal-500" },
     { path: "/settings", label: "Settings", icon: IoSettingsOutline, color: "text-gray-500" },
     { path: "/notifications", label: "Notifications", icon: MdGroupAdd, color: "text-yellow-500" },

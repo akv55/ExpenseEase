@@ -37,7 +37,10 @@ const TransactionDetails = ({ loading, onSettle, onEdit, onDelete }) => {
 				<div className="text-center max-w-7xl mx-auto group-container">
 					<div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-teal-600 mb-4">
 					</div>
-					<p className="text-xl font-semibold text-gray-700">Loading...</p>
+					<h3 className="text-xl font-semibold text-teal-600">Loading
+            <span className="animate-pulse">.</span><span className="animate-pulse delay-150">.</span><span className="animate-pulse delay-300">.</span>
+          </h3>
+          <p>Please wait while we fetch your data.</p>
 				</div>
 			</div>
 		);
@@ -49,7 +52,7 @@ const TransactionDetails = ({ loading, onSettle, onEdit, onDelete }) => {
 			<Sidebar />
 			<div className="md:ml-64 ml-0 p-4 md:p-8">
 				<div className="max-w-7xl mx-auto group-container">
-					<div className="bg-white w-full max-w-7xl rounded-2xl shadow-2xl overflow-hidden">
+					<div className="bg-white w-full max-w-7xl rounded-2xl  overflow-hidden">
 						<div className="bg-gradient-to-r from-teal-500 via-teal-600 to-teal-700 text-white p-6 flex items-start justify-between">
 							<div className="space-y-1">
 								<div className="flex justify-between items-center gap-4 mb-2">
@@ -93,7 +96,7 @@ const TransactionDetails = ({ loading, onSettle, onEdit, onDelete }) => {
 								<div className="bg-gray-50 border border-gray-100 rounded-xl p-4">
 									<p className="text-sm text-gray-600">Category</p>
 									<p className="text-lg font-semibold text-gray-900 mt-2">{txn.category || "General"}</p>
-									<p className="text-xs text-gray-500 mt-1">Paid by: <span className="text-teal-600 bg-teal-100 px-1 py-1 rounded font-semibold uppercase">{txn.paidBy?.name || "Unknown"}</span></p>
+									<p className="text-xs text-gray-500 mt-1">Paid by: <span className="text-teal-600 bg-teal-100 px-2 border rounded-full font-semibold uppercase">{txn.paidBy?.name || "Unknown"}</span></p>
 								</div>
 							</div>
 
@@ -114,18 +117,10 @@ const TransactionDetails = ({ loading, onSettle, onEdit, onDelete }) => {
 													key={`${person.name}-${idx}`}
 													className="flex items-center justify-between px-3 py-2 rounded-lg border border-gray-100 bg-gray-50"
 												>
-													<div className="flex flex-col">
+													<div className="flex flex-row items-center gap-3 justify-between w-full">
 														<span className="font-semibold text-gray-800">{person.name || "Unknown"}</span>
 														<span className="text-xs text-gray-500">Owes ₹{person.share || "0"}</span>
 													</div>
-													<span
-														className={`text-xs px-3 py-1 rounded-full font-semibold ${person.status === "paid"
-															? "bg-emerald-100 text-emerald-700"
-															: "bg-amber-100 text-amber-700"
-															}`}
-													>
-														{person.status === "paid" ? "Paid" : "Pending"}
-													</span>
 												</div>
 											))}
 										</div>
@@ -164,13 +159,13 @@ const TransactionDetails = ({ loading, onSettle, onEdit, onDelete }) => {
 										<div className="grid grid-cols-2 gap-2">
 											<button
 												onClick={() => onEdit?.(txn)}
-												className="px-4 py-3 bg-white border border-teal-200 rounded-xl text-gray-800 font-semibold hover:bg-gray-50 transition-colors cursor-pointer"
+												className="px-3 py-2 bg-white border border-teal-200 rounded-xl text-gray-800 font-semibold hover:bg-teal-50 transition-colors cursor-pointer"
 											>
 												<MdEdit className="inline mr-2 text-teal-500" /> Edit
 											</button>
 											<button
 												onClick={() => onDelete?.(txn)}
-												className="px-4 py-3 bg-white border border-red-200 text-red-600 rounded-xl font-semibold hover:bg-red-50 transition-colors cursor-pointer"
+												className="px-3 py-2 bg-white border border-red-200 text-red-600 rounded-xl font-semibold hover:bg-red-50 transition-colors cursor-pointer"
 											>
 												<FaTrash className="inline mr-2" /> Delete
 											</button>
