@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { use, useMemo, useState } from "react";
 import Sidebar from "../Layouts/Sidebar";
 import {
     FiTrendingUp,
@@ -16,7 +16,7 @@ const filterOptions = [
     { key: "payable", label: "You Pay" },
 ];
 
-const MyKhataBook = () => {
+const MyKhataBook = ({loading}) => {
     const [activeFilter, setActiveFilter] = useState("all");
     const [search, setSearch] = useState("");
 
@@ -83,6 +83,19 @@ const MyKhataBook = () => {
         .reduce((sum, entry) => sum + entry.amount, 0);
 
     const projection = (receivable - payable) * 1.08;
+
+    /* -------- Loading -------- */
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <div className="text-center max-w-7xl mx-auto group-container">
+                    <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-teal-600 mb-4">
+                    </div>
+                    <p className="text-xl font-semibold text-gray-700">Loading...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 transition-colors duration-300">

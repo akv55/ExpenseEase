@@ -67,10 +67,10 @@ const EditProfileForm = () => {
         Edit Profile Information
       </h3>
       {hasAttemptedSubmit && error && (
-      <div className='mb-6 bg-red-50 border border-red-200 rounded-xl p-4'>
-        <p className="text-red-600 text-center text-sm font-medium">{error}</p>
-      </div>
-              )}
+        <div className='mb-6 bg-red-50 border border-red-200 rounded-xl p-4'>
+          <p className="text-red-600 text-center text-sm font-medium">{error}</p>
+        </div>
+      )}
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Profile Preview */}
 
@@ -86,7 +86,7 @@ const EditProfileForm = () => {
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500"
+              className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900 outline-none"
               required
             />
           </div>
@@ -101,7 +101,7 @@ const EditProfileForm = () => {
               name="email"
               value={formData.email}
               disabled
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed"
+              className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900 outline-none cursor-not-allowed"
             />
           </div>
 
@@ -115,24 +115,10 @@ const EditProfileForm = () => {
               name="phone"
               value={formData.phone}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500"
+              className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900 outline-none"
               required
             />
           </div>
-
-          {/* Image Upload */}
-          {/* <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Upload Profile Picture{" "}
-              <span className="text-gray-500">(JPEG, PNG)</span>
-            </label>
-            <input
-              type="file"
-              accept="image/jpeg, image/png"
-              onChange={handleImageChange}
-              className="w-full px-3 py-2 border-2 border-dashed border-purple-400 rounded-lg cursor-pointer file:border-0 file:bg-purple-100 file:rounded-lg file:text-purple-700 file:text-sm file:p-1 hover:border-purple-500 transition"
-            />
-          </div> */}
         </div>
 
         {/* Buttons */}
@@ -140,7 +126,7 @@ const EditProfileForm = () => {
           <button
             type="submit"
             disabled={loading}
-            className={`bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg flex items-center space-x-2 transition-colors ${loading ? "opacity-70 cursor-not-allowed" : ""
+            className={`bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 rounded-lg flex items-center space-x-2 transition-colors ${loading ? "opacity-70 cursor-not-allowed" : ""
               }`}
           >
             <FaSave className="w-4 h-4" />
@@ -150,7 +136,7 @@ const EditProfileForm = () => {
           <button
             type="button"
             onClick={handleCancel}
-            className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg flex items-center space-x-2 transition-colors"
+            className="bg-gray-500 hover:bg-gray-700 text-white px-6 py-2 rounded-lg flex items-center space-x-2 transition-colors"
           >
             <FaTimes className="w-4 h-4" />
             <span>Cancel</span>

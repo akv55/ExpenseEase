@@ -31,7 +31,6 @@ import {
 import AddGroupExpenseModal from "./Models/AddGroupExpenseModal";
 import SettlePaymentModal from "./Models/SettlePaymentModal";
 import AddMembersModal from "./Models/AddMembersModel";
-import TransactionDetailsModal from "./TransactionDetails";
 import { useGroup } from "../../context/groupContext";
 import { useGroupExpense } from "../../context/groupExpenseContext";
 import { useAuth } from "../../context/authContext";
@@ -53,10 +52,8 @@ const GroupExpenseDetails = () => {
     const [showAddGroupExpense, setShowAddGroupExpense] = useState(false);
     const [showAddMemberModal, setShowAddMemberModal] = useState(false);
     const [showSettleModal, setShowSettleModal] = useState(false);
-    const [transactionDetailsModal, setTransactionDetailsModal] = useState(false);
     const [filterCategory, setFilterCategory] = useState("all");
     const [filterSettled, setFilterSettled] = useState("all");
-    const [selectedTransaction, setSelectedTransaction] = useState(null);
     const { fetchGroupById } = useGroup();
     const { groupExpenses, loading: expensesLoading, getGroupExpenses } = useGroupExpense();
     const { user } = useAuth();
@@ -591,14 +588,26 @@ const GroupExpenseDetails = () => {
                                     {members.map((member) => {
                                         const memberId = member?._id ?? member?.id;
                                         const memberName = member?.name || member?.email || "Member";
-                                        const initial = memberName.charAt(0).toUpperCase();
+                                        const profileImg = member?.profileImage?.url;
+                                        const initial = (memberName || "M").trim().charAt(0).toUpperCase();
                                         return (
                                             <div
                                                 key={memberId}
                                                 className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors"
                                             >
-                                                <div className="w-10 h-10 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center text-white font-bold">
-                                                    {initial}
+                                                <div className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-teal-400 to-teal-600 text-white font-bold">
+                                                    {profileImg ? (
+                                                        <img
+                                                            src={profileImg}
+                                                            alt={memberName}
+                                                            className="w-full h-full object-cover"
+                                                            onError={(e) => {
+                                                                e.currentTarget.style.display = "none";
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        <span>{initial}</span>
+                                                    )}
                                                 </div>
                                                 <div className="flex-1">
                                                     <p className="font-semibold text-gray-800">

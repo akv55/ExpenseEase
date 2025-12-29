@@ -65,7 +65,7 @@ const AddMembersModal = ({ open, onClose, onSave, existingMembers = [] }) => {
 	return (
 		<div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
 			<div className="bg-white w-full max-w-3xl rounded-2xl shadow-2xl overflow-hidden">
-				<div className="bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-500 text-white p-6 flex items-start justify-between">
+				<div className="bg-gradient-to-r from-teal-400  to-teal-600 text-white p-6 flex items-start justify-between">
 					<div className="space-y-1">
 						<div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-sm font-semibold">
 							<FaUsers /> Team Builder
@@ -73,9 +73,7 @@ const AddMembersModal = ({ open, onClose, onSave, existingMembers = [] }) => {
 						<h3 className="text-3xl font-bold flex items-center gap-2">
 							<FaUserPlus className="text-white" /> Add Members
 						</h3>
-						<p className="text-sm text-white/80">
-							Invite collaborators with names, emails, and phone numbers.
-						</p>
+						
 					</div>
 					<button
 						onClick={onClose}
@@ -87,76 +85,34 @@ const AddMembersModal = ({ open, onClose, onSave, existingMembers = [] }) => {
 				</div>
 
 				<form onSubmit={handleSubmit} className="p-6 space-y-6">
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+					<div className=" grid grid-cols-1 md:grid-cols-2 gap-4">
 						<div>
 							<label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-								<FaUserPlus className="text-emerald-500" /> Full Name
+								<FaUserPlus className="text-teal-500" /> Phone
 							</label>
 							<input
 								type="text"
-								name="name"
-								value={member.name}
-								onChange={handleFieldChange}
-								placeholder="e.g., Priya Sharma"
-								className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-							/>
-						</div>
-						<div>
-							<label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-								<FaEnvelopeOpenText className="text-blue-500" /> Email
-							</label>
-							<input
-								type="email"
-								name="email"
-								value={member.email}
-								onChange={handleFieldChange}
-								placeholder="name@email.com"
-								className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-							/>
-						</div>
-						<div>
-							<label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-								<FaPhoneAlt className="text-orange-500" /> Phone
-							</label>
-							<input
-								type="tel"
 								name="phone"
 								value={member.phone}
 								onChange={handleFieldChange}
-								placeholder="Optional"
-								className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+								placeholder="e.g., +1234567890"
+								className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-1 focus:ring-teal-500 focus:border-transparent outline-none"
 							/>
-						</div>
-					</div>
 
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-						<div>
-							<label className="block text-sm font-semibold text-gray-700 mb-2">Role</label>
-							<select
-								name="role"
-								value={member.role}
-								onChange={handleFieldChange}
-								className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-							>
-								<option value="Member">Member</option>
-								<option value="Admin">Admin</option>
-								<option value="Viewer">Viewer</option>
-							</select>
 						</div>
-						<div className="md:col-span-2 flex items-end gap-3">
+
+						<div>
 							<button
 								type="button"
 								onClick={handleAddToList}
-								className="flex-1 px-4 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-emerald-600 hover:to-teal-700 transition-all"
+								className=" px-4 py-3 bg-gradient-to-r from-teal-400 to-teal-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-teal-500 hover:to-teal-700 transition-all w-full mt-7"
 							>
 								Add to list
 							</button>
-							<span className="text-sm text-gray-500">
-								{pending.length} pending
-							</span>
 						</div>
 					</div>
 
+					
 					{pending.length > 0 && (
 						<div className="border border-gray-100 rounded-xl bg-gray-50 p-4 space-y-3">
 							<div className="flex items-center justify-between">
@@ -197,7 +153,7 @@ const AddMembersModal = ({ open, onClose, onSave, existingMembers = [] }) => {
 					)}
 
 					{error && (
-						<div className="px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+						<div className="px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm ">
 							{error}
 						</div>
 					)}

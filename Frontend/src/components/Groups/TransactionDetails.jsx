@@ -1,6 +1,6 @@
 import React from "react";
 import Sidebar from "../Layouts/Sidebar";
-import { FaReceipt, FaMoneyBillWave, FaCalendarAlt, FaUsers, FaCheckCircle, FaTrash } from "react-icons/fa";
+import { FaReceipt, FaMoneyBillWave, FaCalendarAlt, FaUsers, FaCheckCircle, FaTrash,FaRegCopy  } from "react-icons/fa";
 import { MdAccountBalanceWallet, MdEdit } from "react-icons/md";
 
 const TransactionDetails = ({ loading, onSettle, onEdit, onDelete }) => {
@@ -57,7 +57,7 @@ const TransactionDetails = ({ loading, onSettle, onEdit, onDelete }) => {
 										<FaReceipt /> Transaction Details
 									</div>
 									<div className="flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-sm font-semibold">
-										<span>#78946134555</span>
+										<p className="flex gap-2">Transaction ID:<span className=""> 78946134555</span> <FaRegCopy className="cursor-pointer p" /></p>
 									</div>
 								</div>
 								<h4 className="text-3xl font-bold flex items-center gap-2">
@@ -97,7 +97,7 @@ const TransactionDetails = ({ loading, onSettle, onEdit, onDelete }) => {
 								</div>
 							</div>
 
-							<div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+							<div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
 								<div className="lg:col-span-2 space-y-4">
 									<div className="border border-gray-100 rounded-xl p-4 bg-white">
 										<div className="flex items-center justify-between mb-3">
@@ -131,12 +131,24 @@ const TransactionDetails = ({ loading, onSettle, onEdit, onDelete }) => {
 										</div>
 									</div>
 								</div>
+
+								<div className="space-y-4 h-">
+									<div className="border border-gray-100 rounded-xl p-4 bg-gradient-to-br from-slate-50 to-gray-100">
+										<div className="flex items-center gap-2 text-gray-800 font-semibold mb-2">
+											<MdAccountBalanceWallet className="text-teal-500" /> Description
+										</div>
+										<p className="p-2 text-sm text-gray-600 bg-white/100 rounded-lg ">
+											Here's a quick summary of your transaction and settlement status:
+										</p>
+									</div>
+								</div>
 								<div className="space-y-4">
 									<div className="border border-gray-100 rounded-xl p-4 bg-gradient-to-br from-slate-50 to-gray-100">
 										<div className="flex items-center gap-2 text-gray-800 font-semibold mb-2">
 											<MdAccountBalanceWallet className="text-teal-500" /> Summary
 										</div>
-										<ul className="space-y-2 text-sm text-gray-700">
+
+										<ul className="space-y-2 text-sm text-gray-700 bg-white/100 p-3 rounded-lg">
 											<li className="flex justify-between"><span>You paid</span><span className="font-semibold">₹{txn.paidBy?.contribution || txn.amount}</span></li>
 											<li className="flex justify-between"><span>Your share</span><span className="font-semibold text-teal-600">₹{txn.yourShare}</span></li>
 											<li className="flex justify-between"><span>Outstanding</span><span className="font-semibold text-amber-600">{txn.settled ? "₹0" : "₹" + txn.yourShare}</span></li>
