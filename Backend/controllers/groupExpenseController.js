@@ -213,3 +213,23 @@ exports.settleGroupExpense = async (req, res) => {
     res.status(500).json({ message: "Failed to settle expense" });
   }
 };
+
+// remove member in group
+
+exports.removeParticipantFromExpenses = async (groupId, userId) => {
+  try {
+    const expenses = await GroupExpense.find({ groupId });
+
+    for (const expense of expenses) {
+      const originalParticipantCount = expense.participants.length;
+      expense.participants = expense.participants.filter(
+        (participant) => participant.user.toString() !== userId
+      );
+      if (expense.participants.length < originalParticipantCount) {
+        await expense.save();
+      }
+    }
+  } catch (error) {
+    console.error("Error removing member from expenses:", error);
+  }   
+};

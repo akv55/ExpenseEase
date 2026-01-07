@@ -1,10 +1,10 @@
 import { useState } from "react";
 import SettingsSidebar from "../components/Settings/SettingsSidebar";
 import Sidebar from "../components/Layouts/Sidebar";
-import ProfileSettings from "../components/Settings/ProfileSettings";
+// import ProfileSettings from "../components/Settings/ProfileSettings";
 import SecuritySettings from "../components/Settings/SecuritySettings";
-import ExpenseSettings from "../components/Settings/ExpenseSettings";
-import SplitRulesSettings from "../components/Settings/SplitRulesSettings";
+// import ExpenseSettings from "../components/Settings/ExpenseSettings";
+// import SplitRulesSettings from "../components/Settings/SplitRulesSettings";
 import NotificationSettings from "../components/Settings/NotificationSettings";
 // import CurrencySettings from "../components/Settings/CurrencySettings";
 // import PaymentSettings from "../components/Settings/PaymentSettings";
@@ -18,10 +18,10 @@ export default function Settings() {
 
   const renderSection = () => {
     switch (active) {
-      case "Profile": return <ProfileSettings />;
+      // case "Profile": return <ProfileSettings />;
       case "Security": return <SecuritySettings />;
-      case "Expense": return <ExpenseSettings />;
-      case "Split Rules": return <SplitRulesSettings />;
+      // case "Expense": return <ExpenseSettings />;
+      // case "Split Rules": return <SplitRulesSettings />;
       case "Notifications": return <NotificationSettings />;
       // case "Currency": return <CurrencySettings />;
       // case "Payments": return <PaymentSettings />;
@@ -29,7 +29,7 @@ export default function Settings() {
       case "Appearance": return <AppearanceSettings />;
       // case "Backup": return <BackupSettings />;
       case "Danger Zone": return <DangerZone />;
-      default: return <ProfileSettings />;
+      default: return <SecuritySettings />;
     }
   };
 

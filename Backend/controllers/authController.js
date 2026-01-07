@@ -355,6 +355,22 @@ const toggleLoginAlert = async (req, res) => {
   });
 };
 
+// 2FA toggle
+const toggleTwoFactor = async (req, res) => {
+  const { enabled } = req.body;
+
+  const user = await User.findByIdAndUpdate(
+    req.user.id,
+    { twoFactorEnabled: enabled },
+    { new: true }
+  );
+
+  res.json({
+    message: "Two Factor Authentication updated",
+    twoFactorEnabled: user.twoFactorEnabled,
+  });
+};
+
 module.exports = {
   signup,
   login,
@@ -367,4 +383,5 @@ module.exports = {
   forgotPassword,
   resetPassword,
   toggleLoginAlert,
+  toggleTwoFactor,
 };

@@ -30,7 +30,14 @@ const userSchema = new mongoose.Schema({
       default: "https://cdn-icons-png.flaticon.com/512/147/147144.png",
     },
   },
-
+  loginAlertEnabled: {
+    type: Boolean,
+    default: false, // 🔔 OFF by default
+  },
+  twoFactorEnabled: {
+    type: Boolean,
+    default: false, // 🔐 2FA OFF by default
+  },
   role: {
     type: String,
     enum: ["user", "admin"],

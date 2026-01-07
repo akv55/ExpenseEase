@@ -98,10 +98,10 @@ const EditProfileForm = () => {
             </label>
             <input
               type="email"
-              name="email"
+              name="email" 
               value={formData.email}
               disabled
-              className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900 outline-none cursor-not-allowed"
+              className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 focus:border-transparent bg-gray-100 text-gray-900 outline-none cursor-not-allowed"
             />
           </div>
 

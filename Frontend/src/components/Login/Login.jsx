@@ -25,6 +25,11 @@ export default function Login() {
     try {
       setLoading(true);
       await login(form);
+      if (res.data.twoFactorRequired) {
+        navigate("/verify-otp", { state: res.data });
+      } else {
+        localStorage.setItem("token", res.data.token);
+      }
       setLoading(false);
       toast.success("Logged in successfully.");
       navigate("/dashboard");
@@ -115,7 +120,7 @@ export default function Login() {
                 <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
                 Google
               </button>
-              
+
             </div>
 
           </div>

@@ -273,7 +273,7 @@ const GroupExpenseDetails = () => {
                                         {/* Popup Modal */}
                                         {selected && (
                                             <div className="fixed inset-0 bg-transparent bg-opacity-50 flex justify-center items-center z-50 p-4">
-                                                <div className="bg-white rounded-2xl shadow-2xl w-96 p-6 relative animate-fadeIn border-2 border-teal-300">
+                                                <div className="bg-white rounded-2xl shadow-2xl w-96 p-6 relative animate-fadeIn border-2 border-gray-400">
                                                     <div className="text-center">
                                                         <h3 className="text-xl font-bold text-gray-900 mb-2 capitalize">
                                                             {groupDetails?.name || "Group"}</h3>
@@ -286,7 +286,7 @@ const GroupExpenseDetails = () => {
                                                     <div className="mt-6 flex justify-center">
                                                         <button
                                                             onClick={() => setSelected(null)}
-                                                            className="px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
+                                                            className="px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors cursor-pointer"
                                                         >
                                                             Close
                                                         </button>
@@ -296,18 +296,18 @@ const GroupExpenseDetails = () => {
                                         )}
                                         <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
                                             <span className="flex items-center gap-1">
-                                                <FaUsers className="text-purple-500" />members:{members.length}
+                                                <FaUsers className="text-purple-500" />Members: {members.length}
                                             </span>
                                             <span className="flex items-center gap-1">
                                                 <FaCalendarAlt className="text-blue-500" />Created:
                                                 {formatDate(groupDetails?.createdAt)}
                                             </span>
                                             <span className="flex items-center gap-1 md:inline-flex hidden">
-                                                <MdPerson className="text-teal-500" /> Owner: <span className="bg-blue-200 px-2 py-1 text-blue-500 rounded-l-full rounded-r-full font-semibold">{ownerName}</span>
+                                                <MdPerson className="text-teal-500" /> Owner: <span className="bg-blue-200 px-2 py-1 text-blue-500 rounded-l-full rounded-r-full font-semibold"> {ownerName}</span>
                                             </span>
                                         </div>
                                         <div className="flex items-center gap-2 mt-2  text-sm text-gray-500 lg:hidden">
-                                            <MdPerson className="text-teal-500" /> Owner: <span className="bg-blue-200 p-1 text-blue-500 rounded-l-full rounded-r-full font-semibold">{ownerName}</span>
+                                            <MdPerson className="text-teal-500" /> Owner: <span className="bg-blue-200 p-1 text-blue-500 rounded-l-full rounded-r-full font-semibold"> {ownerName}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -331,7 +331,7 @@ const GroupExpenseDetails = () => {
                                         Total Expenses
                                     </p>
                                     <p className="text-2xl font-bold">
-                                        ₹{totalGroupExpense.toFixed(2)}
+                                        ₹{totalGroupExpense}
                                     </p>
                                     <p className="text-blue-600 text-xs mt-2">
                                         {totalTransactions} transactions
@@ -349,7 +349,7 @@ const GroupExpenseDetails = () => {
                                     <p className="text-gray-600 text-sm font-medium mb-1">
                                         Your Share
                                     </p>
-                                    <p className="text-2xl font-bold">₹{personalShare.toFixed(2)}</p>
+                                    <p className="text-2xl font-bold">₹{personalShare}</p>
                                     <p className="text-purple-600 text-xs mt-2">
                                         {yourSharePercentage}% of total
                                     </p>

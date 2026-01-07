@@ -1,7 +1,7 @@
 const express= require('express');
 const wrapAsync = require('../utils/wrapAsync.js');
 const { addExpense, getExpenses } = require('../controllers/expenseController');
-const protect = require('../middleware/authMiddleware');
+const protect = require('../middleware/middleware');
 
 const router = express.Router();
 

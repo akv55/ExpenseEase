@@ -158,7 +158,7 @@ const GroupExpense = () => {
                   placeholder="Search groups..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg bg-white text-gray-900 focus:ring-1 focus:ring-teal-500 focus:border-blue-500 outline-none transition-all duration-200 placeholder:text-gray-400"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg bg-white text-gray-900 focus:ring-1 focus:ring-teal-500 focus:border-transparent outline-none transition-all duration-200 placeholder:text-gray-400"
                 />
               </div>
             </div>
@@ -209,7 +209,7 @@ const GroupExpense = () => {
                     const displayDate = formatDate(group.createdAt);
                     return (
                       <tr key={group._id} className="hover:bg-blue-50/60 even:bg-gray-50 transition-colors duration-200">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                        <td className="px-6 py-4 whitespace-nowrap text-semibold text-gray-600">
                           <div className="flex items-center gap-2">
                             {displayDate}
                           </div>

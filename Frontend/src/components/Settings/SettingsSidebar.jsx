@@ -1,8 +1,5 @@
 const menus = [
-  "Profile",
   "Security",
-  "Expense",
-  "Split Rules",
   "Notifications",
   "Appearance",
   "Danger Zone",
@@ -20,7 +17,7 @@ export default function SettingsSidebar({ active, setActive }) {
   };
 
   return (
-    <aside className="w-full md:w-72 bg-white p-4 md:p-6 rounded-2xl shadow-sm mb-4 md:mb-0 md:mr-6">
+    <aside className="w-full md:w-72 bg-white p-4 md:p-6 rounded-2xl shadow-sm mb-4 md:mb-0 md:mr-6 h-fit">
       <h2 className="text-lg md:text-xl font-bold text-teal-700 mb-3 md:mb-6">
         Settings
       </h2>

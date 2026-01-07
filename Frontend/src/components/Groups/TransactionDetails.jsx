@@ -55,12 +55,12 @@ const TransactionDetails = ({ loading, onSettle, onEdit, onDelete }) => {
 					<div className="bg-white w-full max-w-7xl rounded-2xl  overflow-hidden">
 						<div className="bg-gradient-to-r from-teal-500 via-teal-600 to-teal-700 text-white p-6 flex items-start justify-between">
 							<div className="space-y-1">
-								<div className="flex justify-between items-center gap-4 mb-2">
+								<div className="flex justify-between items-center gap-4 mb-2 transactionDeations">
 									<div className="flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-sm font-semibold">
 										<FaReceipt /> Transaction Details
 									</div>
 									<div className="flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-sm font-semibold">
-										<p className="flex gap-2">Transaction ID:<span className=""> 78946134555</span> <FaRegCopy className="cursor-pointer p" /></p>
+										<p className="flex gap-2">Transaction ID :<span className=""> 78946134555</span> <FaRegCopy className="cursor-pointer p" /></p>
 									</div>
 								</div>
 								<h4 className="text-3xl font-bold flex items-center gap-2">
@@ -89,9 +89,9 @@ const TransactionDetails = ({ loading, onSettle, onEdit, onDelete }) => {
 										<FaCalendarAlt className="text-teal-500" />
 										{formatDate(txn.date)}
 									</div>
-									<span className={`mt-3 inline-flex px-3 py-1 rounded-full text-xs font-semibold ${statusBadge(txn.settled)}`}>
+									{/* <span className={`mt-3 inline-flex px-3 py-1 rounded-full text-xs font-semibold ${statusBadge(txn.settled)}`}>
 										{txn.settled ? "Settled" : "Pending"}
-									</span>
+									</span> */}
 								</div>
 								<div className="bg-gray-50 border border-gray-100 rounded-xl p-4">
 									<p className="text-sm text-gray-600">Category</p>
@@ -150,12 +150,12 @@ const TransactionDetails = ({ loading, onSettle, onEdit, onDelete }) => {
 										</ul>
 									</div>
 									<div className="flex flex-col gap-2">
-										<button
+										{/* <button
 											onClick={() => onSettle?.(txn)}
 											className="w-full px-4 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-teal-600 hover:to-teal-700 transition-all colors cursor-pointer"
 										>
 											<FaCheckCircle className="inline mr-2" /> Mark as Settled
-										</button>
+										</button> */}
 										<div className="grid grid-cols-2 gap-2">
 											<button
 												onClick={() => onEdit?.(txn)}

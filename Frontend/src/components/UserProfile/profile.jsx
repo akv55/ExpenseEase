@@ -65,7 +65,7 @@ const Profile = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <Sidebar />
       <div className="ml-64 p-8">
-        <h1 className="text-3xl font-bold mb-6 text-gray-700">User Profile</h1>
+        {/* <h1 className="text-3xl font-bold mb-6 text-gray-700">User Profile</h1> */}
         <div className="max-w-4xl mx-auto">
           <div className="bg-white shadow-lg rounded-2xl overflow-hidden">
             <div className="relative overflow-hidden">
@@ -129,7 +129,7 @@ const UserInfo = ({ user }) => (
 
 const InfoCard = ({ icon, label, value }) => (
   <div className="bg-gray-50 p-4 rounded-lg flex items-center space-x-3">
-    <div className="text-gray-500 w-5 h-5">{icon}</div>
+    <div className="text-teal-500 w-5 h-5">{icon}</div>
     <div>
       <p className="text-sm text-gray-500">{label}</p>
       <p className="font-medium text-gray-800">{value || "N/A"}</p>

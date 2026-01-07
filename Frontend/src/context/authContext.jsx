@@ -86,12 +86,22 @@ export const AuthProvider = ({ children }) => {
     const updateProfileImage = (imageUrl) => {
         setUser((prevUser) => ({
             ...prevUser,
-            profileImage: { ...prevUser.profileImage, url: imageUrl },
+            profileImage: { ...prevUser?.profileImage, url: imageUrl },
         }));
     };
 
+    const updateLoginAlert = async (enabled) => {
+        const res = await API.put("/auth/toggle-login-alert", { enabled });
+        setUser((prevUser) =>
+            prevUser
+                ? { ...prevUser, loginAlertEnabled: res.data.loginAlertEnabled }
+                : prevUser
+        );
+        return res.data;
+    };
+
     return (
-        <AuthContext.Provider value={{ user, loading, login, signup, verifyOtp, resendOtp, requestPasswordReset, resetPassword, logout, changePassword, updateProfileImage }}>
+        <AuthContext.Provider value={{ user, loading, login, signup, verifyOtp, resendOtp, requestPasswordReset, resetPassword, logout, changePassword, updateProfileImage, updateLoginAlert }}>
             {children}
         </AuthContext.Provider>
     );
