@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/User.js");
 const generateToken = require("../utils/generateToken.js");
 const sendOTP = require("../utils/sendOTP.js");
+const loginAlert = require("../utils/loginAlert.js");
 require("dotenv").config();
 
 const OTP_EXPIRY_MINUTES = 5;
@@ -72,29 +73,66 @@ const signup = async (req, res) => {
 // Login
 const login = async (req, res) => {
   const { email, password } = req.body;
-  try {
-    const user = await User.findOne({ email });
-    if (!user)
-      return res.status(404).json({ message: "User not found" });
 
+  try {
+    //  Check user
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    //  Check email verification
     if (!user.isVerified) {
       return res.status(403).json({
         message: "Account not verified. Please verify the OTP sent to your email.",
       });
     }
 
+    //  Validate password
     const validPass = await bcrypt.compare(password, user.password);
-    if (!validPass)
+    if (!validPass) {
       return res.status(400).json({ message: "Invalid credentials" });
+    }
 
+    //  Generate JWT token
     const token = generateToken(user._id);
 
+    //  Send login alert email (ONLY if enabled)
+    if (user.loginAlertEnabled) {
+      try {
+        await loginAlert({
+          email: user.email,
+          name: user.name,
+          ip:
+            req.headers["x-forwarded-for"]?.split(",")[0] ||
+            req.socket.remoteAddress ||
+            "Unknown",
+          device: req.headers["user-agent"] || "Unknown device",
+        });
+      } catch (emailErr) {
+        console.error("Login alert email failed:", emailErr.message);
+        // ❗ Do NOT block login if email fails
+      }
+    }
+
+    //  Remove password from response
     const { password: _, ...userWithoutPassword } = user.toObject();
-    res.json({ user: userWithoutPassword, token });
+
+    return res.status(200).json({
+      success: true,
+      message: "Login successful",
+      user: userWithoutPassword,
+      token,
+    });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Login error:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Server error during login",
+    });
   }
 };
+
 
 const verifyOtp = async (req, res) => {
   const { email, otp } = req.body;
@@ -299,6 +337,24 @@ const logout = (req, res) => {
   res.json({ message: "Logout successful" });
 };
 
+// login alert email 
+
+const toggleLoginAlert = async (req, res) => {
+  const userId = req.user.id; // from auth middleware
+  const { enabled } = req.body;
+
+  const user = await User.findByIdAndUpdate(
+    userId,
+    { loginAlertEnabled: enabled },
+    { new: true }
+  );
+
+  res.json({
+    message: "Login alert setting updated",
+    loginAlertEnabled: user.loginAlertEnabled,
+  });
+};
+
 module.exports = {
   signup,
   login,
@@ -310,4 +366,5 @@ module.exports = {
   resendOtp,
   forgotPassword,
   resetPassword,
+  toggleLoginAlert,
 };
