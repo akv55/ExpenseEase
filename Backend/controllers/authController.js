@@ -23,7 +23,12 @@ const sendLoginAlertEmail = async (user, req) => {
       device: req.headers["user-agent"] || "Unknown device",
     });
   } catch (emailErr) {
-    console.error("Login alert email failed:", emailErr.message);
+    console.error("Login alert email failed:", {
+      email: user.email,
+      error: emailErr.message,
+      code: emailErr.code,
+    });
+    // Don't fail the login if email fails, just log it
   }
 };
 const getProfile = async (req, res) => {

@@ -7,6 +7,8 @@ const loginAlert = async ({ email, name, ip, device }) => {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
     },
+    connectionTimeout: 5000,
+    socketTimeout: 5000,
   });
 
   const mailOptions = {
@@ -25,7 +27,18 @@ const loginAlert = async ({ email, name, ip, device }) => {
     `,
   };
 
-  await transporter.sendMail(mailOptions);
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log("Login alert email sent successfully to:", email);
+  } catch (error) {
+    console.error("Login alert email failed:", {
+      email,
+      message: error.message,
+      code: error.code,
+      response: error.response,
+    });
+    throw error;
+  }
 };
 
-module.exports = loginAlert;
+module.exports = loginAlert;module.exports = loginAlert;
