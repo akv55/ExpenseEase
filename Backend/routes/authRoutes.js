@@ -15,6 +15,7 @@ const {
 	resetPassword,
 	toggleLoginAlert,
 	toggleTwoFactor,
+	verifyTwoFactorLogin,
 } = require('../controllers/authController');
 
 const router = express.Router();
@@ -27,6 +28,7 @@ router.post('/forgot-password', forgotPassword);
 router.post('/reset-password', resetPassword);
 router.post('/change-password', protect, wrapAsync(changePassword));
 router.post('/logout', protect, wrapAsync(logout));
+router.post('/verify-2fa', verifyTwoFactorLogin);
 router.get('/profile', protect, wrapAsync(getProfile));
 router.get('/search', protect, wrapAsync(findUserByPhone));
 router.put('/toggle-login-alert', protect, wrapAsync(toggleLoginAlert));

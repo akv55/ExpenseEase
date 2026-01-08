@@ -8,6 +8,24 @@ require("dotenv").config();
 const OTP_EXPIRY_MINUTES = 5;
 
 const generateOtp = () => Math.floor(100000 + Math.random() * 900000).toString();
+
+const sendLoginAlertEmail = async (user, req) => {
+  if (!user.loginAlertEnabled) return;
+
+  try {
+    await loginAlert({
+      email: user.email,
+      name: user.name,
+      ip:
+        req.headers["x-forwarded-for"]?.split(",")[0] ||
+        req.socket.remoteAddress ||
+        "Unknown",
+      device: req.headers["user-agent"] || "Unknown device",
+    });
+  } catch (emailErr) {
+    console.error("Login alert email failed:", emailErr.message);
+  }
+};
 const getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select("-password");
@@ -94,26 +112,26 @@ const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
+    if (user.twoFactorEnabled) {
+      const otp = generateOtp();
+      user.twoFactorOtp = otp;
+      user.twoFactorOtpExpire = Date.now() + OTP_EXPIRY_MINUTES * 60 * 1000;
+      await user.save();
+
+      await sendOTP(user.email, otp, "twofactor");
+
+      return res.status(200).json({
+        success: true,
+        message: "Two Factor Authentication required. Enter the code sent to your email.",
+        twoFactorRequired: true,
+        email: user.email,
+      });
+    }
+
     //  Generate JWT token
     const token = generateToken(user._id);
 
-    //  Send login alert email (ONLY if enabled)
-    if (user.loginAlertEnabled) {
-      try {
-        await loginAlert({
-          email: user.email,
-          name: user.name,
-          ip:
-            req.headers["x-forwarded-for"]?.split(",")[0] ||
-            req.socket.remoteAddress ||
-            "Unknown",
-          device: req.headers["user-agent"] || "Unknown device",
-        });
-      } catch (emailErr) {
-        console.error("Login alert email failed:", emailErr.message);
-        // ❗ Do NOT block login if email fails
-      }
-    }
+    await sendLoginAlertEmail(user, req);
 
     //  Remove password from response
     const { password: _, ...userWithoutPassword } = user.toObject();
@@ -219,8 +237,10 @@ const forgotPassword = async (req, res) => {
     }
 
     const user = await User.findOne({ email });
-
-    if (!user || !user.isVerified) {
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (!user.isVerified) {
       return res.status(200).json({ message: genericMessage });
     }
 
@@ -359,9 +379,18 @@ const toggleLoginAlert = async (req, res) => {
 const toggleTwoFactor = async (req, res) => {
   const { enabled } = req.body;
 
+  const updatePayload = {
+    twoFactorEnabled: enabled,
+  };
+
+  if (!enabled) {
+    updatePayload.twoFactorOtp = undefined;
+    updatePayload.twoFactorOtpExpire = undefined;
+  }
+
   const user = await User.findByIdAndUpdate(
     req.user.id,
-    { twoFactorEnabled: enabled },
+    updatePayload,
     { new: true }
   );
 
@@ -369,6 +398,56 @@ const toggleTwoFactor = async (req, res) => {
     message: "Two Factor Authentication updated",
     twoFactorEnabled: user.twoFactorEnabled,
   });
+};
+
+const verifyTwoFactorLogin = async (req, res) => {
+  const { email, otp } = req.body;
+
+  try {
+    if (!email || !otp) {
+      return res.status(400).json({ message: "Email and OTP are required" });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (!user.twoFactorEnabled) {
+      return res.status(400).json({ message: "Two Factor Authentication is not enabled for this account" });
+    }
+
+    if (!user.twoFactorOtp || user.twoFactorOtp !== otp) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+
+    if (!user.twoFactorOtpExpire || user.twoFactorOtpExpire < Date.now()) {
+      user.twoFactorOtp = undefined;
+      user.twoFactorOtpExpire = undefined;
+      await user.save();
+      return res.status(400).json({ message: "OTP has expired" });
+    }
+
+    user.twoFactorOtp = undefined;
+    user.twoFactorOtpExpire = undefined;
+    await user.save();
+
+    const token = generateToken(user._id);
+
+    await sendLoginAlertEmail(user, req);
+
+    const { password, ...userWithoutPassword } = user.toObject();
+
+    return res.status(200).json({
+      success: true,
+      message: "Two Factor verification successful",
+      user: userWithoutPassword,
+      token,
+    });
+  } catch (error) {
+    console.error("Verify Two Factor Error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 };
 
 module.exports = {
@@ -384,4 +463,5 @@ module.exports = {
   resetPassword,
   toggleLoginAlert,
   toggleTwoFactor,
+  verifyTwoFactorLogin,
 };

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { data, Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext.jsx";
 import WaveDivider from "../Landing/waveDivider.jsx";
 import { toast } from "react-toastify";
@@ -24,12 +23,15 @@ export default function Login() {
 
     try {
       setLoading(true);
-      await login(form);
-      if (res.data.twoFactorRequired) {
-        navigate("/verify-otp", { state: res.data });
-      } else {
-        localStorage.setItem("token", res.data.token);
+      const result = await login(form);
+      if (result?.twoFactorRequired) {
+        setLoading(false);
+        localStorage.setItem("twoFactorEmail", result.email);
+        toast.info("Enter the verification code we just sent to your email.");
+        navigate("/two-factor", { state: { email: result.email } });
+        return;
       }
+
       setLoading(false);
       toast.success("Logged in successfully.");
       navigate("/dashboard");

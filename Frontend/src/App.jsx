@@ -21,6 +21,7 @@ import GroupExpenseDetails from './components/Groups/GroupExpenseDetails';
 import TransactionDetails from './components/Groups/TransactionDetails';
 import MyKhataBook from './components/MyKhata/MyKhataBook';
 import Notification from './components/Notification/Notification';
+import TwoFactorVerify from './components/Login/TwoFactorVerify';
 import { AuthProvider } from './context/authContext';
 import { IncomeProvider } from './context/incomeContext';
 import { ExpenseProvider } from './context/expenseContext';
@@ -57,6 +58,7 @@ function App() {
                     <Route path="/forgot-password" element={<ForgotPassword />} />
                     <Route path="/reset-password" element={<ResetPassword />} />
                     <Route path="/verify-otp" element={<VerifyOtp />} />
+                    <Route path="/two-factor" element={<TwoFactorVerify />} />
                     <Route path="/add-income" element={<ProtectedRoute><AddIncome /></ProtectedRoute>} />
                     <Route path="/group-expenses" element={<ProtectedRoute><GroupExpense /></ProtectedRoute>} />
                     <Route path="/settings" element={<ProtectedRoute><Setting /></ProtectedRoute>} />

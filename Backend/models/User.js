@@ -38,6 +38,12 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false, // 🔐 2FA OFF by default
   },
+  twoFactorOtp: {
+    type: String,
+  },
+  twoFactorOtpExpire: {
+    type: Date,
+  },
   role: {
     type: String,
     enum: ["user", "admin"],

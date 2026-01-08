@@ -44,9 +44,15 @@ export const AuthProvider = ({ children }) => {
     // Login function
     const login = async (formData) => {
         const res = await API.post("/auth/login", formData);
+
+        if (res.data.twoFactorRequired) {
+            return res.data;
+        }
+
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("user", JSON.stringify(res.data.user));
         setUser(res.data.user);
+        return res.data;
     };
     // Logout function
     const logout = () => {
@@ -83,6 +89,14 @@ export const AuthProvider = ({ children }) => {
         return res.data;
     };
 
+    const verifyTwoFactorOtp = async ({ email, otp }) => {
+        const res = await API.post("/auth/verify-2fa", { email, otp });
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+        setUser(res.data.user);
+        return res.data;
+    };
+
     const updateProfileImage = (imageUrl) => {
         setUser((prevUser) => ({
             ...prevUser,
@@ -100,8 +114,18 @@ export const AuthProvider = ({ children }) => {
         return res.data;
     };
 
+    const toggleTwoFactor = async (enabled) => {
+        const res = await API.put("/auth/toggle-2fa", { enabled });
+        setUser((prevUser) =>
+            prevUser
+                ? { ...prevUser, twoFactorEnabled: res.data.twoFactorEnabled }
+                : prevUser
+        );
+        return res.data;
+    };
+
     return (
-        <AuthContext.Provider value={{ user, loading, login, signup, verifyOtp, resendOtp, requestPasswordReset, resetPassword, logout, changePassword, updateProfileImage, updateLoginAlert }}>
+        <AuthContext.Provider value={{ user, loading, login, signup, verifyOtp, resendOtp, requestPasswordReset, resetPassword, logout, changePassword, updateProfileImage, updateLoginAlert, toggleTwoFactor, verifyTwoFactorOtp }}>
             {children}
         </AuthContext.Provider>
     );

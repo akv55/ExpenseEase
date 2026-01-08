@@ -7,6 +7,7 @@ const EMAIL_FROM = process.env.EMAIL_FROM || process.env.EMAIL_USER;
 const SUBJECTS = {
   verify: `${APP_NAME} - Your verification code`,
   reset: `${APP_NAME} - Reset password code`,
+  twofactor: `${APP_NAME} - Login security code`,
 };
 
 const templates = {
@@ -29,6 +30,17 @@ const templates = {
         ${otp}
       </div>
       <p>If you didn’t request a password reset, you can safely ignore this email.</p>
+      <p style="margin-top:24px;">— The ${APP_NAME} Team</p>
+    </div>
+  `,
+  twofactor: (otp) => `
+    <div style="font-family: Arial, sans-serif; padding: 16px; color: #1f2937;">
+      <h2 style="color:#0f766e;">${APP_NAME} Login Verification</h2>
+      <p>Enter this one-time code to finish signing in. It expires in 5 minutes.</p>
+      <div style="font-size: 32px; letter-spacing: 8px; font-weight: 700; background:#ecfeff; color:#0f766e; padding: 12px 16px; text-align:center; border-radius: 12px; margin: 16px 0;">
+        ${otp}
+      </div>
+      <p>If you did not try to log in, secure your account immediately.</p>
       <p style="margin-top:24px;">— The ${APP_NAME} Team</p>
     </div>
   `,

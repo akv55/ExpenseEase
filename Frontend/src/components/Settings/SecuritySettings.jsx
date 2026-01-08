@@ -5,14 +5,14 @@ import { useAuth } from "../../context/authContext";
 import { useNavigate } from "react-router-dom";
 
 export default function SecuritySettings() {
-  const { user, changePassword, updateLoginAlert } = useAuth();
+  const { user, changePassword, updateLoginAlert, toggleTwoFactor } = useAuth();
   const navigate = useNavigate();
-  const [saving, setSaving] = useState(false);
+  const [loginAlertSaving, setLoginAlertSaving] = useState(false);
+  const [twoFactorSaving, setTwoFactorSaving] = useState(false);
   const [isChangePassword, setIsChangePassword] = useState(false);
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [enabling2FA, setEnabling2FA] = useState(false);
   const [formData, setFormData] = useState({
     currentPassword: "",
     newPassword: "",
@@ -58,7 +58,7 @@ export default function SecuritySettings() {
   };
 
   const handleLoginAlertToggle = async (value) => {
-    setSaving(true);
+    setLoginAlertSaving(true);
     try {
       await updateLoginAlert(value);
       toast.success(
@@ -67,7 +67,23 @@ export default function SecuritySettings() {
     } catch (err) {
       toast.error("Failed to update login alerts.");
     } finally {
-      setSaving(false);
+      setLoginAlertSaving(false);
+    }
+  };
+
+  const handleTwoFactorToggle = async (value) => {
+    setTwoFactorSaving(true);
+    try {
+      await toggleTwoFactor(value);
+      toast.success(
+        value
+          ? "Two Factor Authentication enabled. You'll need an OTP at login."
+          : "Two Factor Authentication disabled."
+      );
+    } catch (err) {
+      toast.error("Failed to update Two Factor Authentication.");
+    } finally {
+      setTwoFactorSaving(false);
     }
   };
 
@@ -85,15 +101,16 @@ export default function SecuritySettings() {
           <SettingsToggle
             label="Two Factor Authentication"
             description="Add an extra layer of protection to your account."
-            checked={enabling2FA}
+            checked={!!user?.twoFactorEnabled}
+            loading={twoFactorSaving}
+            disabled={!user}
+            onChange={handleTwoFactorToggle}
           />
         </div>
-        {enabling2FA && (
-          <div className="px-4 py-3 border-t border-gray-100">
-            {/* 2FA Setup Instructions or QR Code would go here */}
+        {user?.twoFactorEnabled && (
+          <div className="px-4 py-3 border-t border-gray-100 bg-slate-50">
             <p className="text-sm text-gray-600">
-              To enable Two Factor Authentication, please scan the QR code
-              below with your authenticator app and enter the generated code.
+              Two Factor Authentication is active. After entering your password we will email a one-time code that you must enter to finish logging in.
             </p>
           </div>
         )}
@@ -103,7 +120,7 @@ export default function SecuritySettings() {
             label="Login Alerts"
             description="Get notified when your account is accessed."
             checked={!!user?.loginAlertEnabled}
-            loading={saving}
+            loading={loginAlertSaving}
             disabled={!user}
             onChange={handleLoginAlertToggle}
           />
@@ -115,7 +132,7 @@ export default function SecuritySettings() {
         <button
           type="button"
           onClick={() => setIsChangePassword(!isChangePassword)}
-          className="inline-flex items-center justify-center rounded-lg border border-teal-600 px-4 py-2 text-sm font-semibold text-teal-700 hover:bg-teal-50"
+          className="inline-flex items-center justify-center rounded-lg border border-teal-600 px-4 py-2 text-sm font-semibold text-teal-700 hover:bg-teal-50 cursor-pointer"
         >
           {isChangePassword ? "Cancel" : "Change Password"}
         </button>
@@ -186,7 +203,7 @@ export default function SecuritySettings() {
             <button
               type="submit"
               disabled={loading}
-              className="rounded-lg border border-teal-600 px-4 py-2 text-sm font-semibold text-teal-700 hover:bg-teal-50"
+              className="rounded-lg border border-teal-600 px-4 py-2 text-sm font-semibold text-teal-700 hover:bg-teal-50 cursor-pointer"
             >
               {loading ? "Changing..." : "Change Password"}
             </button>
