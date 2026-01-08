@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useParams, useNavigate,Link } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import Sidebar from "../Layouts/Sidebar";
 import {
     FaUsers,
@@ -53,7 +53,7 @@ const GroupExpenseDetails = () => {
     const [showAddMemberModal, setShowAddMemberModal] = useState(false);
     const [showSettleModal, setShowSettleModal] = useState(false);
     const [filterCategory, setFilterCategory] = useState("all");
-    const [filterSettled, setFilterSettled] = useState("all");
+    const [filterMember, setFilterMember] = useState("all");
     const { fetchGroupById } = useGroup();
     const { groupExpenses, loading: expensesLoading, getGroupExpenses } = useGroupExpense();
     const { user } = useAuth();
@@ -148,7 +148,7 @@ const GroupExpenseDetails = () => {
     const currentUserBalance = balances.find(
         (balance) => String(balance.personId) === String(user?._id)
     );
-
+    const participantBalance = currentUserBalance || { type: "settled" };
     const totalOwed = currentUserBalance && currentUserBalance.net > 0 ? currentUserBalance.net : 0;
     const totalOwe = currentUserBalance && currentUserBalance.net < 0 ? Math.abs(currentUserBalance.net) : 0;
 
@@ -206,18 +206,18 @@ const GroupExpenseDetails = () => {
         : "0.0";
 
     if (pageLoading && !groupDetails) {
-       return (
-			<div className="flex justify-center items-center min-h-screen">
-				<div className="text-center max-w-7xl mx-auto group-container">
-					<div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-teal-600 mb-4">
-					</div>
-					<h3 className="text-xl font-semibold text-teal-600">Loading
-            <span className="animate-pulse">.</span><span className="animate-pulse delay-150">.</span><span className="animate-pulse delay-300">.</span>
-          </h3>
-          <p>Please wait while we fetch your data.</p>
-				</div>
-			</div>
-		);
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <div className="text-center max-w-7xl mx-auto group-container">
+                    <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-teal-600 mb-4">
+                    </div>
+                    <h3 className="text-xl font-semibold text-teal-600">Loading
+                        <span className="animate-pulse">.</span><span className="animate-pulse delay-150">.</span><span className="animate-pulse delay-300">.</span>
+                    </h3>
+                    <p>Please wait while we fetch your data.</p>
+                </div>
+            </div>
+        );
     }
 
     const COLORS = [
@@ -242,11 +242,10 @@ const GroupExpenseDetails = () => {
     const filteredExpenses = expenses.filter((expense) => {
         const categoryMatch =
             filterCategory === "all" || expense.category === filterCategory;
-        const settledMatch =
-            filterSettled === "all" ||
-            (filterSettled === "settled" && expense.settled) ||
-            (filterSettled === "pending" && !expense.settled);
-        return categoryMatch && settledMatch;
+        const memberMatch =
+            filterMember === "all" ||
+            String(expense.paidBy?._id ?? expense.paidBy?.id ?? expense.paidBy) === String(filterMember);
+        return categoryMatch && memberMatch;
     });
 
     return (
@@ -423,16 +422,19 @@ const GroupExpenseDetails = () => {
 
                                     <div className="flex-1">
                                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                                            Status
+                                            Member
                                         </label>
                                         <select
-                                            value={filterSettled}
-                                            onChange={(e) => setFilterSettled(e.target.value)}
+                                            value={filterMember}
+                                            onChange={(e) => setFilterMember(e.target.value)}
                                             className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-1 focus:ring-teal-500 focus:border-transparent outline-none"
                                         >
-                                            <option value="all">All Status</option>
-                                            <option value="settled">Settled</option>
-                                            <option value="pending">Pending</option>
+                                            <option value="all">All Members</option>
+                                            {members.map((member) => (
+                                                <option key={member._id || member.id} value={member._id || member.id}>
+                                                    {member.name || member.email}
+                                                </option>
+                                            ))}
                                         </select>
                                     </div>
                                 </div>
@@ -549,6 +551,13 @@ const GroupExpenseDetails = () => {
                                                 <span className="font-semibold text-gray-800">
                                                     {balance.person}
                                                 </span>
+                                                <span className="text-lg font-bold text-gray-700">
+                                                    ₹{personalShare}
+                                                </span>
+
+                                            </div>
+                                            <p className="text-sm text-gray-600 flex items-center gap-2 justify-between">
+                                                {balance.type === "owes" ? "Owes you" : "You owe"}
                                                 <span
                                                     className={`text-lg font-bold ${balance.type === "owes"
                                                         ? "text-green-600"
@@ -557,18 +566,18 @@ const GroupExpenseDetails = () => {
                                                 >
                                                     ₹{balance.amount}
                                                 </span>
-                                            </div>
-                                            <p className="text-sm text-gray-600">
-                                                {balance.type === "owes" ? "Owes you" : "You owe"}
                                             </p>
-                                            {balance.type === "owe" && (
-                                                <button
-                                                    onClick={() => setShowSettleModal(true)}
-                                                    className="mt-3 w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-2 rounded-lg text-sm font-medium transition-all duration-300 cur"
-                                                >
-                                                    Settle Up
-                                                </button>
-                                            )}
+                                            {participantBalance.type === "owe" &&
+                                                balance.type === "owe" &&
+                                                String(balance.personId) === String(user?._id) && (
+                                                    <button
+                                                        onClick={() => setShowSettleModal(true)}
+                                                        className="mt-3 w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-2 rounded-lg text-sm font-medium transition-all duration-300 cursor-pointer"
+                                                    >
+                                                        Settle Up
+                                                    </button>
+                                                )}
+
                                         </div>
                                     ))}
                                 </div>
@@ -581,12 +590,15 @@ const GroupExpenseDetails = () => {
                                         <FaUserFriends className="text-purple-500" />
                                         Members
                                     </h2>
-                                    <button
-                                        onClick={() => setShowAddMemberModal(true)}
-                                        className="bg-gradient-to-br from-teal-400 to-teal-600 text-white px-2 py-2 rounded-lg hover:bg-green-600 transition-colors cursor-pointer flex items-center gap-1 text-sm"
-                                    >
-                                        <FaPlus /> Add Member
-                                    </button>
+
+                                    {String(user?._id) === String(groupDetails?.owner?._id ?? groupDetails?.owner?.id ?? groupDetails?.owner) && (
+                                        <button
+                                            onClick={() => setShowAddMemberModal(true)}
+                                            className="bg-gradient-to-br from-teal-400 to-teal-600 text-white px-2 py-2 rounded-lg hover:bg-green-600 transition-colors cursor-pointer flex items-center gap-1 text-sm"
+                                        >
+                                            <FaPlus /> Add Member
+                                        </button>
+                                    )}
                                 </div>
                                 <div className="space-y-3">
                                     {members.map((member) => {
@@ -620,9 +632,12 @@ const GroupExpenseDetails = () => {
                                                     <p className="text-xs text-gray-500 flex flex-row"><span className="flex items-center gap-1"><CgMail className="text-blue-500" /> {member?.email || "Not provided"}</span>
                                                         <span className="flex items-center gap-1"> &nbsp; <FaPhoneAlt className="text-green-500" />  {member?.phone || "N/A"}</span></p>
                                                 </div>
-                                                <div className="p-2  hover:bg-red-100 text-red-600 rounded-lg transition-colors cursor-pointer" title="Remove member">
-                                                    <FaTrash />
-                                                </div>
+                                                {String(user?._id) === String(groupDetails?.owner?._id ?? groupDetails?.owner?.id ?? groupDetails?.owner) && (
+
+                                                    <div className="p-2  hover:bg-red-100 text-red-600 rounded-lg transition-colors cursor-pointer" title="Remove member">
+                                                        <FaTrash />
+                                                    </div>
+                                                )}
                                             </div>
                                         );
                                     })}
@@ -693,7 +708,7 @@ const GroupExpenseDetails = () => {
                 </div>
 
             </div>
-            
+
             <AddGroupExpenseModal
                 open={showAddGroupExpense}
                 groupId={id}

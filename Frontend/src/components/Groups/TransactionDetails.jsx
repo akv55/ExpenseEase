@@ -1,29 +1,70 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import Sidebar from "../Layouts/Sidebar";
-import { FaReceipt, FaMoneyBillWave, FaCalendarAlt, FaUsers, FaCheckCircle, FaTrash,FaRegCopy  } from "react-icons/fa";
+import { FaReceipt, FaMoneyBillWave, FaCalendarAlt, FaUsers, FaCheckCircle, FaTrash, FaRegCopy } from "react-icons/fa";
 import { MdAccountBalanceWallet, MdEdit } from "react-icons/md";
+import { useGroupExpense } from "../../context/groupExpenseContext";
+import { useAuth } from "../../context/authContext";
 
-const TransactionDetails = ({ loading, onSettle, onEdit, onDelete }) => {
+const TransactionDetails = ({ onSettle, onEdit, onDelete }) => {
+	const { groupId, expenseId } = useParams();
+	const navigate = useNavigate();
+	const { groupExpenses, loading, getGroupExpenses } = useGroupExpense();
+	const { user } = useAuth();
+	const [expense, setExpense] = useState(null);
+	const [isInitialLoad, setIsInitialLoad] = useState(true);
+
 	const formatDate = (dateStr) => {
+		if (!dateStr) return "N/A";
 		const options = { year: 'numeric', month: 'long', day: 'numeric' };
 		return new Date(dateStr).toLocaleDateString(undefined, options);
 	};
-	const txn = {
-		amount: 5000,
-		splitAmong: 3,
-		date: "2024-06-15T10:30:00Z",
-		settled: false,
-		category: "Travel",
-		paidBy: { name: "Alice", contribution: 5000 },
-		yourShare: 1667,
-		participants: [
-			{ name: "Alice", share: 1667, status: "paid" },
-			{ name: "Bob", share: 1667, status: "pending" },
-			{ name: "You", share: 1666, status: "pending" },
 
-		]
+	useEffect(() => {
+		const loadData = async () => {
+			if (groupId) {
+				await getGroupExpenses(groupId);
+				setIsInitialLoad(false);
+			}
+		};
+		loadData();
+	}, [groupId]);
 
-	};
+	useEffect(() => {
+		if (groupExpenses && expenseId) {
+			const foundExpense = groupExpenses.find(
+				(exp) => String(exp._id || exp.id) === String(expenseId)
+			);
+			setExpense(foundExpense || null);
+		}
+	}, [groupExpenses, expenseId]);
+
+	const txn = expense ? {
+		_id: expense._id || expense.id,
+		transactionId:expense.transactionId || "N/A",
+		title: expense.title || "Expense",
+		amount: Number(expense.amount) || 0,
+		description: expense.description || "",
+		splitAmong: expense.participants?.length || 0,
+		date: expense.date || expense.createdAt,
+		settled: expense.settled || false,
+		category: expense.category || "General",
+		paidBy: {
+			name: expense.paidBy?.name || expense.paidBy?.email || "Unknown",
+			contribution: Number(expense.amount) || 0
+		},
+		yourShare: (() => {
+			const participant = (expense.participants || []).find(
+				(p) => String(p?.user?._id ?? p?.user) === String(user?._id)
+			);
+			return Number(participant?.shareAmount) || 0;
+		})(),
+		participants: (expense.participants || []).map((p) => ({
+			name: p?.user?.name || p?.user?.email || "Unknown",
+			share: Number(p?.shareAmount) || 0,
+			status: expense.settled ? "paid" : "pending"
+		}))
+	} : null;
 	const statusBadge = (settled) => {
 		return settled
 			? "bg-emerald-100 text-emerald-700"
@@ -31,7 +72,7 @@ const TransactionDetails = ({ loading, onSettle, onEdit, onDelete }) => {
 	};
 
 	/* -------- Loading -------- */
-	if (loading) {
+	if (isInitialLoad && !expense) {
 		return (
 			<div className="flex justify-center items-center min-h-screen">
 				<div className="text-center max-w-7xl mx-auto group-container">
@@ -40,7 +81,24 @@ const TransactionDetails = ({ loading, onSettle, onEdit, onDelete }) => {
 					<h3 className="text-xl font-semibold text-teal-600">Loading
             <span className="animate-pulse">.</span><span className="animate-pulse delay-150">.</span><span className="animate-pulse delay-300">.</span>
           </h3>
-          <p>Please wait while we fetch your data.</p>
+					<p>Please wait while we fetch your data.</p>
+				</div>
+			</div>
+		);
+	}
+
+	if (!txn) {
+		return (
+			<div className="flex justify-center items-center min-h-screen">
+				<div className="text-center max-w-7xl mx-auto group-container">
+					<h3 className="text-xl font-semibold text-red-600">Expense not found</h3>
+					<p className="text-gray-600 mt-2">The requested expense could not be found.</p>
+					<button
+						onClick={() => navigate(`/group-expense-details/${groupId}`)}
+						className="mt-4 px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
+					>
+						Back to Group
+					</button>
 				</div>
 			</div>
 		);
@@ -60,11 +118,11 @@ const TransactionDetails = ({ loading, onSettle, onEdit, onDelete }) => {
 										<FaReceipt /> Transaction Details
 									</div>
 									<div className="flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-sm font-semibold">
-										<p className="flex gap-2">Transaction ID :<span className=""> 78946134555</span> <FaRegCopy className="cursor-pointer p" /></p>
+										<p className="flex gap-2">Transaction ID :<span className=""> {txn.transactionId}</span> <FaRegCopy className="cursor-pointer" /></p>
 									</div>
 								</div>
 								<h4 className="text-3xl font-bold flex items-center gap-2">
-									{/* {txn.description} */}Flight Ticket
+									{txn.title}
 								</h4>
 
 							</div>
@@ -133,7 +191,7 @@ const TransactionDetails = ({ loading, onSettle, onEdit, onDelete }) => {
 											<MdAccountBalanceWallet className="text-teal-500" /> Description
 										</div>
 										<p className="p-2 text-sm text-gray-600 bg-white/100 rounded-lg ">
-											Here's a quick summary of your transaction and settlement status:
+											{txn.description || "No description provided for this expense."}
 										</p>
 									</div>
 								</div>

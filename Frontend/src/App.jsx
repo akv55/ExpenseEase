@@ -64,7 +64,7 @@ function App() {
                     <Route path="/settings" element={<ProtectedRoute><Setting /></ProtectedRoute>} />
                     <Route path="/create-group" element={<ProtectedRoute><CreateGroup /></ProtectedRoute>} />
                     <Route path="/group-expense-details/:id" element={<ProtectedRoute><GroupExpenseDetails /></ProtectedRoute>} />
-                    <Route path="/group-expense-details/:id/expense/:id" element={<ProtectedRoute><TransactionDetails /></ProtectedRoute>} />
+                    <Route path="/group-expense-details/:groupId/expense/:expenseId" element={<ProtectedRoute><TransactionDetails /></ProtectedRoute>} />
                     <Route path="/my-khata" element={<ProtectedRoute><MyKhataBook /></ProtectedRoute>} />
                     <Route path="/notifications" element={<ProtectedRoute><Notification /></ProtectedRoute>} />
                     <Route path="/maintenance" element={<UnderMaintenance />} />

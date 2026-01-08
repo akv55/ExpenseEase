@@ -4,6 +4,7 @@ import { TrendingUp, IndianRupee, Calendar, CreditCard, ArrowUpRight, ArrowDownR
 import Sidebar from "../Layouts/Sidebar";
 import { Link } from "react-router-dom";
 import { useGroup } from "../../context/groupContext";
+import { useAuth } from "../../context/authContext";
 import { toast } from "react-toastify";
 
 const formatDate = (value) => {
@@ -15,6 +16,7 @@ const formatDate = (value) => {
 
 const GroupExpense = () => {
   const { groups, loading, fetchGroups } = useGroup();
+  const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,41 +48,51 @@ const GroupExpense = () => {
   }, [fetchGroups]);
 
   // ✅ Search Filter
-  const filteredGroups = groups.filter((group) =>
-    group.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredGroups = groups
+    .filter((group) => {
+      // Check if current user is a member of this group
+      const isMember = Array.isArray(group.members) &&
+        group.members.some((member) =>
+          String(member?._id ?? member?.id ?? member) === String(user?._id)
+        );
+      return isMember;
+    })
+    .filter((group) =>
+      group.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
+  
   // Delete placeholder until backend endpoint exists
   const handleDelete = () => {
     toast.info("Delete group is not yet implemented.");
   };
 
-  // ✅ Open Modal
+  // Open Modal
   const openGroupDetails = (group) => {
     setSelectedGroup(group);
     setIsModalOpen(true);
   };
 
-  // ✅ Close Modal
+  // Close Modal
   const closeModal = () => {
     setSelectedGroup(null);
     setIsModalOpen(false);
   };
   /* -------- Loading -------- */
- if (loading) {
-		return (
-			<div className="flex justify-center items-center min-h-screen">
-				<div className="text-center max-w-7xl mx-auto group-container">
-					<div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-teal-600 mb-4">
-					</div>
-					<h2  className="text-xl font-semibold text-teal-600">Loading
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-center max-w-7xl mx-auto group-container">
+          <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-teal-600 mb-4">
+          </div>
+          <h2 className="text-xl font-semibold text-teal-600">Loading
             <span className="animate-pulse">.</span><span className="animate-pulse delay-150">.</span><span className="animate-pulse delay-300">.</span>
           </h2>
           <p>Please wait while we fetch your data.</p>
-				</div>
-			</div>
-		);
-	}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50 to-indigo-100 transition-colors duration-300">
@@ -263,13 +275,15 @@ const GroupExpense = () => {
                             >
                               <FaEye size={16} />
                             </Link>
-                            <button
-                              onClick={() => handleDelete(group._id)}
-                              className="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors duration-200 cursor-pointer"
-                              title="Delete Group"
-                            >
-                              <FaTrash size={14} />
-                            </button>
+                            {String(user?._id) === String(group.owner?._id ?? group.owner?.id ?? group.owner) && (
+                              <button
+                                onClick={() => handleDelete(group._id)}
+                                className="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors duration-200 cursor-pointer"
+                                title="Delete Group"
+                              >
+                                <FaTrash size={14} />
+                              </button>
+                            )}
                           </div>
                         </td>
                       </tr>
@@ -324,12 +338,14 @@ const GroupExpense = () => {
                         >
                           <FaEye size={16} />
                         </Link>
-                        <button
-                          onClick={() => handleDelete(group._id)}
-                          className="p-2.5 text-red-600 bg-red-50 hover:bg-red-100 rounded-xl transition-colors duration-200 cursor-pointer"
-                        >
-                          <FaTrash size={14} />
-                        </button>
+                        {String(user?._id) === String(group.owner?._id ?? group.owner?.id ?? group.owner) && (
+                          <button
+                            onClick={() => handleDelete(group._id)}
+                            className="p-2.5 text-red-600 bg-red-50 hover:bg-red-100 rounded-xl transition-colors duration-200 cursor-pointer"
+                          >
+                            <FaTrash size={14} />
+                          </button>
+                        )}
                       </div>
                     </div>
 
@@ -342,12 +358,12 @@ const GroupExpense = () => {
                       </div>
                       <div className="flex justify-between items-center p-2 bg-blue-50 rounded-xl">
                         <span className="text-sm font-semibold text-gray-700">Your Share:</span>
-                        <span className="text-base font-bold text-teal-900">₹{yourShare.toFixed(2)}65</span>
+                        <span className="text-base font-bold text-teal-900">₹{yourShare.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between items-center p-2 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl">
                         <span className="text-sm font-semibold text-gray-700">You Paid:</span>
                         <span className={`text-base font-bold ${youPaid >= 0 ? "text-green-600" : "text-red-600"}`}>
-                          {youPaid >= 0 ? "+" : ""}₹{Math.abs(youPaid).toFixed(2)}95
+                          {youPaid >= 0 ? "+" : ""}₹{Math.abs(youPaid).toFixed(2)}
                         </span>
                       </div>
                     </div>

@@ -74,15 +74,17 @@ const groupExpenseSchema = new mongoose.Schema(
       ],
       required: true,
     },
-
-    /* 👤 Paid By */
+    transactionId: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     paidBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
 
-    /* 🔀 Split Logic */
     splitType: {
       type: String,
       enum: ["equal", "custom"],
@@ -91,7 +93,6 @@ const groupExpenseSchema = new mongoose.Schema(
 
     participants: [participantSchema],
 
-    /* ✅ Settlement */
     settled: {
       type: Boolean,
       default: false,
@@ -99,5 +100,16 @@ const groupExpenseSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+const transactinIdGenerator = () => {
+  return 'TXN' + Date.now() + Math.floor(Math.random() * 1000);
+};
+
+groupExpenseSchema.pre('validate', function(next) {
+  if (!this.transactinId) {
+    this.transactinId = transactinIdGenerator();
+  }
+  next();
+});
 
 module.exports = mongoose.model("GroupExpense", groupExpenseSchema);
