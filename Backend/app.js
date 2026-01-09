@@ -13,8 +13,7 @@ const methoodsoverride = require('method-override');
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 4000;
-
+const PORT = process.env.PORT || 5001;
 // Connect to database 
 connectDB();
 
@@ -39,6 +38,8 @@ app.use((req, res, next) => {
     next(new ExpressError("Page Not Found", 404));
 });
 
+
 app.listen(PORT, () => {
-    console.log(`Server started on port ${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });
+

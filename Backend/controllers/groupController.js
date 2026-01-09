@@ -48,8 +48,10 @@ const createGroup = async (req, res) => {
       members: memberIds,
       owner: ownerId,
     });
+
     res.status(201).json(group);
   } catch (err) {
+    console.error("Group creation error:", err);
     res.status(500).json({ error: err.message });
   }
 };

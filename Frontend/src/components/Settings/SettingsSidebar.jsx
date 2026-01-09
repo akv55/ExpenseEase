@@ -1,6 +1,5 @@
 const menus = [
   "Security",
-  "Notifications",
   "Appearance",
   "Danger Zone",
 ];

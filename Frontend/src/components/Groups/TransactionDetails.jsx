@@ -6,7 +6,7 @@ import { MdAccountBalanceWallet, MdEdit } from "react-icons/md";
 import { useGroupExpense } from "../../context/groupExpenseContext";
 import { useAuth } from "../../context/authContext";
 
-const TransactionDetails = ({ onSettle, onEdit, onDelete }) => {
+const TransactionDetails = () => {
 	const { groupId, expenseId } = useParams();
 	const navigate = useNavigate();
 	const { groupExpenses, loading, getGroupExpenses } = useGroupExpense();
@@ -41,7 +41,7 @@ const TransactionDetails = ({ onSettle, onEdit, onDelete }) => {
 
 	const txn = expense ? {
 		_id: expense._id || expense.id,
-		transactionId:expense.transactionId || "N/A",
+		transactionId: expense.transactionId || "N/A",
 		title: expense.title || "Expense",
 		amount: Number(expense.amount) || 0,
 		description: expense.description || "",
@@ -79,8 +79,8 @@ const TransactionDetails = ({ onSettle, onEdit, onDelete }) => {
 					<div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-teal-600 mb-4">
 					</div>
 					<h3 className="text-xl font-semibold text-teal-600">Loading
-            <span className="animate-pulse">.</span><span className="animate-pulse delay-150">.</span><span className="animate-pulse delay-300">.</span>
-          </h3>
+						<span className="animate-pulse">.</span><span className="animate-pulse delay-150">.</span><span className="animate-pulse delay-300">.</span>
+					</h3>
 					<p>Please wait while we fetch your data.</p>
 				</div>
 			</div>
@@ -207,28 +207,31 @@ const TransactionDetails = ({ onSettle, onEdit, onDelete }) => {
 											<li className="flex justify-between"><span>Outstanding</span><span className="font-semibold text-amber-600">{txn.settled ? "₹0" : "₹" + txn.yourShare}</span></li>
 										</ul>
 									</div>
-									<div className="flex flex-col gap-2">
-										{/* <button
-											onClick={() => onSettle?.(txn)}
-											className="w-full px-4 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-teal-600 hover:to-teal-700 transition-all colors cursor-pointer"
-										>
-											<FaCheckCircle className="inline mr-2" /> Mark as Settled
-										</button> */}
-										<div className="grid grid-cols-2 gap-2">
-											<button
-												onClick={() => onEdit?.(txn)}
-												className="px-3 py-2 bg-white border border-teal-200 rounded-xl text-gray-800 font-semibold hover:bg-teal-50 transition-colors cursor-pointer"
+									{/* Show Edit/Delete buttons only if current user is the one who paid */}
+									{(expense?.paidBy?._id === user?._id || expense?.paidBy?.id === user?._id || expense?.paidBy === user?._id) && (
+										<div className="flex flex-col gap-2">
+											{/* <button
+												onClick={() => onSettle?.(txn)}
+												className="w-full px-4 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-teal-600 hover:to-teal-700 transition-all colors cursor-pointer"
 											>
-												<MdEdit className="inline mr-2 text-teal-500" /> Edit
-											</button>
-											<button
-												onClick={() => onDelete?.(txn)}
-												className="px-3 py-2 bg-white border border-red-200 text-red-600 rounded-xl font-semibold hover:bg-red-50 transition-colors cursor-pointer"
-											>
-												<FaTrash className="inline mr-2" /> Delete
-											</button>
+												<FaCheckCircle className="inline mr-2" /> Mark as Settled
+											</button> */}
+											<div className="grid grid-cols-2 gap-2">
+												<button
+													// onClick={() => onEdit?.(txn)}
+													className="px-3 py-2 bg-white border border-teal-200 rounded-xl text-gray-800 font-semibold hover:bg-teal-50 transition-colors cursor-pointer"
+												>
+													<MdEdit className="inline mr-2 text-teal-500" /> Edit
+												</button>
+												<button
+													// onClick={() => onDelete?.(txn)}
+													className="px-3 py-2 bg-white border border-red-200 text-red-600 rounded-xl font-semibold hover:bg-red-50 transition-colors cursor-pointer"
+												>
+													<FaTrash className="inline mr-2" /> Delete
+												</button>
+											</div>
 										</div>
-									</div>
+									)}
 								</div>
 							</div>
 						</div>

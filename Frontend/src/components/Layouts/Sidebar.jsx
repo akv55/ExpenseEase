@@ -2,7 +2,6 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../../context/authContext";
 import { IoSettingsOutline, IoCreate } from "react-icons/io5";
-import { MdGroupAdd } from "react-icons/md";
 import {
   FaTachometerAlt,
   FaPlus,
@@ -37,7 +36,6 @@ export default function Sidebar() {
     // { path: "/my-khata", label: "Khatabook", icon: FaBook, color: "text-red-500" },
     { path: "/group-expenses", label: "Group Expenses", icon: FaUsers, color: "text-teal-500" },
     { path: "/settings", label: "Settings", icon: IoSettingsOutline, color: "text-gray-500" },
-    { path: "/notifications", label: "Notifications", icon: MdGroupAdd, color: "text-yellow-500" },
     { path: "/reports", label: "Reports", icon: FaChartBar, color: "text-pink-500" },
   ];
 

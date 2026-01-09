@@ -19,8 +19,6 @@ import Setting from './pages/Setting';
 import CreateGroup from './components/Groups/CreateGroup';
 import GroupExpenseDetails from './components/Groups/GroupExpenseDetails';
 import TransactionDetails from './components/Groups/TransactionDetails';
-import MyKhataBook from './components/MyKhata/MyKhataBook';
-import Notification from './components/Notification/Notification';
 import TwoFactorVerify from './components/Login/TwoFactorVerify';
 import { AuthProvider } from './context/authContext';
 import { IncomeProvider } from './context/incomeContext';
@@ -46,30 +44,28 @@ function App() {
           <ExpenseProvider>
             <GroupProvider>
               <GroupExpenseProvider>
-                <Router>
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/signup" element={<Signup />} />
-                    <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-                    <Route path="/add-expense" element={<ProtectedRoute><AddExpense /></ProtectedRoute>} />
-                    <Route path="/reports" element={<ProtectedRoute><Report /></ProtectedRoute>} />
-                    <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-                    <Route path="/forgot-password" element={<ForgotPassword />} />
-                    <Route path="/reset-password" element={<ResetPassword />} />
-                    <Route path="/verify-otp" element={<VerifyOtp />} />
-                    <Route path="/two-factor" element={<TwoFactorVerify />} />
-                    <Route path="/add-income" element={<ProtectedRoute><AddIncome /></ProtectedRoute>} />
-                    <Route path="/group-expenses" element={<ProtectedRoute><GroupExpense /></ProtectedRoute>} />
-                    <Route path="/settings" element={<ProtectedRoute><Setting /></ProtectedRoute>} />
-                    <Route path="/create-group" element={<ProtectedRoute><CreateGroup /></ProtectedRoute>} />
-                    <Route path="/group-expense-details/:id" element={<ProtectedRoute><GroupExpenseDetails /></ProtectedRoute>} />
-                    <Route path="/group-expense-details/:groupId/expense/:expenseId" element={<ProtectedRoute><TransactionDetails /></ProtectedRoute>} />
-                    <Route path="/my-khata" element={<ProtectedRoute><MyKhataBook /></ProtectedRoute>} />
-                    <Route path="/notifications" element={<ProtectedRoute><Notification /></ProtectedRoute>} />
-                    <Route path="/maintenance" element={<UnderMaintenance />} />
-                  </Routes>
-                </Router>
+                  <Router>
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/signup" element={<Signup />} />
+                      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                      <Route path="/add-expense" element={<ProtectedRoute><AddExpense /></ProtectedRoute>} />
+                      <Route path="/reports" element={<ProtectedRoute><Report /></ProtectedRoute>} />
+                      <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                      <Route path="/forgot-password" element={<ForgotPassword />} />
+                      <Route path="/reset-password" element={<ResetPassword />} />
+                      <Route path="/verify-otp" element={<VerifyOtp />} />
+                      <Route path="/two-factor" element={<TwoFactorVerify />} />
+                      <Route path="/add-income" element={<ProtectedRoute><AddIncome /></ProtectedRoute>} />
+                      <Route path="/group-expenses" element={<ProtectedRoute><GroupExpense /></ProtectedRoute>} />
+                      <Route path="/settings" element={<ProtectedRoute><Setting /></ProtectedRoute>} />
+                      <Route path="/create-group" element={<ProtectedRoute><CreateGroup /></ProtectedRoute>} />
+                      <Route path="/group-expense-details/:id" element={<ProtectedRoute><GroupExpenseDetails /></ProtectedRoute>} />
+                      <Route path="/group-expense-details/:groupId/expense/:expenseId" element={<ProtectedRoute><TransactionDetails /></ProtectedRoute>} />
+                      <Route path="/maintenance" element={<UnderMaintenance />} />
+                    </Routes>
+                  </Router>
               </GroupExpenseProvider>
             </GroupProvider>
           </ExpenseProvider>

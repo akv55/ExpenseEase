@@ -5,7 +5,6 @@ import Sidebar from "../components/Layouts/Sidebar";
 import SecuritySettings from "../components/Settings/SecuritySettings";
 // import ExpenseSettings from "../components/Settings/ExpenseSettings";
 // import SplitRulesSettings from "../components/Settings/SplitRulesSettings";
-import NotificationSettings from "../components/Settings/NotificationSettings";
 // import CurrencySettings from "../components/Settings/CurrencySettings";
 // import PaymentSettings from "../components/Settings/PaymentSettings";
 // import ReportSettings from "../components/Settings/ReportSettings";
@@ -22,7 +21,6 @@ export default function Settings() {
       case "Security": return <SecuritySettings />;
       // case "Expense": return <ExpenseSettings />;
       // case "Split Rules": return <SplitRulesSettings />;
-      case "Notifications": return <NotificationSettings />;
       // case "Currency": return <CurrencySettings />;
       // case "Payments": return <PaymentSettings />;
       // case "Reports": return <ReportSettings />;
