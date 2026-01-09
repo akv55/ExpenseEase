@@ -51,6 +51,10 @@ const sendOTP = async (email, otp, purpose = "verify") => {
     throw new Error("Email and OTP are required to send verification code");
   }
 
+  if (!transporter) {
+    throw new Error("Email transport is not configured. Cannot send OTP.");
+  }
+
   const sanitizedPurpose = templates[purpose] ? purpose : "verify";
 
   const mailOptions = {

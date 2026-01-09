@@ -1,16 +1,10 @@
-const nodemailer = require("nodemailer");
+const transporter = require("../config/email");
 
 const loginAlert = async ({ email, name, ip, device }) => {
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-    connectionTimeout: 5000,
-    socketTimeout: 5000,
-  });
-
+  if (!transporter) {
+    console.warn("⚠️ Login alert skipped: email transport not configured.");
+    return;
+  }
   const mailOptions = {
     from: `"Security Alert" <${process.env.EMAIL_USER}>`,
     to: email,
@@ -40,5 +34,4 @@ const loginAlert = async ({ email, name, ip, device }) => {
     throw error;
   }
 };
-
-module.exports = loginAlert;module.exports = loginAlert;
+module.exports = loginAlert;
