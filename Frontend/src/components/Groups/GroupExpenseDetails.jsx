@@ -55,7 +55,7 @@ const GroupExpenseDetails = () => {
     const [showSettleModal, setShowSettleModal] = useState(false);
     const [filterCategory, setFilterCategory] = useState("all");
     const [filterMember, setFilterMember] = useState("all");
-    const { fetchGroupById, sendGroupInvites } = useGroup();
+    const { fetchGroupById, sendGroupInvites, removeGroupMember } = useGroup();
     const { groupExpenses, loading: expensesLoading, getGroupExpenses } = useGroupExpense();
     const { user } = useAuth();
 
@@ -66,6 +66,7 @@ const GroupExpenseDetails = () => {
     const [pageLoading, setPageLoading] = useState(true);
     const [error, setError] = useState(null);
     const [inviteLoading, setInviteLoading] = useState(false);
+    const [memberActionId, setMemberActionId] = useState(null);
 
     const ownerName = useMemo(() => {
         if (!groupDetails?.owner) return "N/A";
@@ -77,6 +78,14 @@ const GroupExpenseDetails = () => {
         );
         return ownerFromMembers?.name || ownerFromMembers?.email || "N/A";
     }, [groupDetails, members]);
+
+    const ownerId = useMemo(() => {
+        if (!groupDetails?.owner) return null;
+        if (typeof groupDetails.owner === "object") {
+            return groupDetails.owner._id || groupDetails.owner.id || null;
+        }
+        return groupDetails.owner;
+    }, [groupDetails]);
 
     useEffect(() => {
         if (!id) return;
@@ -150,6 +159,7 @@ const GroupExpenseDetails = () => {
     const currentUserBalance = balances.find(
         (balance) => String(balance.personId) === String(user?._id)
     );
+    const canManageMembers = ownerId && String(user?._id) === String(ownerId);
     const participantBalance = currentUserBalance || { type: "settled" };
     const totalOwed = currentUserBalance && currentUserBalance.net > 0 ? currentUserBalance.net : 0;
     const totalOwe = currentUserBalance && currentUserBalance.net < 0 ? Math.abs(currentUserBalance.net) : 0;
@@ -319,6 +329,46 @@ const GroupExpenseDetails = () => {
             throw new Error(message);
         } finally {
             setInviteLoading(false);
+        }
+    };
+
+    const handleRemoveMember = async (memberId) => {
+        if (!groupDetails?._id || !memberId) return;
+        if (String(memberId) === String(ownerId)) {
+            toast.info("Group owner cannot be removed.");
+            return;
+        }
+
+        const member = members.find((item) => String(item?._id ?? item?.id) === String(memberId));
+        const confirmed = window.confirm(
+            `Remove ${member?.name || member?.email || "this member"} from the group?`
+        );
+        if (!confirmed) return;
+
+        try {
+            setMemberActionId(String(memberId));
+            const response = await removeGroupMember({
+                groupId: groupDetails._id,
+                memberId,
+            });
+            const updatedGroup = response?.group || response;
+            if (updatedGroup?.members) {
+                setMembers(updatedGroup.members);
+                setGroupDetails(updatedGroup);
+            } else {
+                setMembers((prev) => prev.filter((m) => String(m?._id ?? m?.id) !== String(memberId)));
+            }
+
+            toast.success("Member removed successfully.");
+        } catch (err) {
+            const message =
+                err?.response?.data?.error ||
+                err?.response?.data?.message ||
+                err?.message ||
+                "Failed to remove member.";
+            toast.error(message);
+        } finally {
+            setMemberActionId(null);
         }
     };
 
@@ -674,7 +724,7 @@ const GroupExpenseDetails = () => {
                                         Members
                                     </h2>
 
-                                    {String(user?._id) === String(groupDetails?.owner?._id ?? groupDetails?.owner?.id ?? groupDetails?.owner) && (
+                                    {canManageMembers && (
                                         <button
                                             onClick={() => setShowAddMemberModal(true)}
                                             className="bg-gradient-to-br from-teal-400 to-teal-600 text-white px-2 py-2 rounded-lg hover:bg-green-600 transition-colors cursor-pointer flex items-center gap-1 text-sm"
@@ -689,6 +739,7 @@ const GroupExpenseDetails = () => {
                                         const memberName = member?.name || member?.email || "Member";
                                         const profileImg = member?.profileImage?.url;
                                         const initial = (memberName || "M").trim().charAt(0).toUpperCase();
+                                        const isOwner = ownerId && String(memberId) === String(ownerId);
                                         return (
                                             <div
                                                 key={memberId}
@@ -715,11 +766,16 @@ const GroupExpenseDetails = () => {
                                                     <p className="text-xs text-gray-500 flex flex-row"><span className="flex items-center gap-1"><CgMail className="text-blue-500" /> {member?.email || "Not provided"}</span>
                                                         <span className="flex items-center gap-1"> &nbsp; <FaPhoneAlt className="text-green-500" />  {member?.phone || "N/A"}</span></p>
                                                 </div>
-                                                {String(user?._id) === String(groupDetails?.owner?._id ?? groupDetails?.owner?.id ?? groupDetails?.owner) && (
-
-                                                    <div className="p-2  hover:bg-red-100 text-red-600 rounded-lg transition-colors cursor-pointer" title="Remove member">
-                                                        <FaTrash />
-                                                    </div>
+                                                {canManageMembers && !isOwner && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleRemoveMember(memberId)}
+                                                        disabled={memberActionId === String(memberId)}
+                                                        className={`p-2 hover:bg-red-100 text-red-600 rounded-lg transition-colors cursor-pointer ${memberActionId === String(memberId) ? "opacity-60 cursor-not-allowed" : ""}`}
+                                                        title="Remove member"
+                                                    >
+                                                        {memberActionId === String(memberId) ? "..." : <FaTrash />}
+                                                    </button>
                                                 )}
                                             </div>
                                         );

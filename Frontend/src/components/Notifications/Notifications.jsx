@@ -75,20 +75,14 @@ const Notifications = () => {
             <Sidebar />
             <div className="md:ml-64 p-4 md:p-8">
                 <div className="max-w-5xl mx-auto">
-                    <div className="bg-gradient-to-r from-teal-500 via-emerald-500 to-lime-500 text-white rounded-3xl p-8 shadow-xl mb-8">
+                    <div className="bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-3xl p-8 shadow-xl mb-8">
                         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                             <div>
-                                <p className="uppercase text-white/80 text-xs tracking-[0.3em] mb-3">
-                                    Collaboration Hub
-                                </p>
                                 <h1 className="text-4xl font-black tracking-tight flex items-center gap-3">
                                     <FaBell className="text-amber-200" /> Group Invites
                                 </h1>
-                                <p className="text-white/90 mt-3 max-w-2xl">
-                                    Keep every member in the loop. Accept or decline group invitations without leaving ExpenseEase.
-                                </p>
                             </div>
-                            <div className="grid grid-cols-3 gap-4 text-center">
+                            {/* <div className="grid grid-cols-3 gap-4 text-center">
                                 <div className="bg-white/15 rounded-2xl p-4">
                                     <p className="text-xs uppercase tracking-wide text-white/80">Pending</p>
                                     <p className="text-3xl font-bold">{inviteStats.pending || 0}</p>
@@ -101,7 +95,7 @@ const Notifications = () => {
                                     <p className="text-xs uppercase tracking-wide text-white/80">Declined</p>
                                     <p className="text-3xl font-bold">{inviteStats.declined || 0}</p>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
 

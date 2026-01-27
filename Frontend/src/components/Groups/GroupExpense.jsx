@@ -15,7 +15,7 @@ const formatDate = (value) => {
 };
 
 const GroupExpense = () => {
-  const { groups, loading, fetchGroups } = useGroup();
+  const { groups, loading, fetchGroups, deleteGroup } = useGroup();
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGroup, setSelectedGroup] = useState(null);
@@ -23,6 +23,7 @@ const GroupExpense = () => {
   const [totalOwed, setTotalOwed] = useState(0);
   const [totalOwing, setTotalOwing] = useState(0);
   const [error, setError] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
 
   // Load groups from API
   useEffect(() => {
@@ -62,9 +63,25 @@ const GroupExpense = () => {
     );
 
   
-  // Delete placeholder until backend endpoint exists
-  const handleDelete = () => {
-    toast.info("Delete group is not yet implemented.");
+  const handleDelete = async (group) => {
+    if (!group?._id) return;
+    const confirmed = window.confirm(`Delete "${group.name}"? This action cannot be undone.`);
+    if (!confirmed) return;
+
+    try {
+      setDeletingId(String(group._id));
+      await deleteGroup(group._id);
+      toast.success("Group deleted successfully.");
+    } catch (err) {
+      const message =
+        err?.response?.data?.error ||
+        err?.response?.data?.message ||
+        err?.message ||
+        "Failed to delete group.";
+      toast.error(message);
+    } finally {
+      setDeletingId(null);
+    }
   };
 
   // Open Modal
@@ -277,11 +294,16 @@ const GroupExpense = () => {
                             </Link>
                             {String(user?._id) === String(group.owner?._id ?? group.owner?.id ?? group.owner) && (
                               <button
-                                onClick={() => handleDelete(group._id)}
-                                className="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors duration-200 cursor-pointer"
+                                onClick={() => handleDelete(group)}
+                                disabled={deletingId === String(group._id)}
+                                className={`p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors duration-200 cursor-pointer ${deletingId === String(group._id) ? "opacity-60 cursor-not-allowed" : ""}`}
                                 title="Delete Group"
                               >
-                                <FaTrash size={14} />
+                                {deletingId === String(group._id) ? (
+                                  <span className="text-xs font-semibold">Deleting...</span>
+                                ) : (
+                                  <FaTrash size={14} />
+                                )}
                               </button>
                             )}
                           </div>
@@ -340,10 +362,11 @@ const GroupExpense = () => {
                         </Link>
                         {String(user?._id) === String(group.owner?._id ?? group.owner?.id ?? group.owner) && (
                           <button
-                            onClick={() => handleDelete(group._id)}
-                            className="p-2.5 text-red-600 bg-red-50 hover:bg-red-100 rounded-xl transition-colors duration-200 cursor-pointer"
+                            onClick={() => handleDelete(group)}
+                            disabled={deletingId === String(group._id)}
+                            className={`p-2.5 text-red-600 bg-red-50 hover:bg-red-100 rounded-xl transition-colors duration-200 cursor-pointer ${deletingId === String(group._id) ? "opacity-60 cursor-not-allowed" : ""}`}
                           >
-                            <FaTrash size={14} />
+                            {deletingId === String(group._id) ? "..." : <FaTrash size={14} />}
                           </button>
                         )}
                       </div>

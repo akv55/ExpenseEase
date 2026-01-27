@@ -97,6 +97,41 @@ export const GroupProvider = ({ children }) => {
             throw err;
         }
     };
+
+    const deleteGroup = async (groupId) => {
+        if (!groupId) throw new Error("groupId is required");
+        try {
+            const res = await API.delete(`/groups/${groupId}`);
+            setGroups((prev) => prev.filter((group) => String(group?._id ?? group?.id) !== String(groupId)));
+            return res.data;
+        } catch (err) {
+            console.error("Error deleting group:", err);
+            throw err;
+        }
+    };
+
+    const removeGroupMember = async ({ groupId, memberId }) => {
+        if (!groupId || !memberId) {
+            throw new Error("groupId and memberId are required");
+        }
+        try {
+            const res = await API.delete(`/groups/${groupId}/members/${memberId}`);
+            const updatedGroup = res.data?.group || res.data;
+            if (updatedGroup?._id) {
+                setGroups((prev) =>
+                    prev.map((group) =>
+                        String(group?._id ?? group?.id) === String(updatedGroup._id)
+                            ? { ...group, ...updatedGroup }
+                            : group
+                    )
+                );
+            }
+            return res.data;
+        } catch (err) {
+            console.error("Error removing group member:", err);
+            throw err;
+        }
+    };
    
     return (
         <GroupContext.Provider
@@ -111,6 +146,8 @@ export const GroupProvider = ({ children }) => {
                 respondToInvite,
                 sendGroupInvites,
                 createGroup,
+                deleteGroup,
+                removeGroupMember,
             }}
         >
             {children}

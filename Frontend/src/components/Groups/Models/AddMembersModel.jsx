@@ -14,6 +14,14 @@ const AddMembersModal = ({ open, onClose, onSave, existingMembers = [], submitti
 		[existingMembers.length, pending.length]
 	);
 
+	useEffect(() => {
+			if (!open) {
+				setPending([]);
+				setMember(emptyMember);
+				setError("");
+			}
+		}, [open]);
+
 	if (!open) return null;
 
 	const handleFieldChange = (e) => {
@@ -73,14 +81,6 @@ const AddMembersModal = ({ open, onClose, onSave, existingMembers = [], submitti
 		setError("");
 		onClose?.();
 	};
-
-	useEffect(() => {
-		if (!open) {
-			setPending([]);
-			setMember(emptyMember);
-			setError("");
-		}
-	}, [open]);
 
 	return (
 		<div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
