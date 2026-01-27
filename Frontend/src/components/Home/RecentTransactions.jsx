@@ -7,6 +7,8 @@ import {
 import { useIncome } from "../../context/incomeContext";
 import { useExpense } from "../../context/expenseContext";
 
+const txDate = (value) => value?.date || value?.createdAt;
+
 const formatDate = (value) => {
   if (!value) return "N/A";
   const date = new Date(value);
@@ -15,7 +17,7 @@ const formatDate = (value) => {
 };
 
 const RecentTransactions = () => {
-  // ✅ SAFE DEFAULTS
+  // SAFE DEFAULTS
   const { incomes = [] } = useIncome();
   const { expenses = [] } = useExpense();
 
@@ -30,8 +32,8 @@ const RecentTransactions = () => {
 
     combined.sort(
       (a, b) =>
-        new Date(b.date || 0).getTime() -
-        new Date(a.date || 0).getTime()
+        new Date(txDate(b) || 0).getTime() -
+        new Date(txDate(a) || 0).getTime()
     );
 
     setTransactions(combined.slice(0, 10));
@@ -70,7 +72,7 @@ const RecentTransactions = () => {
                     {tx.category || "Unknown"}
                   </p>
                   <p className="text-sm text-gray-500">
-                    {formatDate(tx.date)}
+                    {formatDate(txDate(tx))}
                   </p>
                 </div>
               </div>
@@ -129,7 +131,7 @@ const RecentTransactions = () => {
             <div className="mt-6 space-y-3 text-gray-700">
               <div className="flex items-center gap-2">
                 <FaCalendarAlt className="text-blue-500" />
-                <span>{formatDate(selectedTx.date)}</span>
+                <span>{formatDate(txDate(selectedTx))}</span>
               </div>
 
               <div className="border border-gray-200 p-3 rounded-lg bg-gray-50">

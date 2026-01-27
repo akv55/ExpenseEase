@@ -27,6 +27,7 @@ const incomeSchema = new mongoose.Schema(
         "Gifts",
         "Interest",
         "Monthly Pocket Money",
+        "Scholarship",
         "Other",
       ],
     },

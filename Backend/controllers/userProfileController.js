@@ -48,4 +48,19 @@ const uploadProfileImage = async (req, res) => {
   }
 };
 
-module.exports = { uploadProfileImage };
+const editProfileInfo = async (req, res) => {
+  try {
+    const { name, email, phone } = req.body;
+    const user = await User.findById(req.user._id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+    if (name) user.name = name;
+    if (email) user.email = email;
+    if (phone) user.phone = phone;
+    await user.save();
+    res.status(200).json({ message: "Profile updated successfully", user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error during profile update" });
+  }
+};
+  module.exports = { uploadProfileImage, editProfileInfo };

@@ -1,10 +1,10 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { FaUserPlus, FaEnvelopeOpenText, FaPhoneAlt, FaUsers } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 
 const emptyMember = { phone:""};
 
-const AddMembersModal = ({ open, onClose, onSave, existingMembers = [] }) => {
+const AddMembersModal = ({ open, onClose, onSave, existingMembers = [], submitting = false }) => {
 	const [member, setMember] = useState(emptyMember);
 	const [pending, setPending] = useState([]);
 	const [error, setError] = useState("");
@@ -37,7 +37,7 @@ const AddMembersModal = ({ open, onClose, onSave, existingMembers = [] }) => {
 		setPending((prev) => prev.filter((_, i) => i !== index));
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const hasDraft = member.phone.trim();
 		let listToSave = pending;
@@ -56,11 +56,31 @@ const AddMembersModal = ({ open, onClose, onSave, existingMembers = [] }) => {
 			return;
 		}
 
-		onSave?.(listToSave);
+		try {
+			await onSave?.(listToSave);
+			setPending([]);
+			setMember(emptyMember);
+			setError("");
+			onClose?.();
+		} catch (saveErr) {
+			setError(saveErr?.message || "Failed to send invites");
+		}
+	};
+
+	const handleCancel = () => {
 		setPending([]);
 		setMember(emptyMember);
+		setError("");
 		onClose?.();
 	};
+
+	useEffect(() => {
+		if (!open) {
+			setPending([]);
+			setMember(emptyMember);
+			setError("");
+		}
+	}, [open]);
 
 	return (
 		<div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
@@ -162,16 +182,17 @@ const AddMembersModal = ({ open, onClose, onSave, existingMembers = [] }) => {
 						<div className="flex gap-3 w-full md:w-auto">
 							<button
 								type="button"
-								onClick={onClose}
+								onClick={handleCancel}
 								className="flex-1 md:flex-none px-6 py-3 border-2 border-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors"
 							>
 								Cancel
 							</button>
 							<button
 								type="submit"
-								className="flex-1 md:flex-none px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-teal-600 hover:to-teal-700 transition-all"
+								disabled={submitting}
+								className={`flex-1 md:flex-none px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-teal-600 hover:to-teal-700 transition-all ${submitting ? "opacity-70 cursor-not-allowed" : ""}`}
 							>
-								Send Invites
+								{submitting ? "Sending..." : "Send Invites"}
 							</button>
 						</div>
 					</div>

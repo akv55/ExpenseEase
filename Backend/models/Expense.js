@@ -35,6 +35,7 @@ const expenseSchema = new mongoose.Schema(
         "Internet Bill",
         "Gas Bill",
         "Fuel",
+        "Phone Bill",
         "Groceries Shopping",
         "Other",
       ],

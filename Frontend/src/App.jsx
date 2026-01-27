@@ -20,6 +20,7 @@ import CreateGroup from './components/Groups/CreateGroup';
 import GroupExpenseDetails from './components/Groups/GroupExpenseDetails';
 import TransactionDetails from './components/Groups/TransactionDetails';
 import TwoFactorVerify from './components/Login/TwoFactorVerify';
+import Notifications from './components/Notifications/Notifications';
 import { AuthProvider } from './context/authContext';
 import { IncomeProvider } from './context/incomeContext';
 import { ExpenseProvider } from './context/expenseContext';
@@ -63,6 +64,7 @@ function App() {
                       <Route path="/create-group" element={<ProtectedRoute><CreateGroup /></ProtectedRoute>} />
                       <Route path="/group-expense-details/:id" element={<ProtectedRoute><GroupExpenseDetails /></ProtectedRoute>} />
                       <Route path="/group-expense-details/:groupId/expense/:expenseId" element={<ProtectedRoute><TransactionDetails /></ProtectedRoute>} />
+                      <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
                       <Route path="/maintenance" element={<UnderMaintenance />} />
                     </Routes>
                   </Router>

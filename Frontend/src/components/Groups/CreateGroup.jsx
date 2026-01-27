@@ -85,13 +85,32 @@ const CreateGroup = () => {
       const validMemberIds = foundMembers
         .filter((m) => !m.notFound)
         .map((m) => m._id);
-      await createGroup({
+      const response = await createGroup({
         name: groupName,
         description,
         members: validMemberIds,
       });
 
-      setSuccess("✅ Group created successfully!");
+      const summary = response?.inviteSummary;
+      const parts = [];
+
+      if (summary) {
+        if (summary.createdCount > 0) {
+          parts.push(`${summary.createdCount} invite${summary.createdCount === 1 ? "" : "s"} sent`);
+        }
+        if (Array.isArray(summary.alreadyMembers) && summary.alreadyMembers.length > 0) {
+          parts.push(`${summary.alreadyMembers.length} already in group`);
+        }
+        if (Array.isArray(summary.alreadyInvited) && summary.alreadyInvited.length > 0) {
+          parts.push(`${summary.alreadyInvited.length} already invited`);
+        }
+        if (Array.isArray(summary.missingUsers) && summary.missingUsers.length > 0) {
+          parts.push(`${summary.missingUsers.length} not registered`);
+        }
+      }
+
+      const suffix = parts.length > 0 ? ` (${parts.join(", ")})` : "";
+      setSuccess(`✅ Group created successfully!${suffix}`);
       setFormData({ groupName: "", description: "", members: "" });
       setFoundMembers([]);
     } catch (err) {

@@ -104,6 +104,14 @@ export const AuthProvider = ({ children }) => {
         }));
     };
 
+    const editProfileInfo = async (profileData) => {
+        const res = await API.put("/user-profiles/editProfileInfo", profileData);
+        setUser(res.data.user);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+        return res.data;
+
+    };
+
     const updateLoginAlert = async (enabled) => {
         const res = await API.put("/auth/toggle-login-alert", { enabled });
         setUser((prevUser) =>
@@ -125,7 +133,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, loading, login, signup, verifyOtp, resendOtp, requestPasswordReset, resetPassword, logout, changePassword, updateProfileImage, updateLoginAlert, toggleTwoFactor, verifyTwoFactorOtp }}>
+        <AuthContext.Provider value={{ user, loading, login, signup, verifyOtp, resendOtp, requestPasswordReset, resetPassword, logout, changePassword, updateProfileImage, updateLoginAlert, toggleTwoFactor, verifyTwoFactorOtp, editProfileInfo }}>
             {children}
         </AuthContext.Provider>
     );

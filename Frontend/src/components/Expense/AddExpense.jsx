@@ -4,6 +4,27 @@ import { FaWallet, FaCalendarAlt, FaSave, FaTimes } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { useExpense } from '../../context/expenseContext';
 
+const EXPENSE_CATEGORIES = [
+  "Fast Food",
+  "Entertainment",
+  "Fruits",
+  "Vegetables",
+  "Health",
+  "Shopping",
+  "Education",
+  "Travel",
+  "Rent",
+  "Electricity Bill",
+  "Water Bill",
+  "Internet Bill",
+  "Subscriptions",
+  "Gas Bill",
+  "Fuel",
+  "Groceries Shopping",
+  "Gifts",
+  "Other",
+];
+
 const AddExpense = () => {
   const navigate = useNavigate();
   const { addExpense } = useExpense();
@@ -87,24 +108,9 @@ const AddExpense = () => {
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900 outline-none"
                   >
                     <option value="">Select a category</option>
-                    <option value="fast food"> Fast Food</option>
-                    <option value="entertainment">Entertainment</option>
-                    <option value="fruits">Fruits</option>
-                    <option value="vegetables">Vegetables</option>
-                    <option value="health">Health</option>
-                    <option value="shopping">Shopping</option>
-                    <option value="education">Education</option>
-                    <option value="travel">Travel</option>
-                    <option value="rent">Rent</option>
-                    <option value="electricity bill">Electricity Bill</option>
-                    <option value="water bill">Water Bill</option>
-                    <option value="internet bill">Internet Bill</option>
-                    <option value="subscriptions">Subscriptions</option>
-                    <option value="gas bill">Gas Bill</option>
-                    <option value="fuel">Fuel</option>
-                    <option value="groceries shopping">Groceries Shopping</option>
-                    <option value="gifts">Gifts</option>
-                    <option value="other">Other</option>
+                    {EXPENSE_CATEGORIES.map((option) => (
+                      <option key={option} value={option}>{option}</option>
+                    ))}
                   </select>
                   <p className="mt-2 text-sm text-gray-500"><span className="font-semibold text-red-600">Note:</span> Please select the category that best fits your expense.</p>
                 </div>

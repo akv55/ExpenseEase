@@ -11,7 +11,8 @@ import {
   FaSignOutAlt,
   FaBars,
   FaTimes,
-  FaBook
+  FaBook,
+  FaBell,
 } from "react-icons/fa";
 
 export default function Sidebar() {
@@ -35,6 +36,7 @@ export default function Sidebar() {
     { path: "/create-group", label: "Create Group", icon: IoCreate, color: "text-orange-500" },
     // { path: "/my-khata", label: "Khatabook", icon: FaBook, color: "text-red-500" },
     { path: "/group-expenses", label: "Group Expenses", icon: FaUsers, color: "text-teal-500" },
+    { path: "/notifications", label: "Notifications", icon: FaBell, color: "text-amber-500" },
     { path: "/settings", label: "Settings", icon: IoSettingsOutline, color: "text-gray-500" },
     { path: "/reports", label: "Reports", icon: FaChartBar, color: "text-pink-500" },
   ];

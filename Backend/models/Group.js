@@ -18,12 +18,15 @@ const groupSchema = new mongoose.Schema(
       required: true,
     },
 
-    members: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
+    members: {
+      type: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+      ],
+      default: [],
+    },
 
     totalExpense: {
       type: Number,

@@ -35,6 +35,7 @@ import { useGroup } from "../../context/groupContext";
 import { useGroupExpense } from "../../context/groupExpenseContext";
 import { useAuth } from "../../context/authContext";
 import { toast } from "react-toastify";
+import API from "../../API/api";
 
 
 const formatDate = (value) => {
@@ -54,7 +55,7 @@ const GroupExpenseDetails = () => {
     const [showSettleModal, setShowSettleModal] = useState(false);
     const [filterCategory, setFilterCategory] = useState("all");
     const [filterMember, setFilterMember] = useState("all");
-    const { fetchGroupById } = useGroup();
+    const { fetchGroupById, sendGroupInvites } = useGroup();
     const { groupExpenses, loading: expensesLoading, getGroupExpenses } = useGroupExpense();
     const { user } = useAuth();
 
@@ -64,6 +65,7 @@ const GroupExpenseDetails = () => {
     const [balances, setBalances] = useState([]);
     const [pageLoading, setPageLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [inviteLoading, setInviteLoading] = useState(false);
 
     const ownerName = useMemo(() => {
         if (!groupDetails?.owner) return "N/A";
@@ -234,9 +236,90 @@ const GroupExpenseDetails = () => {
         setShowSettleModal(false);
     };
 
-    const handleAddMembersSave = (newMembers) => {
-        setMembers((prev) => [...prev, ...newMembers]);
-        setShowAddMemberModal(false);
+    const handleAddMembersSave = async (entries) => {
+        if (!groupDetails?._id) {
+            throw new Error("Group details not loaded yet.");
+        }
+
+        try {
+            setInviteLoading(true);
+            const lookups = await Promise.all(
+                entries.map(async (entry) => {
+                    const phone = entry.phone?.trim();
+                    if (!phone) {
+                        return { phone, error: "Phone is required" };
+                    }
+                    try {
+                        const { data } = await API.get("/auth/search", {
+                            params: { phone },
+                        });
+                        return { phone, user: data };
+                    } catch (lookupError) {
+                        return {
+                            phone,
+                            error:
+                                lookupError?.response?.data?.message || "User not found",
+                        };
+                    }
+                })
+            );
+
+            const validUsers = lookups.filter((result) => result.user?._id);
+            if (validUsers.length === 0) {
+                throw new Error(
+                    "No registered users found for the provided phone numbers."
+                );
+            }
+
+            const memberIds = Array.from(
+                new Set(validUsers.map((result) => result.user._id))
+            );
+
+            const response = await sendGroupInvites({
+                groupId: groupDetails._id,
+                memberIds,
+            });
+
+            const createdCount =
+                response?.inviteSummary?.createdCount ?? memberIds.length;
+            toast.success(
+                `Sent ${createdCount} invite${createdCount === 1 ? "" : "s"} successfully.`
+            );
+
+            const alreadyMembersCount = response?.inviteSummary?.alreadyMembers?.length || 0;
+            if (alreadyMembersCount > 0) {
+                const count = alreadyMembersCount;
+                toast.info(
+                    `${count} member${count === 1 ? "" : "s"} already part of the group.`
+                );
+            }
+
+            const alreadyInvitedCount = response?.inviteSummary?.alreadyInvited?.length || 0;
+            if (alreadyInvitedCount > 0) {
+                const count = alreadyInvitedCount;
+                toast.info(
+                    `${count} invite${count === 1 ? "" : "s"} already pending approval.`
+                );
+            }
+
+            const unresolved = lookups.filter((result) => !result.user && result.phone);
+            if (unresolved.length > 0) {
+                const count = unresolved.length;
+                toast.info(
+                    `${count} phone number${count === 1 ? "" : "s"} skipped because no registered user was found.`
+                );
+            }
+        } catch (err) {
+            const message =
+                err?.response?.data?.error ||
+                err?.response?.data?.message ||
+                err?.message ||
+                "Failed to send invites.";
+            toast.error(message);
+            throw new Error(message);
+        } finally {
+            setInviteLoading(false);
+        }
     };
 
     const filteredExpenses = expenses.filter((expense) => {
@@ -728,6 +811,7 @@ const GroupExpenseDetails = () => {
                 onClose={() => setShowAddMemberModal(false)}
                 onSave={handleAddMembersSave}
                 existingMembers={members}
+                submitting={inviteLoading}
             />
 
         </>

@@ -1,6 +1,6 @@
-const User = require("../models/User.js");
 const Group = require("../models/Group.js");
 const mongoose = require("mongoose");
+const { createGroupInvites } = require("../services/groupInviteService.js");
 
 // Get all groups for a user
 const getGroups = async (req, res) => {
@@ -16,19 +16,23 @@ const getGroups = async (req, res) => {
 
 // Create a new group
 const createGroup = async (req, res) => {
-  const { name, groupName, description, members } = req.body;
+  const { name, groupName, description, members = [], note } = req.body;
   const resolvedName = name || groupName;
 
-  // Basic validation to avoid silent 500s from schema validation
-  if (!resolvedName || !Array.isArray(members) || members.length === 0) {
-    return res
-      .status(400)
-      .json({ error: "name and at least one member are required." });
+  if (!resolvedName) {
+    return res.status(400).json({ error: "Group name is required." });
   }
 
-  const invalidMemberIds = members.filter(
-    (id) => !mongoose.Types.ObjectId.isValid(id)
+  if (members && !Array.isArray(members)) {
+    return res
+      .status(400)
+      .json({ error: "members must be an array of user ids." });
+  }
+
+  const invalidMemberIds = (members || []).filter(
+    (id) => !mongoose.Types.ObjectId.isValid(String(id))
   );
+
   if (invalidMemberIds.length > 0) {
     return res.status(400).json({
       error: "One or more member IDs are invalid.",
@@ -38,21 +42,35 @@ const createGroup = async (req, res) => {
 
   try {
     const ownerId = req.user.id;
-    const memberIds = Array.from(
-      new Set([ownerId, ...members.map((id) => String(id))])
-    );
-
     const group = await Group.create({
       name: resolvedName,
       description,
-      members: memberIds,
+      members: [ownerId],
       owner: ownerId,
     });
 
-    res.status(201).json(group);
+    let inviteSummary = null;
+    if (Array.isArray(members) && members.length > 0) {
+      const invites = await createGroupInvites({
+        groupId: group._id,
+        inviterId: ownerId,
+        memberIds: members,
+        note,
+      });
+      inviteSummary = {
+        createdCount: invites.createdInvites.length,
+        ...invites.summary,
+      };
+    }
+
+    const populatedGroup = await Group.findById(group._id)
+      .populate("owner", "name email phone")
+      .populate("members", "name email phone");
+
+    res.status(201).json({ group: populatedGroup, inviteSummary });
   } catch (err) {
     console.error("Group creation error:", err);
-    res.status(500).json({ error: err.message });
+    res.status(err.statusCode || 500).json({ error: err.message });
   }
 };
 

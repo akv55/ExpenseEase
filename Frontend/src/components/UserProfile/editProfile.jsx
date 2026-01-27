@@ -1,17 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaSave, FaTimes } from "react-icons/fa";
 import { useAuth } from "../../context/authContext";
 
 const EditProfileForm = () => {
-  const { user } = useAuth();
+  const { user, editProfileInfo } = useAuth();
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const [formData, setFormData] = useState({
     name: user?.name || "",
     email: user?.email || "",
     phone: user?.phone || "",
   });
+
+  useEffect(() => {
+    setFormData({
+      name: user?.name || "",
+      email: user?.email || "",
+      phone: user?.phone || "",
+    });
+    setError(null);
+    setSuccess(null);
+    setHasAttemptedSubmit(false);
+  }, [user]);
   // Handle text input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -19,47 +31,48 @@ const EditProfileForm = () => {
       ...prev,
       [name]: value,
     }));
-  };
-
-  // Handle file upload
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFormData((prev) => ({
-        ...prev,
-        image: file,
-      }));
-      setPreviewImage(URL.createObjectURL(file));
-    }
+    if (error) setError(null);
+    if (success) setSuccess(null);
   };
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      setIsSubmitting(true);
+    setHasAttemptedSubmit(true);
+    setError(null);
+    setSuccess(null);
 
-      // Example: send formData to backend
-      const formDataToSend = new FormData();
-      formDataToSend.append("name", formData.name);
-      formDataToSend.append("phone", formData.phone);
-      res.status.json({ message: "Profile updated successfully" });
+    if (!formData.name.trim() || !formData.phone.trim()) {
+      setError("Please fill out all required fields.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const payload = {
+        name: formData.name.trim(),
+        phone: formData.phone.trim(),
+      };
+      const response = await editProfileInfo(payload);
+      setSuccess(response?.message || "Profile updated successfully.");
     } catch (err) {
-      setError("Error updating profile. Please try again.");
+      const apiMessage = err?.response?.data?.message;
+      setError(apiMessage || "Error updating profile. Please try again.");
     } finally {
-      setIsSubmitting(false);
+      setLoading(false);
     }
   };
 
-  const handleCancel = () => {
-    setFormData({
-      name: user?.name || "",
-      email: user?.email || "",
-      phone: user?.phone || "",
-      image: user?.profileImage?.url || "",
-    });
-    setPreviewImage(user?.profileImage?.url || null);
-  };
+  // const handleCancel = () => {
+  //   setFormData({
+  //     name: user?.name || "",
+  //     email: user?.email || "",
+  //     phone: user?.phone || "",
+  //   });
+  //   setError(null);
+  //   setSuccess(null);
+  //   setHasAttemptedSubmit(false);
+  // };
 
   return (
     <div className="space-y-6">
@@ -67,8 +80,13 @@ const EditProfileForm = () => {
         Edit Profile Information
       </h3>
       {hasAttemptedSubmit && error && (
-        <div className='mb-6 bg-red-50 border border-red-200 rounded-xl p-4'>
+        <div className="mb-6 bg-red-50 border border-red-200 rounded-xl p-4">
           <p className="text-red-600 text-center text-sm font-medium">{error}</p>
+        </div>
+      )}
+      {success && (
+        <div className="mb-6 bg-green-50 border border-green-200 rounded-xl p-4">
+          <p className="text-green-700 text-center text-sm font-medium">{success}</p>
         </div>
       )}
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -126,21 +144,13 @@ const EditProfileForm = () => {
           <button
             type="submit"
             disabled={loading}
-            className={`bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 rounded-lg flex items-center space-x-2 transition-colors ${loading ? "opacity-70 cursor-not-allowed" : ""
+            className={`bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 rounded-lg flex items-center space-x-2 transition-colors cursor-pointer ${loading ? "opacity-70 cursor-not-allowed" : ""
               }`}
           >
             <FaSave className="w-4 h-4" />
             <span>{loading ? "Saving..." : "Save Changes"}</span>
           </button>
-
-          <button
-            type="button"
-            onClick={handleCancel}
-            className="bg-gray-500 hover:bg-gray-700 text-white px-6 py-2 rounded-lg flex items-center space-x-2 transition-colors"
-          >
-            <FaTimes className="w-4 h-4" />
-            <span>Cancel</span>
-          </button>
+          
         </div>
       </form>
     </div>

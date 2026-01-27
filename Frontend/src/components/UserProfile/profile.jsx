@@ -66,7 +66,7 @@ const Profile = () => {
       <Sidebar />
       <div className="ml-64 p-8">
         {/* <h1 className="text-3xl font-bold mb-6 text-gray-700">User Profile</h1> */}
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto group-container ">
           <div className="bg-white shadow-lg rounded-2xl overflow-hidden">
             <div className="relative overflow-hidden">
               <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
@@ -97,7 +97,7 @@ const Profile = () => {
                     <p className="text-purple-100">{user?.email}</p>
                   </div>
                 </div>
-                <button onClick={() => setIsEditing(!isEditing)} className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg flex items-center space-x-2">
+                <button onClick={() => setIsEditing(!isEditing)} className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg flex items-center space-x-2 cursor-pointer">
                   <FaEdit className="w-4 h-4" />
                   <span>{isEditing ? "Cancel" : "Edit Profile"}</span>
                 </button>
