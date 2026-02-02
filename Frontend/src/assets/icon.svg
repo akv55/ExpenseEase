@@ -1,0 +1,27 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<defs>
+		<linearGradient id="bgGradient" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+			<stop offset="0" stop-color="#14B8A6"/>
+			<stop offset="0.5" stop-color="#06B6D4"/>
+			<stop offset="1" stop-color="#0F172A"/>
+		</linearGradient>
+		<linearGradient id="accentGradient" x1="16" y1="12" x2="52" y2="52" gradientUnits="userSpaceOnUse">
+			<stop offset="0" stop-color="#ECFEFF"/>
+			<stop offset="1" stop-color="#A5F3FC"/>
+		</linearGradient>
+	</defs>
+
+	<!-- Rounded background -->
+	<rect x="4" y="4" width="56" height="56" rx="18" fill="url(#bgGradient)"/>
+
+	<!-- Inner card shape -->
+	<rect x="14" y="14" width="36" height="36" rx="12" fill="#0F172A" fill-opacity="0.65"/>
+
+	<!-- Stylised "E" for ExpenseEase -->
+	<path d="M24 22.5C24 20.567 25.567 19 27.5 19H38C39.105 19 40 19.895 40 21C40 22.105 39.105 23 38 23H28.5C27.672 23 27 23.672 27 24.5C27 25.328 27.672 26 28.5 26H35.5C36.605 26 37.5 26.895 37.5 28C37.5 29.105 36.605 30 35.5 30H28.5C27.672 30 27 30.672 27 31.5C27 32.328 27.672 33 28.5 33H38C39.105 33 40 33.895 40 35C40 36.105 39.105 37 38 37H27.5C25.567 37 24 35.433 24 33.5V22.5Z"
+				fill="url(#accentGradient)"/>
+
+	<!-- Accent pill suggesting a card or chip -->
+	<rect x="19" y="38" width="16" height="4" rx="2" fill="#2DD4BF" fill-opacity="0.85"/>
+</svg>
+

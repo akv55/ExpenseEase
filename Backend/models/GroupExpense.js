@@ -101,13 +101,13 @@ const groupExpenseSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const transactinIdGenerator = () => {
+const transactionIdGenerator = () => {
   return 'TXN' + Date.now() + Math.floor(Math.random() * 1000);
 };
 
-groupExpenseSchema.pre('validate', function(next) {
-  if (!this.transactinId) {
-    this.transactinId = transactinIdGenerator();
+groupExpenseSchema.pre('validate', function (next) {
+  if (!this.transactionId) {
+    this.transactionId = transactionIdGenerator();
   }
   next();
 });

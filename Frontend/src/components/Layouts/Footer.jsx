@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import logoIcon from "../../../public/icon.svg";
 import {
   FaFacebookF,
   FaTwitter,
@@ -7,75 +9,145 @@ import {
 } from "react-icons/fa";
 
 const Footer = () => {
+  const year = new Date().getFullYear();
+
   return (
-    <footer className="bg-gray-800 text-gray-300 py-6">
-      <div className="container mx-auto flex flex-col md:flex-row justify-between items-center px-4">
-        {/* Left Section - Logo + Name */}
-        <div className="flex items-center space-x-3 mb-4 md:mb-0">
-          {/* Overlapping Circles Logo */}
-          <div className="relative w-16 h-8">
-            <div className="absolute w-8 h-8 bg-cyan-400 rounded-full opacity-90 left-0"></div>
-            <div className="absolute w-8 h-8 bg-sky-300 rounded-full opacity-90 left-4"></div>
+    <footer className="border-t border-teal-900/40 bg-slate-950 text-slate-200 mt-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+          {/* Brand */}
+          <div className="max-w-sm">
+            <Link to="/" className="flex items-center gap-3 mb-3">
+              <div className="relative h-9 w-9 rounded-2xl bg-white/5 border border-white/15 flex items-center justify-center overflow-hidden shadow-sm">
+                <img
+                  src={logoIcon}
+                  alt="ExpenseEase icon"
+                  className="h-7 w-7 object-contain"
+                  loading="lazy"
+                />
+              </div>
+              <div>
+                <p className="text-base font-semibold text-white tracking-tight">
+                  ExpenseEase
+                </p>
+                <p className="text-[11px] text-teal-100/80 uppercase tracking-[0.22em]">
+                  Split • Track • Relax
+                </p>
+              </div>
+            </Link>
+            <p className="text-xs text-slate-300/90 leading-relaxed">
+              A simple way to keep shared expenses, personal budgets and everyday
+              spending organised—so you focus more on moments and less on money math.
+            </p>
           </div>
 
-          <div>
-            <h1 className="text-white font-semibold text-lg">Split & Track</h1>
-            <p className="text-xs text-gray-400">
-              © Copyright Split & Track 2025
-            </p>
+          {/* Links */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 text-sm">
+            <div>
+              <p className="text-xs font-semibold text-slate-100 uppercase tracking-[0.18em] mb-3">
+                Product
+              </p>
+              <ul className="space-y-2 text-slate-300/90">
+                <li>
+                  <a href="/#features" className="hover:text-teal-300 transition-colors">
+                    Features
+                  </a>
+                </li>
+                <li>
+                  <a href="/#how-it-works" className="hover:text-teal-300 transition-colors">
+                    How it works
+                  </a>
+                </li>
+                <li>
+                  <Link to="/dashboard" className="hover:text-teal-300 transition-colors">
+                    Dashboard
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <p className="text-xs font-semibold text-slate-100 uppercase tracking-[0.18em] mb-3">
+                Company
+              </p>
+              <ul className="space-y-2 text-slate-300/90">
+                <li>
+                  <a href="/#why-us" className="hover:text-teal-300 transition-colors">
+                    About
+                  </a>
+                </li>
+                <li>
+                  <Link to="/notifications" className="hover:text-teal-300 transition-colors">
+                    Updates
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/settings" className="hover:text-teal-300 transition-colors">
+                    Settings
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="col-span-2 sm:col-span-1">
+              <p className="text-xs font-semibold text-slate-100 uppercase tracking-[0.18em] mb-3">
+                Legal
+              </p>
+              <ul className="space-y-2 text-slate-300/90">
+                <li>
+                  <button className="hover:text-teal-300 transition-colors text-left w-full">
+                    Privacy policy
+                  </button>
+                </li>
+                <li>
+                  <button className="hover:text-teal-300 transition-colors text-left w-full">
+                    Terms of use
+                  </button>
+                </li>
+                <li>
+                  <button className="hover:text-teal-300 transition-colors text-left w-full">
+                    Cookies
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 
-        {/* Center Section - Links */}
-        <ul className="flex space-x-6 text-sm mb-4 md:mb-0">
-          <li>
-            <a href="#" className="hover:text-cyan-400 transition">
-              About Us
-            </a>
-          </li>
-          <li>
-            <a href="#" className="hover:text-cyan-400 transition">
-              Contact
-            </a>
-          </li>
-          <li>
-            <a href="#" className="hover:text-cyan-400 transition">
-              Privacy Policy
-            </a>
-          </li>
-          <li>
-            <a href="#" className="hover:text-cyan-400 transition">
-              Terms of Service
-            </a>
-          </li>
-        </ul>
+        <div className="mt-8 pt-6 border-t border-slate-800 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between text-xs text-slate-400">
+          <p>
+            © {year} ExpenseEase. All rights reserved.
+          </p>
 
-        {/* Right Section - Social Icons */}
-        <div className="flex space-x-3">
-          <a
-            href="#"
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-gray-800 hover:bg-cyan-400 hover:text-white transition"
-          >
-            <FaFacebookF />
-          </a>
-          <a
-            href="#"
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-gray-800 hover:bg-cyan-400 hover:text-white transition"
-          >
-            <FaTwitter />
-          </a>
-          <a
-            href="#"
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-gray-800 hover:bg-cyan-400 hover:text-white transition"
-          >
-            <FaInstagram />
-          </a>
-          <a
-            href="#"
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-white text-gray-800 hover:bg-cyan-400 hover:text-white transition"
-          >
-            <FaLinkedinIn />
-          </a>
+          <div className="flex items-center gap-3">
+            <span className="text-[11px] text-slate-400">Follow us</span>
+            <div className="flex space-x-2">
+              <a
+                href="#"
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-900 text-slate-200 hover:bg-teal-500 hover:text-white transition-colors border border-slate-700/80"
+              >
+                <FaFacebookF className="h-3.5 w-3.5" />
+              </a>
+              <a
+                href="#"
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-900 text-slate-200 hover:bg-teal-500 hover:text-white transition-colors border border-slate-700/80"
+              >
+                <FaTwitter className="h-3.5 w-3.5" />
+              </a>
+              <a
+                href="#"
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-900 text-slate-200 hover:bg-teal-500 hover:text-white transition-colors border border-slate-700/80"
+              >
+                <FaInstagram className="h-3.5 w-3.5" />
+              </a>
+              <a
+                href="#"
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-900 text-slate-200 hover:bg-teal-500 hover:text-white transition-colors border border-slate-700/80"
+              >
+                <FaLinkedinIn className="h-3.5 w-3.5" />
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

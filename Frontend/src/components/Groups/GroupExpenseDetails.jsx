@@ -426,20 +426,21 @@ const GroupExpenseDetails = () => {
                                                 </div>
                                             </div>
                                         )}
-                                        <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
-                                            <span className="flex items-center gap-1">
-                                                <FaUsers className="text-purple-500" />Members: {members.length}
+                                        <div className="mt-3 flex flex-wrap items-center gap-3 text-xs md:text-sm text-gray-600">
+                                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 text-purple-700 border border-purple-100">
+                                                <FaUsers className="text-purple-500" />
+                                                <span className="font-medium">{members.length} members</span>
                                             </span>
-                                            <span className="flex items-center gap-1">
-                                                <FaCalendarAlt className="text-blue-500" />Created:
-                                                {formatDate(groupDetails?.createdAt)}
+                                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100">
+                                                <FaCalendarAlt className="text-blue-500" />
+                                                <span>Created {formatDate(groupDetails?.createdAt)}</span>
                                             </span>
-                                            <span className="flex items-center gap-1 md:inline-flex hidden">
-                                                <MdPerson className="text-teal-500" /> Owner: <span className="bg-blue-200 px-2 py-1 text-blue-500 rounded-l-full rounded-r-full font-semibold"> {ownerName}</span>
+                                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                                <MdPerson className="text-emerald-500" />
+                                                <span className="font-semibold truncate max-w-[10rem] md:max-w-none">
+                                                    Owner: {ownerName}
+                                                </span>
                                             </span>
-                                        </div>
-                                        <div className="flex items-center gap-2 mt-2  text-sm text-gray-500 lg:hidden">
-                                            <MdPerson className="text-teal-500" /> Owner: <span className="bg-blue-200 p-1 text-blue-500 rounded-l-full rounded-r-full font-semibold"> {ownerName}</span>
                                         </div>
                                     </div>
                                 </div>
