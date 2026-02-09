@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Footer from '../Layouts/Footer';
 import WaveDivider from './waveDivider';
-import logoIcon from "../../../public/icon.svg";
 import { FaWallet, FaUsers, FaChartLine, FaShieldAlt, FaCheckCircle, FaArrowRight } from 'react-icons/fa';
 
 const Home = () => {
@@ -83,7 +82,7 @@ const Home = () => {
             <Link to="/" className="flex items-center gap-2 group">
               <div className="h-9 w-9 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center overflow-hidden shadow-sm">
                 <img
-                  src={logoIcon}
+                  src="/icon.svg"
                   alt="ExpenseEase icon"
                   className="h-7 w-7 object-contain"
                   loading="lazy"

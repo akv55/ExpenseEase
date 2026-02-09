@@ -56,8 +56,8 @@ const RecentTransactions = () => {
               <div className="flex items-center gap-3">
                 <div
                   className={`p-3 rounded-full ${tx.type === "income"
-                      ? "bg-green-100"
-                      : "bg-red-100"
+                    ? "bg-green-100"
+                    : "bg-red-100"
                     }`}
                 >
                   {tx.type === "income" ? (
@@ -79,8 +79,8 @@ const RecentTransactions = () => {
 
               <p
                 className={`font-semibold ${tx.type === "income"
-                    ? "text-green-600"
-                    : "text-red-600"
+                  ? "text-green-600"
+                  : "text-red-600"
                   }`}
               >
                 {tx.type === "income" ? "+" : "-"}₹{tx.amount}
@@ -89,21 +89,17 @@ const RecentTransactions = () => {
           ))}
         </ul>
       )}
-      {transactions.length === 10 && (
-        <button className="text-blue-600 text-sm mt-3">
-          View all transactions →
-        </button>
-      )}
 
-      {/* ✅ MODAL */}
+
+      {/*  MODAL */}
       {selectedTx && (
         <div className="fixed inset-0 bg-transparent bg-opacity-50 flex justify-center items-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-96 p-6 relative">
             <div className="text-center">
               <div
                 className={`inline-flex items-center justify-center w-16 h-16 rounded-full ${selectedTx.type === "income"
-                    ? "bg-green-100"
-                    : "bg-red-100"
+                  ? "bg-green-100"
+                  : "bg-red-100"
                   } mb-4`}
               >
                 {selectedTx.type === "income" ? (
@@ -119,8 +115,8 @@ const RecentTransactions = () => {
 
               <p
                 className={`text-lg font-semibold ${selectedTx.type === "income"
-                    ? "text-green-600"
-                    : "text-red-600"
+                  ? "text-green-600"
+                  : "text-red-600"
                   }`}
               >
                 {selectedTx.type === "income" ? "+" : "-"}₹
@@ -129,9 +125,22 @@ const RecentTransactions = () => {
             </div>
 
             <div className="mt-6 space-y-3 text-gray-700">
-              <div className="flex items-center gap-2">
-                <FaCalendarAlt className="text-blue-500" />
-                <span>{formatDate(txDate(selectedTx))}</span>
+              <div className="flex items-center justify-between gap-4 text-sm">
+                <div className="flex items-center gap-2 text-gray-600">
+                  <FaCalendarAlt className="text-blue-500" />
+                  <div className="flex flex-col">
+                    <span className="text-xs text-gray-400">Date</span>
+                    <span className="font-medium text-gray-800">
+                      {formatDate(txDate(selectedTx))}
+                    </span>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs text-gray-400">Payment method</p>
+                  <p className="font-medium text-gray-800">
+                    {selectedTx.paymentMethod || "N/A"}
+                  </p>
+                </div>
               </div>
 
               <div className="border border-gray-200 p-3 rounded-lg bg-gray-50">

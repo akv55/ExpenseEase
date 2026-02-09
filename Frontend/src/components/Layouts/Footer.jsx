@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logoIcon from "../../../public/icon.svg";
 import {
   FaFacebookF,
   FaTwitter,
@@ -20,7 +19,7 @@ const Footer = () => {
             <Link to="/" className="flex items-center gap-3 mb-3">
               <div className="relative h-9 w-9 rounded-2xl bg-white/5 border border-white/15 flex items-center justify-center overflow-hidden shadow-sm">
                 <img
-                  src={logoIcon}
+                  src="/icon.svg"
                   alt="ExpenseEase icon"
                   className="h-7 w-7 object-contain"
                   loading="lazy"

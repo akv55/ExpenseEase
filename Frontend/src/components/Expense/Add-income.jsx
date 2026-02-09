@@ -13,9 +13,10 @@ const AddIncome = () => {
   const [formData, setFormData] = useState({
     amount: '',
     description: '',
-    category: ''
+    category: '',
+    paymentMode: ''
   });
-  const { amount, description, category } = formData;
+  const { amount, description, category, paymentMode } = formData;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,7 +28,7 @@ const AddIncome = () => {
     setLoading(true);
     try {
       await addIncome(formData);
-      setFormData({ amount: '', description: '', category: '' });
+      setFormData({ amount: '', description: '', category: '', paymentMode: '' });
       navigate('/dashboard');
     } catch (error) {
       setError("Failed to add income.");
@@ -47,11 +48,11 @@ const AddIncome = () => {
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Basic Income Info */}
             <div className="bg-white rounded-2xl shadow-xl p-8">
-             <div className="mb-2 flex items-center justify-center">
-              <h1 className="text-2xl font-bold text-gray-800 mb-2 flex items-center gap-3">
-                Add New Income
-              </h1>
-            </div>
+              <div className="mb-2 flex items-center justify-center">
+                <h1 className="text-2xl font-bold text-gray-800 mb-2 flex items-center gap-3">
+                  Add New Income
+                </h1>
+              </div>
               <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
                 <FaWallet className="text-teal-500" />
                 Income Details
@@ -77,32 +78,50 @@ const AddIncome = () => {
                     />
                   </div>
                 </div>
-
+               
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Category <span className="text-red-600">*</span></label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
                   <div className="relative">
-                    <select
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900 outline-none"
+                    <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900 outline-none"
                       onChange={handleChange}
-                      name="category"
-                      value={category}
+                      name="paymentMode"
+                      value={paymentMode}
                     >
-                      <option value="">Select a category</option>
-                      <option value="Salary">Salary</option>
-                      <option value="Business">Business</option>
-                      <option value="Freelancing">Freelancing</option>
-                      <option value="Investments">Investments</option>
-                      <option value="Rental Income">Rental Income</option>
-                      <option value="Gifts">Gifts</option>
-                      <option value="Interest">Interest</option>
-                      <option value="Monthly Pocket Money">Monthly Pocket Money</option>
-                      <option value="Scholarship">Scholarship</option>
+                      <option value="">Select a payment method</option>
+                      <option value="Cash">Cash</option>
+                      <option value="Cheque">Cheque</option>
+                      <option value="Bank Transfer">Bank Transfer</option>
+                      <option value="UPI">UPI</option>
                       <option value="Other">Other</option>
                     </select>
-                    <p className="mt-2 text-sm text-gray-500"><span className="font-semibold text-red-600">Note:</span> Please select the category that best fits your income source.</p>
                   </div>
                 </div>
               </div>
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Category <span className="text-red-600">*</span></label>
+                <div className="relative">
+                  <select
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900 outline-none"
+                    onChange={handleChange}
+                    name="category"
+                    value={category}
+                  >
+                    <option value="">Select a category</option>
+                    <option value="Salary">Salary</option>
+                    <option value="Business">Business</option>
+                    <option value="Freelancing">Freelancing</option>
+                    <option value="Investments">Investments</option>
+                    <option value="Rental Income">Rental Income</option>
+                    <option value="Gifts">Gifts</option>
+                    <option value="Interest">Interest</option>
+                    <option value="Monthly Pocket Money">Monthly Pocket Money</option>
+                    <option value="Scholarship">Scholarship</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <p className="mt-2 text-sm text-gray-500"><span className="font-semibold text-red-600">Note:</span> Please select the category that best fits your income source.</p>
+                </div>
+              </div>
+
 
               <div className="mt-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Description <span className="text-red-600">*</span></label>

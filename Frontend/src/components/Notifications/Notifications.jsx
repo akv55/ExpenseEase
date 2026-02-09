@@ -74,7 +74,7 @@ const Notifications = () => {
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50">
             <Sidebar />
             <div className="md:ml-64 p-4 md:p-8">
-                <div className="max-w-5xl mx-auto">
+                <div className="max-w-5xl mx-auto group-container">
                     <div className="bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-3xl p-8 shadow-xl mb-8">
                         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                             <div>

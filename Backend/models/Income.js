@@ -15,6 +15,11 @@ const incomeSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    paymentMethod: {
+      type: String,
+      enum: ["Cash", "Cheque", "Bank Transfer", "UPI", "Other"],
+      default: "Cash",
+    },
     category: {
       type: String,
       required: true,

@@ -25,6 +25,10 @@ const EXPENSE_CATEGORIES = [
   "Other",
 ];
 
+const PAYMENT_METHODS = [
+  "Cash", "Credit Card", "Debit Card", "UPI", "Net Banking", "Other"
+];
+
 const AddExpense = () => {
   const navigate = useNavigate();
   const { addExpense } = useExpense();
@@ -34,20 +38,20 @@ const AddExpense = () => {
   const [formData, setFormData] = useState({
     amount: '',
     description: '',
-    category: ''
+    category: '',
   });
-  const { amount, description, category } = formData;
+  const { amount, description, category, paymentMode } = formData;
   const handleSubmit = async (e) => {
     e.preventDefault();
     setHasAttemptedSubmit(true);
-    if (!amount || !description || !category) {
+    if (!amount || !description || !category || !paymentMode) {
       setError("Please fill out all required fields.");
       return;
     }
     setLoading(true);
     try {
       await addExpense(formData);
-      setFormData({ amount: '', description: '', category: '' });
+      setFormData({ amount: '', description: '', category: '', paymentMode: '' });
       navigate('/dashboard');
     } catch (error) {
       setError("Failed to add Expense.");
@@ -98,24 +102,41 @@ const AddExpense = () => {
                   </div>
                 </div>
 
-                {/* Category Selection */}
+                {/* Payment Method Selection */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Category <span className="text-red-600">*</span></label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Payment Method <span className="text-red-600">*</span></label>
                   <select
                     onChange={handleChange}
-                    name="category"
-                    value={category}
+                    name="paymentMode"
+                    value={paymentMode}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900 outline-none"
                   >
                     <option value="">Select a category</option>
-                    {EXPENSE_CATEGORIES.map((option) => (
+                    {PAYMENT_METHODS.map((option) => (
                       <option key={option} value={option}>{option}</option>
                     ))}
                   </select>
-                  <p className="mt-2 text-sm text-gray-500"><span className="font-semibold text-red-600">Note:</span> Please select the category that best fits your expense.</p>
                 </div>
-
               </div>
+
+              {/* Category Selection */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Category <span className="text-red-600">*</span></label>
+                <select
+                  onChange={handleChange}
+                  name="category"
+                  value={category}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-teal-500 focus:border-transparent bg-white text-gray-900 outline-none"
+                >
+                  <option value="">Select a category</option>
+                  {EXPENSE_CATEGORIES.map((option) => (
+                    <option key={option} value={option}>{option}</option>
+                  ))}
+                </select>
+                <p className="mt-2 text-sm text-gray-500"><span className="font-semibold text-red-600">Note:</span> Please select the category that best fits your expense.</p>
+              </div>
+
+
 
               <div className="mt-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Description <span className="text-red-600">*</span></label>
