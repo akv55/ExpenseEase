@@ -3,21 +3,18 @@ const nodemailer = require("nodemailer");
 const hasCredentials = process.env.EMAIL_USER && process.env.EMAIL_PASS;
 
 if (!hasCredentials) {
-    console.warn(" Email credentials missing. Outbound emails are disabled.");
+    console.warn("Email credentials missing. Outbound emails are disabled.");
 }
 
 const transporter = hasCredentials
     ? nodemailer.createTransport({
             host: process.env.SMTP_HOST || "smtp.gmail.com",
-            port: Number(process.env.SMTP_PORT || 465),
-            secure: process.env.SMTP_SECURE !== "false",
+            port: Number(process.env.SMTP_PORT || 587),
+            secure: false, // ALWAYS false for 587
             auth: {
                 user: process.env.EMAIL_USER,
                 pass: process.env.EMAIL_PASS,
             },
-            pool: true,
-            connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT || 15000),
-            socketTimeout: Number(process.env.SMTP_SOCKET_TIMEOUT || 20000),
         })
     : null;
 

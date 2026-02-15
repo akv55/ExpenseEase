@@ -14,7 +14,6 @@ const methoodsoverride = require('method-override');
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5001;
 // Connect to database 
 connectDB();
 
