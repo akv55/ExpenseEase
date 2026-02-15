@@ -4,13 +4,81 @@ const GroupInvite = require("../models/GroupInvite.js");
 const mongoose = require("mongoose");
 const { createGroupInvites } = require("../services/groupInviteService.js");
 
-// Get all groups for a user
+// Get all groups for a user with settlement summary for the current user
 const getGroups = async (req, res) => {
   try {
     const groups = await Group.find({
       $or: [{ members: req.user.id }, { owner: req.user.id }],
     });
-    res.json(groups);
+
+    if (!groups.length) {
+      return res.json([]);
+    }
+
+    const groupIds = groups.map((group) => group._id);
+
+    // Fetch all unsettled expenses for these groups to compute per-group balances
+    const expenses = await GroupExpense.find({
+      groupId: { $in: groupIds },
+      settled: { $ne: true },
+    }).select("groupId amount paidBy participants");
+
+    const userId = String(req.user.id);
+
+    const getId = (value) => {
+      if (!value) return null;
+      if (typeof value === "object" && value._id) {
+        return String(value._id);
+      }
+      return String(value);
+    };
+
+    // Aggregate how much the current user paid and owes in each group
+    const summaryByGroup = {};
+
+    expenses.forEach((expense) => {
+      const groupKey = String(expense.groupId);
+      if (!summaryByGroup[groupKey]) {
+        summaryByGroup[groupKey] = { paid: 0, share: 0 };
+      }
+
+      const amount = Number(expense.amount) || 0;
+      const paidById = getId(expense.paidBy);
+
+      if (paidById === userId) {
+        summaryByGroup[groupKey].paid += amount;
+      }
+
+      (expense.participants || []).forEach((participant) => {
+        const participantId = getId(participant.user);
+        const shareAmount = Number(participant.shareAmount) || 0;
+
+        if (participantId === userId) {
+          summaryByGroup[groupKey].share += shareAmount;
+        }
+      });
+    });
+
+    const responseGroups = groups.map((group) => {
+      const obj = group.toObject();
+      const key = String(group._id);
+      const summary = summaryByGroup[key] || { paid: 0, share: 0 };
+
+      const rawBalance = (Number(summary.paid) || 0) - (Number(summary.share) || 0);
+      const myBalance = Math.round(rawBalance * 100) / 100;
+
+      return {
+        ...obj,
+        // Expose a "totalExpenses" alias expected by the frontend
+        totalExpenses: obj.totalExpense || 0,
+        // Net amount for the current user in this group:
+        // > 0  => others owe the user
+        // < 0  => user owes others
+        myBalance,
+      };
+    });
+
+    res.json(responseGroups);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
