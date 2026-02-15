@@ -45,9 +45,10 @@ const AddGroupExpenseModal = ({
         description: "",
         amount: "",
         category: "",
+        paymentMethod: "",
         splitType: "equal",
     });
-    const { title, description, amount, category, paidBy } = formData;
+    const { title, description, amount, category, paidBy, paymentMethod } = formData;
 
     const [customShares, setCustomShares] = useState({});
 
@@ -58,6 +59,7 @@ const AddGroupExpenseModal = ({
             description: "",
             amount: "",
             category: "",
+            paymentMethod: "",
             splitType: "equal",
         });
         setCustomShares({});
@@ -100,7 +102,7 @@ const AddGroupExpenseModal = ({
     const handleSubmit = async (e) => {
         e.preventDefault();
         setHasAttemptedSubmit(true);
-        if (!description || !amount || !category || !title) {
+        if (!description || !amount || !category || !title || !paymentMethod) {
             setError("Please fill out all required fields.");
             return;
         }
@@ -242,20 +244,21 @@ const AddGroupExpenseModal = ({
 
                 <form onSubmit={handleSubmit} className="p-6 space-y-6">
 
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            Title <span className="text-red-600">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            name="title"
+                            value={formData.title}
+                            onChange={handleChange}
+                            placeholder="e.g., Group dinner "
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-1 focus:ring-teal-500 focus:border-transparent outline-none"
+                        />
+                    </div>
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Title <span className="text-red-600">*</span>
-                            </label>
-                            <input
-                                type="text"
-                                name="title"
-                                value={formData.title}
-                                onChange={handleChange}
-                                placeholder="e.g., Group dinner "
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-1 focus:ring-teal-500 focus:border-transparent outline-none"
-                            />
-                        </div>
                         <div>
                             <label className="block text-sm font-semibold text-gray-700 mb-2">
                                 Amount (₹) <span className="text-red-600">*</span>
@@ -269,8 +272,29 @@ const AddGroupExpenseModal = ({
                                 className=" w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-1 focus:ring-teal-500 focus:border-transparent outline-none"
                             />
                         </div>
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                Payment Method: <span className="text-red-600">*</span>
+                            </label>
+                            <select
+                                name="paymentMethod"
+                                value={formData.paymentMethod}
+                                onChange={handleChange}
+                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-1 focus:ring-teal-500 focus:border-transparent outline-none"
+                            >
+                                <option value="">Select Payment Method</option>
+                                <option value="cash">Cash</option>
+                                <option value="card">Debit Card</option>
+                                <option value="credit">Credit Card</option>
+                                <option value="netbanking">Net Banking</option>
+                                <option value="upi">UPI</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
                     </div>
                     <div>
+
                         <label className="block text-sm font-semibold text-gray-700 mb-2">
                             Descriptions <span className="text-red-600">*</span>
                         </label>
